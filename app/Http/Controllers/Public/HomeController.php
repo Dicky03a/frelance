@@ -41,7 +41,7 @@ class HomeController extends Controller
             ->get();
 
         $forumPreview = ForumThread::where('is_hidden', false)
-            ->with(['user', 'replies'])
+            ->with(['user'])
             ->withCount(['replies as visible_replies_count' => function ($query) {
                 $query->where('is_hidden', false);
             }])

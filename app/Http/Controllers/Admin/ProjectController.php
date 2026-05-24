@@ -42,8 +42,8 @@ class ProjectController extends Controller
         return Inertia::render('admin/projects/index', [
             'projects' => ProjectResource::collection($projects),
             'filters' => $request->only(['search', 'status', 'category']),
-            'categories' => ProjectCategory::cases(),
-            'statuses' => ProjectStatus::cases(),
+            'categories' => collect(ProjectCategory::cases())->map(fn($c) => $c->value)->toArray(),
+            'statuses' => collect(ProjectStatus::cases())->map(fn($s) => $s->value)->toArray(),
         ]);
     }
 
@@ -51,8 +51,8 @@ class ProjectController extends Controller
     {
         return Inertia::render('admin/projects/create', [
             'skills' => Skill::orderBy('name')->get(),
-            'categories' => ProjectCategory::cases(),
-            'statuses' => ProjectStatus::cases(),
+            'categories' => collect(ProjectCategory::cases())->map(fn($c) => $c->value)->toArray(),
+            'statuses' => collect(ProjectStatus::cases())->map(fn($s) => $s->value)->toArray(),
         ]);
     }
 
@@ -88,8 +88,8 @@ class ProjectController extends Controller
         return Inertia::render('admin/projects/edit', [
             'project' => $project->load('skills'),
             'skills' => Skill::orderBy('name')->get(),
-            'categories' => ProjectCategory::cases(),
-            'statuses' => ProjectStatus::cases(),
+            'categories' => collect(ProjectCategory::cases())->map(fn($c) => $c->value)->toArray(),
+            'statuses' => collect(ProjectStatus::cases())->map(fn($s) => $s->value)->toArray(),
         ]);
     }
 

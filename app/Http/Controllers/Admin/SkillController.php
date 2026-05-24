@@ -22,7 +22,7 @@ class SkillController extends Controller
 
         return Inertia::render('admin/skills/index', [
             'skills' => SkillResource::collection($skills),
-            'categories' => SkillCategory::cases(),
+            'categories' => collect(SkillCategory::cases())->map(fn($c) => $c->value)->toArray(),
         ]);
     }
 

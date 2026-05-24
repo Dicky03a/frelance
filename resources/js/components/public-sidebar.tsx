@@ -44,15 +44,15 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
             items: [
                 { title: 'Calculator', href: '/#calculator', icon: Calculator },
                 { title: 'Forum', href: route('forum.index'), icon: MessageSquare },
-                { title: 'Reviews', href: '/reviews', icon: Star },
+                { title: 'Reviews', href: route('reviews.index'), icon: Star },
             ]
         },
         {
             title: 'Info',
             items: [
-                { title: 'About Me', href: '/about', icon: User },
-                { title: 'Skills', href: '/skills', icon: Code },
-                { title: 'Contact', href: '/contact', icon: Mail },
+                { title: 'About Me', href: route('about'), icon: User },
+                { title: 'Skills', href: route('skills.public'), icon: Code },
+                { title: 'Contact', href: route('contact'), icon: Mail },
             ]
         }
     ];

@@ -31,7 +31,7 @@ class ForumController extends Controller
 
         return Inertia::render('public/forum/index', [
             'threads' => $threads,
-            'categories' => ForumCategory::cases(),
+            'categories' => collect(ForumCategory::cases())->map(fn($c) => $c->value)->toArray(),
             'filters' => $request->only(['category', 'search']),
         ]);
     }

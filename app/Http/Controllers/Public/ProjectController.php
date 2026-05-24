@@ -26,7 +26,7 @@ class ProjectController extends Controller
 
         return Inertia::render('public/projects/index', [
             'projects' => ProjectResource::collection($projects),
-            'categories' => ProjectCategory::cases(),
+            'categories' => collect(ProjectCategory::cases())->map(fn($c) => $c->value)->toArray(),
             'filters' => $request->only(['category']),
         ]);
     }

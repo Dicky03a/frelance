@@ -14,6 +14,11 @@ Route::get('/services', [\App\Http\Controllers\Public\ServiceController::class, 
 Route::get('/forum', [\App\Http\Controllers\Public\ForumController::class, 'index'])->name('forum.index');
 Route::get('/forum/{thread:slug}', [\App\Http\Controllers\Public\ForumController::class, 'show'])->name('forum.show');
 
+Route::get('/reviews', [\App\Http\Controllers\Public\ReviewController::class, 'index'])->name('reviews.index');
+Route::get('/about', [\App\Http\Controllers\Public\AboutController::class, 'index'])->name('about');
+Route::get('/skills', [\App\Http\Controllers\Public\SkillController::class, 'index'])->name('skills.public');
+Route::get('/contact', [\App\Http\Controllers\Public\ContactController::class, 'index'])->name('contact');
+
 Route::post('/calculator/estimate', [\App\Http\Controllers\Public\CalculatorController::class, 'estimate'])->name('calculator.estimate');
 
 // Client Routes

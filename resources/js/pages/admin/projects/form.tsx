@@ -1,4 +1,4 @@
-import { useForm, usePage } from '@inertiajs/react';
+import { useForm, usePage, router } from '@inertiajs/react';
 import { Project, Skill } from '@/types/models';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ export default function ProjectForm({ project, skills, categories, statuses }: P
     const [techInput, setTechInput] = useState('');
     const [preview, setThumbnailPreview] = useState<string | null>(project?.thumbnail ? `/storage/${project.thumbnail}` : null);
 
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         title: project?.title || '',
         category: project?.category || '',
         status: project?.status || 'draft',
@@ -38,7 +38,6 @@ export default function ProjectForm({ project, skills, categories, statuses }: P
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (project) {
-            // For update with files, we must use POST with _method=PUT
             router.post(route('admin.projects.update', project.id), {
                 ...data,
                 _method: 'PUT'
@@ -334,6 +333,3 @@ export default function ProjectForm({ project, skills, categories, statuses }: P
         </form>
     );
 }
-
-// I need to export router from inertia as well
-import { router } from '@inertiajs/react';
