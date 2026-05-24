@@ -45,4 +45,44 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the projects for the user.
+     */
+    public function projects(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    /**
+     * Get the services for the user.
+     */
+    public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    /**
+     * Get the orders for the user.
+     */
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the forum threads for the user.
+     */
+    public function forumThreads(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ForumThread::class);
+    }
+
+    /**
+     * Get the forum replies for the user.
+     */
+    public function forumReplies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ForumReply::class);
+    }
 }
