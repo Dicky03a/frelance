@@ -84,10 +84,10 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the ratings for the user.
+     * Check if the user is an admin.
      */
-    public function ratings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function isAdmin(): bool
     {
-        return $this->hasMany(Rating::class);
+        return $this->role === \App\Enums\UserRole::ADMIN->value;
     }
 }
