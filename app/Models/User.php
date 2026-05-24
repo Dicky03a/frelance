@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'avatar',
+        'locale',
+        'is_banned',
     ];
 
     /**
@@ -43,23 +47,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_banned' => 'boolean',
         ];
-    }
-
-    /**
-     * Get the projects for the user.
-     */
-    public function projects(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Project::class);
-    }
-
-    /**
-     * Get the services for the user.
-     */
-    public function services(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Service::class);
     }
 
     /**
@@ -84,5 +73,21 @@ class User extends Authenticatable
     public function forumReplies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ForumReply::class);
+    }
+
+    /**
+     * Get the project comments for the user.
+     */
+    public function projectComments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ProjectComment::class);
+    }
+
+    /**
+     * Get the ratings for the user.
+     */
+    public function ratings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Rating::class);
     }
 }

@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Service extends Model
+class CalculatorConfig extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -13,12 +12,12 @@ class Service extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'slug',
-        'description',
-        'icon',
+        'project_type',
+        'label',
+        'base_price',
+        'features',
+        'timeline_multipliers',
         'is_active',
-        'sort_order',
     ];
 
     /**
@@ -29,15 +28,10 @@ class Service extends Model
     protected function casts(): array
     {
         return [
+            'features' => 'array',
+            'timeline_multipliers' => 'array',
             'is_active' => 'boolean',
+            'base_price' => 'decimal:2',
         ];
-    }
-
-    /**
-     * Get the packages for the service.
-     */
-    public function packages(): HasMany
-    {
-        return $this->hasMany(ServicePackage::class);
     }
 }

@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
@@ -15,25 +16,57 @@ class Project extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
-        'user_id',
         'title',
         'slug',
         'description',
-        'content',
-        'image_url',
-        'link_url',
+        'long_description',
+        'tech_stack',
+        'thumbnail',
+        'images',
+        'price_from',
+        'price_to',
+        'duration_weeks',
+        'live_url',
+        'github_url',
+        'category',
         'status',
+        'is_featured',
+        'views',
         'sort_order',
     ];
 
     /**
-     * Get the user that owns the project.
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
      */
-    public function user(): BelongsTo
+    protected function casts(): array
     {
-        return $this->belongsTo(User::class);
+        return [
+            'tech_stack' => 'array',
+            'images' => 'array',
+            'is_featured' => 'boolean',
+            'price_from' => 'decimal:2',
+            'price_to' => 'decimal:2',
+        ];
+    }
+
+    /**
+     * Get the skills for the project.
+     */
+    public function skills(): BelongsToMany
+    {
+        return $this->belongsToMany(Skill::class);
+    }
+
+    /**
+     * Get the comments for the project.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(ProjectComment::class);
     }
 }

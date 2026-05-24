@@ -16,16 +16,34 @@ class ForumThread extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'user_id',
         'title',
         'slug',
-        'content',
+        'body',
+        'category',
         'is_pinned',
         'is_locked',
+        'is_hidden',
+        'views',
+        'replies_count',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'is_pinned' => 'boolean',
+            'is_locked' => 'boolean',
+            'is_hidden' => 'boolean',
+        ];
+    }
 
     /**
      * Get the user that created the thread.
@@ -40,6 +58,6 @@ class ForumThread extends Model
      */
     public function replies(): HasMany
     {
-        return $this->hasMany(ForumReply::class);
+        return $this->hasMany(ForumReply::class, 'thread_id');
     }
 }

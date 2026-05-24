@@ -2,27 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ForumReply extends Model
+class Rating extends Model
 {
-    /** @use HasFactory<\Database\Factories\ForumReplyFactory> */
-    use HasFactory, SoftDeletes;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'thread_id',
         'user_id',
-        'body',
-        'is_hidden',
-        'is_best_answer',
+        'order_id',
+        'score',
+        'review',
+        'is_visible',
     ];
 
     /**
@@ -33,13 +28,13 @@ class ForumReply extends Model
     protected function casts(): array
     {
         return [
-            'is_hidden' => 'boolean',
-            'is_best_answer' => 'boolean',
+            'is_visible' => 'boolean',
+            'score' => 'integer',
         ];
     }
 
     /**
-     * Get the user that created the reply.
+     * Get the user that created the rating.
      */
     public function user(): BelongsTo
     {
@@ -47,10 +42,10 @@ class ForumReply extends Model
     }
 
     /**
-     * Get the thread that this reply belongs to.
+     * Get the order that this rating belongs to.
      */
-    public function thread(): BelongsTo
+    public function order(): BelongsTo
     {
-        return $this->belongsTo(ForumThread::class, 'thread_id');
+        return $this->belongsTo(Order::class);
     }
 }

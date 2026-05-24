@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ForumReply extends Model
+class ProjectComment extends Model
 {
-    /** @use HasFactory<\Database\Factories\ForumReplyFactory> */
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -18,11 +16,10 @@ class ForumReply extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'thread_id',
+        'project_id',
         'user_id',
         'body',
         'is_hidden',
-        'is_best_answer',
     ];
 
     /**
@@ -34,23 +31,22 @@ class ForumReply extends Model
     {
         return [
             'is_hidden' => 'boolean',
-            'is_best_answer' => 'boolean',
         ];
     }
 
     /**
-     * Get the user that created the reply.
+     * Get the project that owns the comment.
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the user that created the comment.
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the thread that this reply belongs to.
-     */
-    public function thread(): BelongsTo
-    {
-        return $this->belongsTo(ForumThread::class, 'thread_id');
     }
 }

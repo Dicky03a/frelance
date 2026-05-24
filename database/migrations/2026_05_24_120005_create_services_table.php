@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->text('description')->nullable();
-            $table->decimal('price', 15, 2)->default(0);
-            $table->string('image_url')->nullable();
-            $table->string('status')->default('active'); // active, inactive
-            $table->softDeletes();
+            $table->text('description');
+            $table->string('icon', 100)->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->smallInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }
