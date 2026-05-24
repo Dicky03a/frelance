@@ -40,5 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/projects/{project}/ratings', [\App\Http\Controllers\Client\ReviewController::class, 'storeRating'])->name('projects.ratings.store');
 });
 
+Route::get('/api/calculator/config/{type}', function ($type) {
+    return \App\Models\CalculatorConfig::where('project_type', $type)->where('is_active', true)->first();
+})->name('api.calculator.config');
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
