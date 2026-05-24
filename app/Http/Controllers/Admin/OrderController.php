@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\OrderResource;
+
 class OrderController extends Controller
 {
     public function index(Request $request): Response
@@ -28,7 +30,7 @@ class OrderController extends Controller
         $orders = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('admin/orders/index', [
-            'orders' => $orders,
+            'orders' => OrderResource::collection($orders),
             'filters' => $request->only(['status', 'search']),
             'statuses' => OrderStatus::cases(),
         ]);

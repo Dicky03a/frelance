@@ -30,7 +30,7 @@ interface DashboardProps extends SharedProps {
         orders_this_month: number;
         new_clients_this_month: number;
     };
-    pending_orders: Order[];
+    pending_orders: { data: Order[] };
     recent_threads: ForumThread[];
     monthly_revenue: Array<{ month: string; revenue: number }>;
     top_services: ServicePackage[];
@@ -94,7 +94,7 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
                     />
                     <StatCard 
                         title="Pesanan Tertunda" 
-                        value={pending_orders.length} 
+                        value={pending_orders.data.length} 
                         icon={Clock}
                     />
                 </div>
@@ -175,7 +175,7 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5 text-sm text-white/70">
-                                    {pending_orders.map(order => (
+                                    {pending_orders.data.map(order => (
                                         <tr key={order.id} className="hover:bg-white/5 transition-colors cursor-pointer">
                                             <td className="px-6 py-4 font-mono text-xs">{order.order_code}</td>
                                             <td className="px-6 py-4">{order.user?.name}</td>
@@ -190,7 +190,7 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
                                             </td>
                                         </tr>
                                     ))}
-                                    {pending_orders.length === 0 && (
+                                    {pending_orders.data.length === 0 && (
                                         <tr>
                                             <td colSpan={5} className="px-6 py-8 text-center text-white/30 italic">Belum ada pesanan masuk</td>
                                         </tr>

@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\ProjectResource;
+
 class ProjectController extends Controller
 {
     public function index(Request $request): Response
@@ -38,7 +40,7 @@ class ProjectController extends Controller
         $projects = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('admin/projects/index', [
-            'projects' => $projects,
+            'projects' => ProjectResource::collection($projects),
             'filters' => $request->only(['search', 'status', 'category']),
             'categories' => ProjectCategory::cases(),
             'statuses' => ProjectStatus::cases(),

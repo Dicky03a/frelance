@@ -1,36 +1,13 @@
-import AppLayout from '@/layouts/app-layout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { 
-    Table, 
-    TableBody, 
-    TableCell, 
-    TableHead, 
-    TableHeader, 
-    TableRow 
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { Project } from '@/types/models';
 import { PaginatedResponse } from '@/types/pagination';
-import { Project, ProjectCategory, ProjectStatus } from '@/types/models';
 import { Head, Link, router } from '@inertiajs/react';
-import { 
-    Plus, 
-    Search, 
-    Edit2, 
-    Trash2, 
-    Eye, 
-    MoreHorizontal,
-    ExternalLink
-} from 'lucide-react';
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
-    DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
-import { useDebounce } from '@/hooks/use-debounce'; // Assuming this hook exists or I will create it
-import { useEffect } from 'react';
+import { Briefcase, Edit2, Plus, Search, Trash2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface ProjectsIndexProps {
     projects: PaginatedResponse<Project>;
@@ -45,7 +22,7 @@ interface ProjectsIndexProps {
 
 export default function Index({ projects, filters, categories, statuses }: ProjectsIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
-    
+
     // Simple debounce logic for search
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -65,14 +42,14 @@ export default function Index({ projects, filters, categories, statuses }: Proje
     return (
         <AppLayout>
             <Head title="Manajemen Proyek" />
-            
+
             <div className="space-y-6 p-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-white">Proyek</h1>
                         <p className="text-white/50">Kelola portofolio dan proyek Anda.</p>
                     </div>
-                    <Button asChild className="bg-indigo-600 hover:bg-indigo-700 rounded-xl">
+                    <Button asChild className="rounded-xl bg-indigo-600 hover:bg-indigo-700">
                         <Link href={route('admin.projects.create')}>
                             <Plus className="mr-2 h-4 w-4" /> Tambah Proyek
                         </Link>
@@ -82,30 +59,38 @@ export default function Index({ projects, filters, categories, statuses }: Proje
                 <div className="rounded-[20px] border border-white/7 bg-[#1c1c28] p-6">
                     <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center">
                         <div className="relative flex-1">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
-                            <Input 
-                                placeholder="Cari judul proyek..." 
-                                className="pl-10 bg-white/5 border-white/10 rounded-xl focus:ring-indigo-500/20"
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-white/30" />
+                            <Input
+                                placeholder="Cari judul proyek..."
+                                className="rounded-xl border-white/10 bg-white/5 pl-10 focus:ring-indigo-500/20"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
                         <div className="flex gap-2">
-                            <select 
-                                className="bg-white/5 border-white/10 rounded-xl text-sm text-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                            <select
+                                className="rounded-xl border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none"
                                 value={filters.category || ''}
                                 onChange={(e) => router.get(route('admin.projects.index'), { ...filters, category: e.target.value })}
                             >
                                 <option value="">Semua Kategori</option>
-                                {categories.map(c => <option key={c} value={c}>{c.replace('_', ' ').toUpperCase()}</option>)}
+                                {categories.map((c) => (
+                                    <option key={c} value={c}>
+                                        {c.replace('_', ' ').toUpperCase()}
+                                    </option>
+                                ))}
                             </select>
-                            <select 
-                                className="bg-white/5 border-white/10 rounded-xl text-sm text-white/70 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                            <select
+                                className="rounded-xl border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none"
                                 value={filters.status || ''}
                                 onChange={(e) => router.get(route('admin.projects.index'), { ...filters, status: e.target.value })}
                             >
                                 <option value="">Semua Status</option>
-                                {statuses.map(s => <option key={s} value={s}>{s.toUpperCase()}</option>)}
+                                {statuses.map((s) => (
+                                    <option key={s} value={s}>
+                                        {s.toUpperCase()}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -124,7 +109,7 @@ export default function Index({ projects, filters, categories, statuses }: Proje
                             </TableHeader>
                             <TableBody>
                                 {projects.data.map((project) => (
-                                    <TableRow key={project.id} className="border-white/7 hover:bg-white/5 group transition-colors">
+                                    <TableRow key={project.id} className="group border-white/7 transition-colors hover:bg-white/5">
                                         <TableCell>
                                             <div className="flex items-center gap-3">
                                                 <div className="h-10 w-16 overflow-hidden rounded-lg bg-white/5">
@@ -140,16 +125,20 @@ export default function Index({ projects, filters, categories, statuses }: Proje
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge variant="outline" className="capitalize border-white/10 text-white/70">
+                                            <Badge variant="outline" className="border-white/10 text-white/70 capitalize">
                                                 {project.category.replace('_', ' ')}
                                             </Badge>
                                         </TableCell>
                                         <TableCell>
-                                            <Badge className={
-                                                project.status === 'published' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                                                project.status === 'draft' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                                                'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                                            }>
+                                            <Badge
+                                                className={
+                                                    project.status === 'published'
+                                                        ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                                        : project.status === 'draft'
+                                                          ? 'border-amber-500/20 bg-amber-500/10 text-amber-400'
+                                                          : 'border-rose-500/20 bg-rose-500/10 text-rose-400'
+                                                }
+                                            >
                                                 {project.status.toUpperCase()}
                                             </Badge>
                                         </TableCell>
@@ -157,12 +146,22 @@ export default function Index({ projects, filters, categories, statuses }: Proje
                                         <TableCell className="text-white/50">{new Date(project.created_at).toLocaleDateString()}</TableCell>
                                         <TableCell className="text-right">
                                             <div className="flex justify-end gap-2">
-                                                <Button variant="ghost" size="icon" asChild className="hover:bg-indigo-500/10 hover:text-indigo-400 text-white/30">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    asChild
+                                                    className="text-white/30 hover:bg-indigo-500/10 hover:text-indigo-400"
+                                                >
                                                     <Link href={route('admin.projects.edit', project.id)}>
                                                         <Edit2 size={16} />
                                                     </Link>
                                                 </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(project.id)} className="hover:bg-rose-500/10 hover:text-rose-400 text-white/30">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleDelete(project.id)}
+                                                    className="text-white/30 hover:bg-rose-500/10 hover:text-rose-400"
+                                                >
                                                     <Trash2 size={16} />
                                                 </Button>
                                             </div>
@@ -186,12 +185,12 @@ export default function Index({ projects, filters, categories, statuses }: Proje
                         </div>
                         <div className="flex gap-2">
                             {projects.links.prev && (
-                                <Button variant="outline" size="sm" asChild className="border-white/10 bg-white/5 hover:bg-white/10 text-white">
+                                <Button variant="outline" size="sm" asChild className="border-white/10 bg-white/5 text-white hover:bg-white/10">
                                     <Link href={projects.links.prev}>Previous</Link>
                                 </Button>
                             )}
                             {projects.links.next && (
-                                <Button variant="outline" size="sm" asChild className="border-white/10 bg-white/5 hover:bg-white/10 text-white">
+                                <Button variant="outline" size="sm" asChild className="border-white/10 bg-white/5 text-white hover:bg-white/10">
                                     <Link href={projects.links.next}>Next</Link>
                                 </Button>
                             )}

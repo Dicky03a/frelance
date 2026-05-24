@@ -12,12 +12,16 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\SkillResource;
+
 class SkillController extends Controller
 {
     public function index(): Response
     {
+        $skills = Skill::orderBy('sort_order')->paginate(20);
+
         return Inertia::render('admin/skills/index', [
-            'skills' => Skill::orderBy('sort_order')->paginate(20),
+            'skills' => SkillResource::collection($skills),
             'categories' => SkillCategory::cases(),
         ]);
     }

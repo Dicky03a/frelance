@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\UserResource;
+
 class UserController extends Controller
 {
     public function index(Request $request): Response
@@ -28,7 +30,7 @@ class UserController extends Controller
         $users = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('admin/users/index', [
-            'users' => $users,
+            'users' => UserResource::collection($users),
             'filters' => $request->only(['search', 'role']),
             'roles' => UserRole::cases(),
         ]);

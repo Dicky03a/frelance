@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\OrderResource;
+
 class DashboardController extends Controller
 {
     public function index(): Response
@@ -32,7 +34,7 @@ class DashboardController extends Controller
             ->count();
 
         $pendingOrders = Order::where('status', OrderStatus::PENDING->value)
-            ->with(['user', 'servicePackage'])
+            ->with(['user', 'servicePackage.service'])
             ->latest()
             ->take(5)
             ->get();
@@ -69,7 +71,7 @@ class DashboardController extends Controller
                 'orders_this_month' => $ordersThisMonth,
                 'new_clients_this_month' => $newClientsThisMonth,
             ],
-            'pending_orders' => $pendingOrders,
+            'pending_orders' => OrderResource::collection($pendingOrders),
             'recent_threads' => $recentThreads,
             'monthly_revenue' => $monthlyRevenue,
             'top_services' => $topServices,
