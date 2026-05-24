@@ -3,9 +3,51 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\ForumThread;
+use App\Enums\ForumCategory;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ForumController extends Controller
 {
-    //
+    public function index(Request $request): Response
+    {
+        $query = ForumThread::where('is_hidden', false)
+            ->with('user')
+            ->withCount(['replies as visible_replies_count' => function ($query) {
+                $query->where('is_hidden', false);
+            }]);
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', "%{$request->search}%");
+        }
+
+        $threads = $query->latest()->paginate(15)->withQueryString();
+
+        return Inertia::render('public/forum/index', [
+            'threads' => $threads,
+            'categories' => ForumCategory::cases(),
+            'filters' => $request->only(['category', 'search']),
+        ]);
+    }
+
+    public function show(ForumThread $thread): Response
+    {
+        if ($thread->is_hidden) {
+            abort(404);
+        }
+
+        $thread->increment('views');
+
+        return Inertia::render('public/forum/show', [
+            'thread' => $thread->load(['user', 'replies.user' => function ($query) {
+                $query->where('is_hidden', false);
+            }]),
+        ]);
+    }
 }

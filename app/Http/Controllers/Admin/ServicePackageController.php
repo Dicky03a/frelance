@@ -27,13 +27,13 @@ class ServicePackageController extends Controller
         return redirect()->back()->with('success', 'Paket layanan berhasil ditambahkan.');
     }
 
-    public function update(UpdateServicePackageRequest $request, Service $service, ServicePackage $package): RedirectResponse
+    public function update(UpdateServicePackageRequest $request, ServicePackage $package): RedirectResponse
     {
         $package->update($request->validated());
         return redirect()->back()->with('success', 'Paket layanan berhasil diperbarui.');
     }
 
-    public function destroy(Service $service, ServicePackage $package): RedirectResponse
+    public function destroy(ServicePackage $package): RedirectResponse
     {
         $package->delete();
         return redirect()->back()->with('success', 'Paket layanan berhasil dihapus.');

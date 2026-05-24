@@ -66,4 +66,10 @@ class OrderController extends Controller
 
         return redirect()->back()->with('success', 'Order telah diselesaikan.');
     }
+
+    public function destroy(Order $order): RedirectResponse
+    {
+        $order->delete();
+        return redirect()->route('admin.orders.index')->with('success', 'Order berhasil dihapus.');
+    }
 }

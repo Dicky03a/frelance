@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('admin/dashboard');
-    })->name('dashboard');
+    Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('projects', \App\Http\Controllers\Admin\ProjectController::class);
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);

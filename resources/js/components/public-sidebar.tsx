@@ -15,20 +15,35 @@ import { cn } from '@/lib/utils';
 export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
     const { url } = usePage();
 
+    const getPathname = (itemUrl: string) => {
+        try {
+            return new URL(itemUrl).pathname;
+        } catch (e) {
+            return itemUrl;
+        }
+    };
+
+    const isUrlActive = (itemUrl: string) => {
+        const pathname = getPathname(itemUrl);
+        if (pathname === url) return true;
+        if (pathname !== '/' && url.startsWith(pathname)) return true;
+        return false;
+    };
+
     const sections = [
         {
             title: 'Overview',
             items: [
-                { title: 'Dashboard', href: '/', icon: LayoutDashboard },
-                { title: 'Projects', href: '/projects', icon: Folder },
-                { title: 'Services', href: '/services', icon: Package },
+                { title: 'Dashboard', href: route('home'), icon: LayoutDashboard },
+                { title: 'Projects', href: route('projects.index'), icon: Folder },
+                { title: 'Services', href: route('services.index'), icon: Package },
             ]
         },
         {
             title: 'Tools',
             items: [
                 { title: 'Calculator', href: '/#calculator', icon: Calculator },
-                { title: 'Forum', href: '/forum', icon: MessageSquare },
+                { title: 'Forum', href: route('forum.index'), icon: MessageSquare },
                 { title: 'Reviews', href: '/reviews', icon: Star },
             ]
         },
@@ -55,11 +70,11 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
                         </h4>
                         <div className="space-y-1">
                             {section.items.map((item, j) => {
-                                const isActive = url === item.href || (item.href !== '/' && url.startsWith(item.href));
+                                const isActive = isUrlActive(item.href);
                                 return (
                                     <Link
                                         key={j}
-                                        href={item.href}
+                                        href={getPathname(item.href)}
                                         className={cn(
                                             "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all group",
                                             isActive 
