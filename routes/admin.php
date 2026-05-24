@@ -10,15 +10,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(funct
 
     Route::resource('projects', \App\Http\Controllers\Admin\ProjectController::class);
     Route::resource('services', \App\Http\Controllers\Admin\ServiceController::class);
-    Route::resource('services/{service}/packages', \App\Http\Controllers\Admin\ServicePackageController::class);
-    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
-    Route::resource('forum/threads', \App\Http\Controllers\Admin\ForumThreadController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::resource('services.packages', \App\Http\Controllers\Admin\ServicePackageController::class)->shallow();
     
-    Route::post('/forum/replies/{reply}/hide', function () {
-        // Logic to hide reply
-    })->name('forum.replies.hide');
+    Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
+    
+    Route::prefix('forum')->as('forum.')->group(function () {
+        Route::resource('threads', \App\Http\Controllers\Admin\ForumThreadController::class)->only(['index', 'show', 'update', 'destroy']);
+        Route::post('/replies/{reply}/hide', function () {
+            // Logic to hide reply
+        })->name('replies.hide');
+    });
 
     Route::resource('skills', \App\Http\Controllers\Admin\SkillController::class);
+    Route::post('/skills/order', [\App\Http\Controllers\Admin\SkillController::class, 'updateOrder'])->name('skills.order');
     
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('users.show');
