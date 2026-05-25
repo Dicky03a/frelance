@@ -20,17 +20,14 @@ export function AppSidebar() {
         {
             title: 'Dashboard',
             url: route('dashboard'),
-            icon: LayoutGrid,
         },
         {
             title: 'My Orders',
             url: route('client.orders'),
-            icon: ShoppingCart,
         },
         {
             title: 'Forum',
             url: route('forum.index'),
-            icon: MessageSquare,
         },
     ];
 
@@ -38,42 +35,34 @@ export function AppSidebar() {
         {
             title: 'Statistics',
             url: route('admin.dashboard'),
-            icon: ShieldCheck,
         },
         {
             title: 'Proyek',
             url: route('admin.projects.index'),
-            icon: Briefcase,
         },
         {
             title: 'Layanan',
             url: route('admin.services.index'),
-            icon: Wrench,
         },
         {
             title: 'Pesanan',
             url: route('admin.orders.index'),
-            icon: ShoppingCart,
         },
         {
             title: 'Calculator',
             url: route('admin.calculator-configs.index'),
-            icon: Calculator,
         },
         {
             title: 'Forum',
             url: route('admin.forum.threads.index'),
-            icon: MessageSquare,
         },
         {
             title: 'Ulasan',
             url: route('admin.reviews.index'),
-            icon: Star,
         },
         {
             title: 'Skills',
             url: route('admin.skills.index'),
-            icon: Settings2,
         },
     ];
 
@@ -81,12 +70,10 @@ export function AppSidebar() {
         {
             title: 'Repository',
             url: 'https://github.com/laravel/react-starter-kit',
-            icon: Folder,
         },
         {
             title: 'Documentation',
             url: 'https://laravel.com/docs/starter-kits',
-            icon: BookOpen,
         },
     ];
 

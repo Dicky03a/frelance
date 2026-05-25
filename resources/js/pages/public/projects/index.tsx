@@ -4,7 +4,6 @@ import { ProjectCard } from '@/components/public/project-card';
 import { Project } from '@/types/models';
 import { PaginatedResponse } from '@/types/pagination';
 import { cn } from '@/lib/utils';
-import { Search, Briefcase } from 'lucide-react';
 
 import { useTranslation } from '@/lib/i18n';
 
@@ -31,25 +30,22 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
         <PublicLayout>
             <Head title={`${t('title')} - Professional Works`} />
 
-            <div className="px-6 py-10 space-y-12">
-                <header className="max-w-3xl space-y-4">
-                    <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/10 mb-2">
-                        <Briefcase size={28} />
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{t('title')}</h1>
-                    <p className="text-white/40 text-lg leading-relaxed">
+            <div className="px-12 py-16 space-y-16">
+                <header className="max-w-3xl space-y-6">
+                    <h1 className="text-[48px] md:text-[56px] font-normal text-cursor-ink leading-[1.1] tracking-[-1.5px]">{t('title')}</h1>
+                    <p className="text-cursor-body text-[20px] leading-relaxed font-normal">
                         {t('subtitle')}
                     </p>
                 </header>
 
-                <div className="sticky top-16 z-20 bg-[#09090f]/80 backdrop-blur-md py-4 -mx-2 px-2 border-y border-white/5 flex gap-2 overflow-x-auto no-scrollbar">
+                <div className="sticky top-16 z-20 bg-cursor-canvas/80 backdrop-blur-md py-6 -mx-4 px-4 border-y border-cursor-hairline flex gap-4 overflow-x-auto no-scrollbar">
                     <button
                         onClick={() => router.get(route('projects.index'))}
                         className={cn(
-                            "px-6 py-2.5 rounded-full text-xs font-bold border transition-all whitespace-nowrap",
+                            "px-6 py-2 rounded-cursor-md text-sm font-medium border transition-all whitespace-nowrap",
                             !filters.category 
-                                ? "bg-indigo-600 border-indigo-500 text-white" 
-                                : "bg-white/5 border-white/5 text-white/40 hover:border-white/10"
+                                ? "bg-cursor-ink border-cursor-ink text-white" 
+                                : "bg-cursor-surface-card border-cursor-hairline text-cursor-muted hover:border-cursor-hairline-strong hover:text-cursor-ink"
                         )}
                     >
                         {t('all_projects')}
@@ -59,49 +55,48 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
                             key={cat}
                             onClick={() => handleCategoryFilter(cat)}
                             className={cn(
-                                "px-6 py-2.5 rounded-full text-xs font-bold border transition-all whitespace-nowrap",
+                                "px-6 py-2 rounded-cursor-md text-sm font-medium border transition-all whitespace-nowrap",
                                 filters.category === cat 
-                                    ? "bg-indigo-600 border-indigo-500 text-white" 
-                                    : "bg-white/5 border-white/5 text-white/40 hover:border-white/10"
+                                    ? "bg-cursor-ink border-cursor-ink text-white" 
+                                    : "bg-cursor-surface-card border-cursor-hairline text-cursor-muted hover:border-cursor-hairline-strong hover:text-cursor-ink"
                             )}
                         >
-                            {cat.replace('_', ' ').toUpperCase()}
+                            {cat.replace('_', ' ')}
                         </button>
                     ))}
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                     {projects.data.map(project => (
                         <ProjectCard key={project.id} project={project} />
                     ))}
                 </div>
 
                 {projects.data.length === 0 && (
-                    <div className="py-32 text-center rounded-[40px] border border-dashed border-white/10">
-                        <Search size={48} className="mx-auto text-white/10 mb-4" />
-                        <h3 className="text-xl font-bold text-white mb-2">{t('no_projects')}</h3>
-                        <p className="text-white/30 italic">{t('no_projects_desc')}</p>
+                    <div className="py-32 text-center rounded-cursor-lg border border-dashed border-cursor-hairline">
+                        <h3 className="text-[22px] font-normal text-cursor-ink mb-3 tracking-[-0.11px]">{t('no_projects')}</h3>
+                        <p className="text-cursor-muted italic font-normal">{t('no_projects_desc')}</p>
                     </div>
                 )}
 
                 {/* Pagination */}
                 {projects.meta.last_page > 1 && (
-                    <div className="flex justify-center gap-2 pt-10">
+                    <div className="flex justify-center gap-4 pt-16 border-t border-cursor-hairline">
                         {projects.links.prev && (
                             <button 
                                 onClick={() => router.get(projects.links.prev!)}
-                                className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 text-white/50 font-bold hover:text-white transition-all"
+                                className="px-8 py-3 rounded-cursor-md bg-cursor-surface-card border border-cursor-hairline text-cursor-muted font-medium hover:text-cursor-ink hover:bg-cursor-hairline-soft transition-all text-sm"
                             >
                                 {tCommon('previous')}
                             </button>
                         )}
-                        <div className="px-6 py-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-bold">
+                        <div className="px-8 py-3 rounded-cursor-md bg-cursor-surface-strong text-cursor-ink font-medium text-sm">
                             {t('page_info', { current: String(projects.meta.current_page), last: String(projects.meta.last_page) })}
                         </div>
                         {projects.links.next && (
                             <button 
                                 onClick={() => router.get(projects.links.next!)}
-                                className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 text-white/50 font-bold hover:text-white transition-all"
+                                className="px-8 py-3 rounded-cursor-md bg-cursor-surface-card border border-cursor-hairline text-cursor-muted font-medium hover:text-cursor-ink hover:bg-cursor-hairline-soft transition-all text-sm"
                             >
                                 {tCommon('next')}
                             </button>

@@ -62,53 +62,53 @@ export default function Form({ config }: FormProps) {
 
             <div className="max-w-4xl mx-auto p-6 space-y-8">
                 <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" asChild className="text-white/40 hover:text-white hover:bg-white/5 rounded-xl">
+                    <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-foreground hover:bg-muted rounded-md">
                         <Link href={route('admin.calculator-configs.index')}>
                             <ArrowLeft size={20} />
                         </Link>
                     </Button>
-                    <h1 className="text-2xl font-bold text-white">{isEdit ? 'Edit Konfigurasi' : 'Tambah Konfigurasi Baru'}</h1>
+                    <h1 className="text-[26px] font-normal tracking-[-0.325px] text-foreground">{isEdit ? 'Edit Konfigurasi' : 'Tambah Konfigurasi Baru'}</h1>
                 </div>
 
                 <form onSubmit={submit} className="space-y-6">
-                    <Card className="border-white/10 bg-[#1c1c28]">
+                    <Card className="border-border bg-card">
                         <CardContent className="pt-6 space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="project_type">Tipe Proyek (Key)</Label>
+                                    <Label htmlFor="project_type" className="text-foreground">Tipe Proyek (Key)</Label>
                                     <Input 
                                         id="project_type"
                                         value={data.project_type}
                                         onChange={e => setData('project_type', e.target.value)}
                                         placeholder="web_app"
-                                        className="bg-white/5 border-white/10 text-white"
+                                        className="bg-card border-border text-foreground"
                                     />
-                                    {errors.project_type && <p className="text-xs text-red-400">{errors.project_type}</p>}
+                                    {errors.project_type && <p className="text-xs text-rose-600">{errors.project_type}</p>}
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="label">Label Tampilan</Label>
+                                    <Label htmlFor="label" className="text-foreground">Label Tampilan</Label>
                                     <Input 
                                         id="label"
                                         value={data.label}
                                         onChange={e => setData('label', e.target.value)}
                                         placeholder="Web Application"
-                                        className="bg-white/5 border-white/10 text-white"
+                                        className="bg-card border-border text-foreground"
                                     />
-                                    {errors.label && <p className="text-xs text-red-400">{errors.label}</p>}
+                                    {errors.label && <p className="text-xs text-rose-600">{errors.label}</p>}
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="base_price">Harga Dasar (IDR)</Label>
+                                    <Label htmlFor="base_price" className="text-foreground">Harga Dasar (IDR)</Label>
                                     <Input 
                                         id="base_price"
                                         type="number"
                                         value={data.base_price}
                                         onChange={e => setData('base_price', parseFloat(e.target.value))}
-                                        className="bg-white/5 border-white/10 text-white"
+                                        className="bg-card border-border text-foreground"
                                     />
-                                    {errors.base_price && <p className="text-xs text-red-400">{errors.base_price}</p>}
+                                    {errors.base_price && <p className="text-xs text-rose-600">{errors.base_price}</p>}
                                 </div>
                                 <div className="flex items-center gap-3 pt-8">
                                     <Checkbox 
@@ -116,7 +116,7 @@ export default function Form({ config }: FormProps) {
                                         checked={data.is_active}
                                         onCheckedChange={checked => setData('is_active', !!checked)}
                                     />
-                                    <Label htmlFor="is_active">Aktifkan di Kalkulator Publik</Label>
+                                    <Label htmlFor="is_active" className="text-foreground">Aktifkan di Kalkulator Publik</Label>
                                 </div>
                             </div>
                         </CardContent>
@@ -124,17 +124,17 @@ export default function Form({ config }: FormProps) {
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-bold text-white">Daftar Fitur & Harga Tambahan</h3>
-                            <Button type="button" onClick={addFeature} variant="outline" size="sm" className="border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 rounded-lg">
+                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground">Daftar Fitur & Harga Tambahan</h3>
+                            <Button type="button" onClick={addFeature} variant="outline" size="sm" className="border-primary/30 text-primary hover:bg-primary/10 rounded-md">
                                 <Plus className="mr-2 h-4 w-4" /> Tambah Fitur
                             </Button>
                         </div>
                         
                         <div className="space-y-3">
                             {data.features.map((feature, index) => (
-                                <div key={index} className="flex gap-3 items-start bg-white/5 p-4 rounded-xl border border-white/5">
+                                <div key={index} className="flex gap-3 items-start bg-muted/50 p-4 rounded-xl border border-border">
                                     <div className="flex-1 space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Key</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Key</Label>
                                         <Input 
                                             value={feature.key}
                                             onChange={e => {
@@ -143,11 +143,11 @@ export default function Form({ config }: FormProps) {
                                                 setData('features', newFeatures);
                                             }}
                                             placeholder="auth"
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <div className="flex-[2] space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Label</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Label</Label>
                                         <Input 
                                             value={feature.label}
                                             onChange={e => {
@@ -156,11 +156,11 @@ export default function Form({ config }: FormProps) {
                                                 setData('features', newFeatures);
                                             }}
                                             placeholder="User Authentication"
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <div className="flex-1 space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Tambah Harga</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Tambah Harga</Label>
                                         <Input 
                                             type="number"
                                             value={feature.price_add}
@@ -169,7 +169,7 @@ export default function Form({ config }: FormProps) {
                                                 newFeatures[index].price_add = parseFloat(e.target.value);
                                                 setData('features', newFeatures);
                                             }}
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <Button 
@@ -177,7 +177,7 @@ export default function Form({ config }: FormProps) {
                                         onClick={() => removeFeature(index)} 
                                         variant="ghost" 
                                         size="icon" 
-                                        className="mt-6 text-white/20 hover:text-red-400"
+                                        className="mt-6 text-muted-foreground/30 hover:text-rose-600"
                                         disabled={data.features.length === 1}
                                     >
                                         <Trash2 size={16} />
@@ -189,17 +189,17 @@ export default function Form({ config }: FormProps) {
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-bold text-white">Timeline & Multiplier</h3>
-                            <Button type="button" onClick={addTimeline} variant="outline" size="sm" className="border-violet-500/30 text-violet-400 hover:bg-violet-500/10 rounded-lg">
+                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground">Timeline & Multiplier</h3>
+                            <Button type="button" onClick={addTimeline} variant="outline" size="sm" className="border-primary/30 text-primary hover:bg-primary/10 rounded-md">
                                 <Plus className="mr-2 h-4 w-4" /> Tambah Timeline
                             </Button>
                         </div>
                         
                         <div className="space-y-3">
                             {data.timeline_multipliers.map((m, index) => (
-                                <div key={index} className="flex gap-3 items-start bg-white/5 p-4 rounded-xl border border-white/5">
+                                <div key={index} className="flex gap-3 items-start bg-muted/50 p-4 rounded-xl border border-border">
                                     <div className="flex-1 space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Weeks</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Weeks</Label>
                                         <Input 
                                             type="number"
                                             value={m.weeks}
@@ -208,11 +208,11 @@ export default function Form({ config }: FormProps) {
                                                 newTimelines[index].weeks = parseInt(e.target.value);
                                                 setData('timeline_multipliers', newTimelines);
                                             }}
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <div className="flex-[2] space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Label</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Label</Label>
                                         <Input 
                                             value={m.label}
                                             onChange={e => {
@@ -221,11 +221,11 @@ export default function Form({ config }: FormProps) {
                                                 setData('timeline_multipliers', newTimelines);
                                             }}
                                             placeholder="Standard Delivery"
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <div className="flex-1 space-y-2">
-                                        <Label className="text-[10px] uppercase text-white/30">Multiplier</Label>
+                                        <Label className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Multiplier</Label>
                                         <Input 
                                             type="number"
                                             step="0.1"
@@ -235,7 +235,7 @@ export default function Form({ config }: FormProps) {
                                                 newTimelines[index].multiplier = parseFloat(e.target.value);
                                                 setData('timeline_multipliers', newTimelines);
                                             }}
-                                            className="h-9 bg-black/20 border-white/10 text-xs"
+                                            className="h-9 bg-muted border-border text-xs text-foreground"
                                         />
                                     </div>
                                     <Button 
@@ -243,7 +243,7 @@ export default function Form({ config }: FormProps) {
                                         onClick={() => removeTimeline(index)} 
                                         variant="ghost" 
                                         size="icon" 
-                                        className="mt-6 text-white/20 hover:text-red-400"
+                                        className="mt-6 text-muted-foreground/30 hover:text-rose-600"
                                         disabled={data.timeline_multipliers.length === 1}
                                     >
                                         <Trash2 size={16} />
@@ -253,11 +253,11 @@ export default function Form({ config }: FormProps) {
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-4 pt-6 border-t border-white/5">
-                        <Button type="button" variant="ghost" asChild className="text-white/40 rounded-xl px-8">
+                    <div className="flex justify-end gap-4 pt-6 border-t border-border">
+                        <Button type="button" variant="ghost" asChild className="text-muted-foreground rounded-md px-8">
                             <Link href={route('admin.calculator-configs.index')}>Batal</Link>
                         </Button>
-                        <Button disabled={processing} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl px-12 font-bold shadow-lg shadow-indigo-600/20">
+                        <Button disabled={processing} className="bg-primary hover:bg-primary/90 rounded-md px-12 font-bold text-white">
                             {processing ? 'Menyimpan...' : (
                                 <><Save className="mr-2 h-4 w-4" /> Simpan Konfigurasi</>
                             )}

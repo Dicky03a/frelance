@@ -40,13 +40,13 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
 
     const getStatusStyles = (status: string) => {
         switch (status) {
-            case 'completed': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-            case 'paid': return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-            case 'pending': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-            case 'in_progress': return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
+            case 'completed': return 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20';
+            case 'paid': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+            case 'pending': return 'bg-amber-500/10 text-amber-600 border-amber-500/20';
+            case 'in_progress': return 'bg-primary/10 text-primary border-primary/20';
             case 'cancelled':
-            case 'expired': return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-            default: return 'bg-white/5 text-white/40 border-white/10';
+            case 'expired': return 'bg-rose-500/10 text-rose-600 border-rose-500/20';
+            default: return 'bg-muted/50 text-muted-foreground border-border';
         }
     };
 
@@ -68,18 +68,15 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
             <div className="px-6 py-10 space-y-8">
                 <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div className="max-w-2xl space-y-4">
-                        <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/10 mb-2">
-                            <ShoppingBag size={28} />
-                        </div>
-                        <h1 className="text-4xl font-black text-white tracking-tight">{t('title')}</h1>
-                        <p className="text-white/40 text-lg">
+                        <h1 className="text-[36px] font-normal tracking-[-0.72px] text-foreground">{t('title')}</h1>
+                        <p className="text-muted-foreground text-lg">
                             Manage and track your service orders.
                         </p>
                     </div>
                 </header>
 
                 {/* Filters */}
-                <div className="flex flex-wrap items-center gap-2 border-b border-white/5 pb-6">
+                <div className="flex flex-wrap items-center gap-2 border-b border-border pb-6">
                     {tabs.map(tab => (
                         <button
                             key={tab.value || 'all'}
@@ -87,8 +84,8 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                             className={cn(
                                 "px-6 py-2.5 rounded-full text-sm font-bold transition-all",
                                 (filters.status || null) === tab.value
-                                    ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
-                                    : "bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                    ? "bg-primary text-white"
+                                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
                             )}
                         >
                             {tab.label}
@@ -101,22 +98,19 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                     {orders.data.map(order => (
                         <div 
                             key={order.id} 
-                            className="group flex flex-col md:flex-row md:items-center justify-between p-6 rounded-[32px] border border-white/5 bg-[#1c1c28] hover:border-indigo-500/30 transition-all duration-300"
+                            className="group flex flex-col md:flex-row md:items-center justify-between p-6 rounded-xl border border-border bg-card hover:border-primary/30 transition-all duration-300"
                         >
                             <div className="flex items-center gap-6">
-                                <div className="hidden sm:flex w-16 h-16 rounded-[20px] bg-indigo-500/10 items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform">
-                                    <Package size={32} />
-                                </div>
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-3">
-                                        <h3 className="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">
+                                        <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground group-hover:text-primary transition-colors">
                                             {order.service_package?.service?.name}
                                         </h3>
-                                        <Badge variant="outline" className="bg-white/5 border-white/10 text-white/50">
+                                        <Badge variant="outline" className="bg-muted/50 border-border text-muted-foreground">
                                             {order.service_package?.name}
                                         </Badge>
                                     </div>
-                                    <p className="text-xs font-mono text-white/20">
+                                    <p className="text-xs font-mono text-muted-foreground/40">
                                         {order.order_code} • {new Date(order.created_at).toLocaleDateString()}
                                     </p>
                                 </div>
@@ -124,7 +118,7 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
 
                             <div className="mt-6 md:mt-0 flex flex-wrap items-center justify-between md:justify-end gap-8">
                                 <div className="text-right">
-                                    <p className="text-2xl font-black text-white">{format(order.total_idr)}</p>
+                                    <p className="text-2xl font-black text-foreground">{format(order.total_idr)}</p>
                                     <Badge variant="outline" className={cn("mt-1 capitalize px-4 py-1 border", getStatusStyles(order.status))}>
                                         {t(`status_${order.status}`)}
                                     </Badge>
@@ -132,20 +126,20 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
 
                                 <div className="flex items-center gap-2">
                                     {order.status === 'pending' && order.midtrans_token && (
-                                        <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold">
+                                        <Button asChild size="sm" className="bg-emerald-600 hover:bg-emerald-700 rounded-md font-bold text-white">
                                             <Link href={route('orders.payment', order.id)}>
                                                 <CreditCard size={16} className="mr-2" /> Pay Now
                                             </Link>
                                         </Button>
                                     )}
                                     {order.status === 'completed' && !order.rating && (
-                                        <Button variant="outline" size="sm" className="border-amber-500/20 bg-amber-500/5 text-amber-500 hover:bg-amber-500/10 rounded-xl font-bold">
+                                        <Button variant="outline" size="sm" className="border-amber-500/20 bg-amber-500/5 text-amber-600 hover:bg-amber-500/10 rounded-md font-bold">
                                             <Link href={route('orders.show', order.id)}>
                                                 <Star size={16} className="mr-2" /> Rate
                                             </Link>
                                         </Button>
                                     )}
-                                    <Button asChild variant="ghost" size="icon" className="rounded-xl hover:bg-white/5 text-white/20 hover:text-white">
+                                    <Button asChild variant="ghost" size="icon" className="rounded-md hover:bg-muted text-muted-foreground hover:text-foreground">
                                         <Link href={route('orders.show', order.id)}>
                                             <ArrowRight size={20} />
                                         </Link>
@@ -156,13 +150,13 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                     ))}
 
                     {orders.data.length === 0 && (
-                        <div className="py-32 text-center rounded-[40px] border border-dashed border-white/5 bg-white/[0.01]">
-                            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-6 text-white/10">
+                        <div className="py-32 text-center rounded-xl border border-dashed border-border bg-accent/30">
+                            <div className="w-20 h-20 rounded-full bg-muted/50 flex items-center justify-center mx-auto mb-6 text-muted-foreground/30">
                                 <ShoppingBag size={40} />
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-2">{t('no_orders')}</h3>
-                            <p className="text-white/30 mb-8">Start your first project with us today.</p>
-                            <Button asChild className="bg-indigo-600 hover:bg-indigo-700 rounded-2xl h-12 px-8 font-bold">
+                            <h3 className="text-[26px] font-normal tracking-[-0.325px] text-foreground mb-2">{t('no_orders')}</h3>
+                            <p className="text-muted-foreground mb-8">Start your first project with us today.</p>
+                            <Button asChild className="bg-primary hover:bg-primary/90 rounded-md h-12 px-8 font-bold text-white">
                                 <Link href={route('services.index')}>
                                     Browse Services <ArrowRight size={18} className="ml-2" />
                                 </Link>
@@ -175,15 +169,15 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                 {orders.meta.last_page > 1 && (
                     <div className="flex justify-center gap-2 pt-10">
                         {orders.links.prev && (
-                            <Button variant="ghost" asChild className="text-white/50 hover:text-white rounded-xl">
+                            <Button variant="ghost" asChild className="text-muted-foreground hover:text-foreground rounded-md">
                                 <Link href={orders.links.prev}>{tCommon('previous')}</Link>
                             </Button>
                         )}
-                        <div className="px-5 py-2 rounded-xl bg-white/5 text-white/30 text-xs font-bold flex items-center">
+                        <div className="px-5 py-2 rounded-md bg-muted/50 text-muted-foreground text-xs font-bold flex items-center">
                             {orders.meta.current_page} / {orders.meta.last_page}
                         </div>
                         {orders.links.next && (
-                            <Button variant="ghost" asChild className="text-white/50 hover:text-white rounded-xl">
+                            <Button variant="ghost" asChild className="text-muted-foreground hover:text-foreground rounded-md">
                                 <Link href={orders.links.next}>{tCommon('next')}</Link>
                             </Button>
                         )}

@@ -1,7 +1,6 @@
 import { ForumThread } from '@/types/models';
-import { Badge } from '@/components/ui/badge';
 import { Link } from '@inertiajs/react';
-import { MessageSquare, Clock, User } from 'lucide-react';
+import { MessageSquare, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 import { useTranslation } from '@/lib/i18n';
@@ -12,35 +11,36 @@ export function ForumPreviewItem({ thread }: { thread: ForumThread }) {
     return (
         <Link 
             href={`/forum/${thread.slug}`}
-            className="flex gap-4 p-4 rounded-[20px] bg-white/5 hover:bg-white/10 border border-white/5 hover:border-indigo-500/20 transition-all group"
+            className="flex gap-6 py-6 transition-all group hover:bg-cursor-hairline-soft/50 px-4 -mx-4 rounded-cursor-md"
         >
-            <div className="h-10 w-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10 flex-shrink-0">
-                <User size={20} />
-            </div>
-            
-            <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="outline" className="text-[9px] uppercase border-white/10 text-white/40 h-4 px-1.5">
-                        {thread.category}
-                    </Badge>
-                    <span className="text-[10px] text-white/20 flex items-center gap-1">
-                        <Clock size={10} /> {formatDistanceToNow(new Date(thread.created_at))} ago
+            <div className="flex-1 min-w-0 space-y-2">
+                <div className="flex items-center gap-3">
+                    <span className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">
+                        {thread.category.replace('_', ' ')}
+                    </span>
+                    <span className="text-cursor-muted/40">•</span>
+                    <span className="text-[11px] font-medium text-cursor-muted">
+                        {formatDistanceToNow(new Date(thread.created_at))} ago
                     </span>
                 </div>
                 
-                <h4 className="font-bold text-white group-hover:text-indigo-400 transition-colors truncate">
+                <h4 className="text-[18px] font-normal text-cursor-ink group-hover:text-cursor-primary transition-colors truncate tracking-[-0.11px]">
                     {thread.title}
                 </h4>
                 
-                <div className="flex items-center gap-4 mt-2">
-                    <div className="flex items-center gap-1.5 text-[11px] text-white/30 font-medium">
-                        <MessageSquare size={12} className="text-indigo-500" />
+                <div className="flex items-center gap-6">
+                    <div className="text-[13px] text-cursor-body font-medium flex items-center gap-2">
+                        <MessageSquare size={14} className="text-cursor-primary" />
                         <span>{thread.replies_count ?? 0} {t('replies')}</span>
                     </div>
-                    <div className="text-[11px] text-white/30">
-                        {t('author')}: <span className="text-white/60">{thread.user?.name}</span>
+                    <div className="text-[13px] text-cursor-muted font-normal">
+                        by <span className="text-cursor-ink font-medium">{thread.user?.name}</span>
                     </div>
                 </div>
+            </div>
+            
+            <div className="hidden sm:flex items-center">
+                <ArrowRight size={20} className="text-cursor-hairline-strong group-hover:text-cursor-primary transition-colors group-hover:translate-x-1 transition-transform" />
             </div>
         </Link>
     );

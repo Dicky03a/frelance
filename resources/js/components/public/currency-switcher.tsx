@@ -14,13 +14,13 @@ export function CurrencySwitcher() {
     };
 
     return (
-        <div className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1">
+        <div className="flex items-center gap-1 rounded-cursor-md border border-cursor-hairline bg-cursor-surface-card p-1">
             <Button
                 variant="ghost"
                 size="sm"
                 className={cn(
-                    'h-7 rounded-full px-3 text-xs font-medium transition-all',
-                    currency === 'IDR' ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'text-zinc-400 hover:text-zinc-200'
+                    'h-7 rounded-cursor-sm px-3 text-xs font-medium transition-all',
+                    currency === 'IDR' ? 'bg-cursor-ink text-cursor-canvas hover:bg-cursor-ink/90' : 'text-cursor-muted hover:text-cursor-ink'
                 )}
                 onClick={() => setCurrency('IDR')}
             >
@@ -30,8 +30,8 @@ export function CurrencySwitcher() {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                    'h-7 rounded-full px-3 text-xs font-medium transition-all',
-                    currency === 'USD' ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'text-zinc-400 hover:text-zinc-200'
+                    'h-7 rounded-cursor-sm px-3 text-xs font-medium transition-all',
+                    currency === 'USD' ? 'bg-cursor-ink text-cursor-canvas hover:bg-cursor-ink/90' : 'text-cursor-muted hover:text-cursor-ink'
                 )}
                 onClick={() => setCurrency('USD')}
             >

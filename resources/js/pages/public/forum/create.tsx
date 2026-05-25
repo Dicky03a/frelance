@@ -29,87 +29,87 @@ export default function Create({ categories }: ForumCreateProps) {
         <PublicLayout>
             <Head title="Buat Diskusi Baru" />
 
-            <div className="px-6 py-10 max-w-3xl mx-auto space-y-8">
+            <div className="px-12 py-16 max-w-4xl mx-auto space-y-12">
                 <Link 
                     href={route('forum.index')} 
-                    className="inline-flex items-center gap-2 text-sm font-bold text-white/30 hover:text-white transition-colors group"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-cursor-muted hover:text-cursor-ink transition-colors mb-8 group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> BACK TO FORUM
                 </Link>
 
-                <div className="space-y-2">
-                    <h1 className="text-3xl font-black text-white leading-tight">Mulai Diskusi Baru</h1>
-                    <p className="text-white/40">Bagikan pertanyaan atau ide Anda kepada komunitas.</p>
-                </div>
+                <header className="space-y-4">
+                    <h1 className="text-[36px] md:text-[48px] font-normal text-cursor-ink leading-[1.1] tracking-[-1.5px]">Mulai Diskusi Baru</h1>
+                    <p className="text-cursor-body text-lg font-normal">Bagikan pertanyaan atau ide Anda kepada komunitas.</p>
+                </header>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="space-y-4 rounded-[32px] border border-white/10 bg-[#1c1c28] p-8">
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-white/30 uppercase tracking-widest px-1">Judul Diskusi</label>
+                <form onSubmit={handleSubmit} className="space-y-10">
+                    <div className="space-y-10 rounded-xl border border-cursor-hairline bg-cursor-surface-card p-10 md:p-12">
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">Judul Diskusi</label>
                             <Input 
                                 value={data.title}
                                 onChange={e => setData('title', e.target.value)}
                                 placeholder="Apa yang ingin Anda diskusikan?"
                                 className={cn(
-                                    "h-14 bg-white/5 border-white/10 rounded-2xl focus:border-indigo-500/50",
-                                    errors.title && "border-rose-500/50 focus:border-rose-500/50"
+                                    "h-14 bg-cursor-canvas-soft border-cursor-hairline rounded-cursor-md focus:border-cursor-hairline-strong text-cursor-ink placeholder:text-cursor-muted/40 transition-colors",
+                                    errors.title && "border-destructive focus:border-destructive"
                                 )}
                             />
-                            {errors.title && <p className="text-xs text-rose-500 mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.title}</p>}
+                            {errors.title && <p className="text-xs text-destructive mt-2 ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.title}</p>}
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-white/30 uppercase tracking-widest px-1">Kategori</label>
-                            <div className="flex flex-wrap gap-2">
+                        <div className="space-y-4">
+                            <label className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">Kategori</label>
+                            <div className="flex flex-wrap gap-3">
                                 {categories.map(cat => (
                                     <button
                                         key={cat}
                                         type="button"
                                         onClick={() => setData('category', cat)}
                                         className={cn(
-                                            "px-4 py-2 rounded-xl text-sm font-bold transition-all border capitalize",
+                                            "px-6 py-2 rounded-cursor-md text-sm font-medium transition-all border capitalize",
                                             data.category === cat 
-                                                ? "bg-indigo-500/20 border-indigo-500 text-indigo-400" 
-                                                : "bg-white/5 border-white/5 text-white/40 hover:border-white/10 hover:text-white"
+                                                ? "bg-cursor-ink border-cursor-ink text-white" 
+                                                : "bg-cursor-surface-card border-cursor-hairline text-cursor-muted hover:border-cursor-hairline-strong hover:text-cursor-ink"
                                         )}
                                     >
                                         {cat.replace('_', ' ')}
                                     </button>
                                 ))}
                             </div>
-                            {errors.category && <p className="text-xs text-rose-500 mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.category}</p>}
+                            {errors.category && <p className="text-xs text-destructive mt-2 ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.category}</p>}
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-white/30 uppercase tracking-widest px-1">Isi Diskusi</label>
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">Isi Diskusi</label>
                             <textarea 
-                                rows={8}
+                                rows={10}
                                 value={data.body}
                                 onChange={e => setData('body', e.target.value)}
                                 placeholder="Jelaskan lebih detail mengenai topik yang ingin Anda bahas..."
                                 className={cn(
-                                    "w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 min-h-[200px]",
-                                    errors.body && "border-rose-500/50 focus:ring-rose-500/20"
+                                    "w-full bg-cursor-canvas-soft border border-cursor-hairline rounded-cursor-md p-6 text-cursor-ink placeholder:text-cursor-muted/40 focus:outline-none focus:border-cursor-hairline-strong min-h-[250px] transition-colors resize-none",
+                                    errors.body && "border-destructive"
                                 )}
                             />
-                            {errors.body && <p className="text-xs text-rose-500 mt-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.body}</p>}
+                            {errors.body && <p className="text-xs text-destructive mt-2 ml-1 flex items-center gap-1"><AlertCircle size={12} /> {errors.body}</p>}
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-4">
+                    <div className="flex justify-end gap-6">
                         <Button 
                             type="button" 
                             variant="ghost" 
                             asChild 
-                            className="rounded-2xl h-12 px-8 font-bold text-white/40"
+                            className="rounded-cursor-md h-12 px-10 font-medium text-cursor-muted hover:text-cursor-ink hover:bg-cursor-hairline-soft"
                         >
                             <Link href={route('forum.index')}>Batal</Link>
                         </Button>
                         <Button 
                             disabled={processing} 
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl h-12 px-8 font-bold shadow-lg shadow-indigo-600/20"
+                            className="bg-cursor-primary hover:bg-cursor-primary-active text-white rounded-cursor-md h-12 px-10 font-medium border-none shadow-none transition-all"
                         >
-                            <Send size={18} className="mr-2" /> Publikasikan
+                            Publikasikan
                         </Button>
                     </div>
                 </form>

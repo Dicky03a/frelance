@@ -10,74 +10,61 @@ export function ProjectCard({ project }: { project: Project }) {
     const { t } = useTranslation('common');
     
     return (
-        <div className="group relative rounded-[24px] border border-white/7 bg-[#1c1c28] overflow-hidden transition-all duration-500 hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/10">
+        <div className="group relative rounded-cursor-lg border border-cursor-hairline bg-cursor-surface-card overflow-hidden transition-all duration-300 hover:border-cursor-hairline-strong">
             {/* Image Section */}
-            <div className="aspect-[16/10] overflow-hidden relative">
+            <div className="aspect-[16/10] overflow-hidden relative border-b border-cursor-hairline">
                 {project.thumbnail ? (
                     <img 
                         src={`/storage/${project.thumbnail}`} 
                         alt={project.title} 
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                 ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20 flex items-center justify-center">
-                        <span className="text-white/10 font-bold text-lg">DEV PORTO</span>
+                    <div className="h-full w-full bg-cursor-canvas-soft flex items-center justify-center">
+                        <span className="text-cursor-muted/20 font-bold text-lg">DEV PORTO</span>
                     </div>
                 )}
                 
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-[#09090f]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3">
-                    <Link 
-                        href={`/projects/${project.slug}`}
-                        className="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform"
-                    >
-                        <Eye size={20} />
-                    </Link>
-                </div>
-
                 <div className="absolute top-4 left-4">
-                    <Badge className="bg-black/60 backdrop-blur-md text-white/90 border-white/10 capitalize rounded-lg px-3 py-1">
+                    <Badge className="bg-cursor-surface-card/90 backdrop-blur-sm text-cursor-ink border border-cursor-hairline capitalize rounded-cursor-md px-3 py-1 font-medium shadow-none">
                         {project.category.replace('_', ' ')}
                     </Badge>
                 </div>
             </div>
 
             {/* Content Section */}
-            <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
+            <div className="p-8">
+                <div className="flex flex-wrap gap-3 mb-4">
                     {project.tech_stack.slice(0, 3).map((tech, i) => (
-                        <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-white/30">
+                        <span key={i} className="text-[11px] font-semibold uppercase tracking-[0.88px] text-cursor-muted">
                             {tech}
                         </span>
                     ))}
-                    {project.tech_stack.length > 3 && (
-                        <span className="text-[10px] font-bold text-indigo-400">
-                            +{project.tech_stack.length - 3} {t('more')}
-                        </span>
-                    )}
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-                    {project.title}
+                <h3 className="text-[22px] font-normal text-cursor-ink mb-3 tracking-[-0.11px]">
+                    <Link href={`/projects/${project.slug}`} className="hover:text-cursor-primary transition-colors">
+                        {project.title}
+                    </Link>
                 </h3>
                 
-                <p className="text-sm text-white/50 line-clamp-2 mb-6 h-10">
+                <p className="text-[14px] text-cursor-body line-clamp-2 mb-8 h-10 font-normal leading-relaxed">
                     {project.description}
                 </p>
 
-                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between pt-6 border-t border-cursor-hairline">
                     <div className="text-xs">
-                        <span className="text-white/30 block mb-1">Starting from</span>
-                        <span className="text-white font-bold text-sm">
+                        <span className="text-cursor-muted block mb-1 font-medium uppercase tracking-[0.88px] text-[10px]">Investment</span>
+                        <span className="text-cursor-ink font-semibold text-sm">
                             {format(project.price_from ? Number(project.price_from) : 0)}
                         </span>
                     </div>
                     
                     <Link 
                         href={`/projects/${project.slug}`}
-                        className="flex items-center gap-2 text-xs font-bold text-white/40 hover:text-white transition-colors group/link"
+                        className="flex items-center gap-2 text-[13px] font-medium text-cursor-primary hover:opacity-80 transition-opacity"
                     >
-                        {t('view').toUpperCase()} <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                        {t('view')} <ArrowRight size={14} />
                     </Link>
                 </div>
             </div>

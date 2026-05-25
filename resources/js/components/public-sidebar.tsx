@@ -1,19 +1,4 @@
 import { Link, usePage } from '@inertiajs/react';
-import { 
-    LayoutDashboard, 
-    Folder, 
-    Package, 
-    Calculator, 
-    MessageSquare, 
-    Star, 
-    User, 
-    Code, 
-    Mail,
-    ShoppingBag,
-    Settings,
-    ShieldCheck,
-    Briefcase
-} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { SharedData } from '@/types';
 
@@ -43,38 +28,38 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
         {
             title: t('overview', { default: 'Overview' }),
             items: [
-                { title: t('home'), href: route('home'), icon: LayoutDashboard },
-                { title: t('projects'), href: route('projects.index'), icon: Folder },
-                { title: t('services'), href: route('services.index'), icon: Package },
+                { title: t('home'), href: route('home') },
+                { title: t('projects'), href: route('projects.index') },
+                { title: t('services'), href: route('services.index') },
             ]
         },
         {
             title: t('tools', { default: 'Tools' }),
             items: [
-                { title: t('calculator', { default: 'Calculator' }), href: '/#calculator', icon: Calculator },
-                { title: t('forum'), href: route('forum.index'), icon: MessageSquare },
-                { title: t('reviews'), href: route('reviews.index'), icon: Star },
+                { title: t('calculator', { default: 'Calculator' }), href: '/#calculator' },
+                { title: t('forum'), href: route('forum.index') },
+                { title: t('reviews'), href: route('reviews.index') },
             ]
         },
         {
             title: t('info', { default: 'Info' }),
             items: [
-                { title: t('about'), href: route('about'), icon: User },
-                { title: t('skills'), href: route('skills.public'), icon: Code },
-                { title: t('contact'), href: route('contact'), icon: Mail },
+                { title: t('about'), href: route('about') },
+                { title: t('skills'), href: route('skills.public') },
+                { title: t('contact'), href: route('contact') },
             ]
         }
     ];
 
     return (
         <aside className={cn(
-            "fixed left-0 top-14 bottom-0 z-40 w-52 bg-[#09090f] border-r border-white/5 transition-transform md:translate-x-0",
+            "fixed left-0 top-16 bottom-0 z-40 w-52 bg-cursor-canvas border-r border-cursor-hairline transition-transform md:translate-x-0",
             isOpen ? "translate-x-0" : "-translate-x-full"
         )}>
-            <div className="h-full py-6 px-4 space-y-8 overflow-y-auto custom-scrollbar">
+            <div className="h-full py-8 px-5 space-y-10 overflow-y-auto custom-scrollbar">
                 {sections.map((section, i) => (
-                    <div key={i} className="space-y-3">
-                        <h4 className="px-2 text-[10px] font-bold uppercase tracking-wider text-white/20">
+                    <div key={i} className="space-y-4">
+                        <h4 className="px-3 text-[11px] font-semibold uppercase tracking-[0.88px] text-cursor-muted">
                             {section.title}
                         </h4>
                         <div className="space-y-1">
@@ -85,16 +70,12 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
                                         key={j}
                                         href={getPathname(item.href)}
                                         className={cn(
-                                            "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all group",
+                                            "flex items-center px-3 py-2 rounded-cursor-md text-sm font-medium transition-all",
                                             isActive 
-                                                ? "bg-indigo-500/10 text-indigo-400 font-medium" 
-                                                : "text-white/40 hover:text-white hover:bg-white/5"
+                                                ? "bg-cursor-surface-strong text-cursor-ink" 
+                                                : "text-cursor-muted hover:text-cursor-ink hover:bg-cursor-hairline-soft"
                                         )}
                                     >
-                                        <item.icon size={18} className={cn(
-                                            "transition-colors",
-                                            isActive ? "text-indigo-400" : "text-white/20 group-hover:text-white/50"
-                                        )} />
                                         {item.title}
                                     </Link>
                                 );

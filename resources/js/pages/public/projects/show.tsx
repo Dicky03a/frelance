@@ -4,15 +4,12 @@ import { Project } from '@/types/models';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
-    Calendar, 
     Clock, 
     ExternalLink, 
     Github, 
     ArrowLeft,
     CheckCircle2,
-    MessageSquare,
     Star,
-    Layers,
     ShoppingCart
 } from 'lucide-react';
 
@@ -57,53 +54,53 @@ export default function Show({ project }: { project: Project }) {
         <PublicLayout>
             <Head title={`${project.title} - ${t('title')}`} />
 
-            <div className="px-6 py-10">
+            <div className="px-12 py-16">
                 <Link 
                     href="/projects" 
-                    className="inline-flex items-center gap-2 text-sm font-bold text-white/30 hover:text-white transition-colors mb-8 group"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-cursor-muted hover:text-cursor-ink transition-colors mb-12 group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {t('back_to_portfolio')}
                 </Link>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                     {/* Left Column: Content */}
-                    <div className="lg:col-span-2 space-y-12">
+                    <div className="lg:col-span-2 space-y-16">
                         <header className="space-y-6">
-                            <Badge className="bg-indigo-500/10 text-indigo-400 border-indigo-500/20 px-4 py-1 rounded-full uppercase text-[10px] font-bold tracking-widest">
+                            <Badge variant="primary" className="px-4 py-1 rounded-cursor-pill">
                                 {project.category.replace('_', ' ')}
                             </Badge>
-                            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">
+                            <h1 className="text-[48px] md:text-[56px] font-normal text-cursor-ink leading-[1.1] tracking-[-1.5px]">
                                 {project.title}
                             </h1>
-                            <p className="text-xl text-white/60 leading-relaxed">
+                            <p className="text-[20px] text-cursor-body leading-relaxed font-normal">
                                 {project.description}
                             </p>
                         </header>
 
-                        <div className="aspect-video w-full rounded-[32px] overflow-hidden border border-white/10 bg-white/5">
+                        <div className="aspect-video w-full rounded-cursor-lg overflow-hidden border border-cursor-hairline bg-cursor-canvas-soft">
                             {project.thumbnail ? (
                                 <img src={`/storage/${project.thumbnail}`} alt={project.title} className="w-full h-full object-cover" />
                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-indigo-500/20 to-violet-500/20" />
+                                <div className="w-full h-full bg-cursor-surface-strong" />
                             )}
                         </div>
 
-                        <section className="space-y-6">
-                            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                                <Layers size={24} className="text-indigo-400" /> {t('technical_details')}
+                        <section className="space-y-8">
+                            <h3 className="text-[26px] font-normal text-cursor-ink tracking-[-0.325px]">
+                                {t('technical_details')}
                             </h3>
-                            <div className="prose prose-invert max-w-none text-white/70">
-                                <p className="whitespace-pre-wrap leading-loose">
+                            <div className="prose prose-slate max-w-none text-cursor-body">
+                                <p className="whitespace-pre-wrap leading-loose font-normal">
                                     {project.long_description || "Detailed case study coming soon."}
                                 </p>
                             </div>
                         </section>
 
-                        <section className="space-y-6">
-                            <h3 className="text-sm font-black text-white/30 uppercase tracking-[0.2em]">{t('tech_stack')}</h3>
-                            <div className="flex flex-wrap gap-3">
+                        <section className="space-y-8">
+                            <h3 className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">{t('tech_stack')}</h3>
+                            <div className="flex flex-wrap gap-4">
                                 {project.tech_stack.map(tech => (
-                                    <div key={tech} className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-sm font-bold text-white hover:border-indigo-500/50 transition-colors">
+                                    <div key={tech} className="px-6 py-3 rounded-cursor-md bg-cursor-surface-card border border-cursor-hairline text-sm font-medium text-cursor-ink">
                                         {tech}
                                     </div>
                                 ))}
@@ -112,11 +109,11 @@ export default function Show({ project }: { project: Project }) {
 
                         {/* Gallery Mockup */}
                         {project.images && project.images.length > 0 && (
-                            <section className="space-y-6">
-                                <h3 className="text-sm font-black text-white/30 uppercase tracking-[0.2em]">{t('gallery')}</h3>
-                                <div className="grid grid-cols-2 gap-4">
+                            <section className="space-y-8">
+                                <h3 className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">{t('gallery')}</h3>
+                                <div className="grid grid-cols-2 gap-6">
                                     {project.images.map((img, i) => (
-                                        <div key={i} className="aspect-video rounded-2xl overflow-hidden border border-white/5 bg-white/5">
+                                        <div key={i} className="aspect-video rounded-cursor-lg overflow-hidden border border-cursor-hairline bg-cursor-surface-card">
                                             <img src={img} alt="" className="w-full h-full object-cover" />
                                         </div>
                                     ))}
@@ -127,58 +124,58 @@ export default function Show({ project }: { project: Project }) {
 
                     {/* Right Column: Sidebar Card */}
                     <div className="lg:col-span-1">
-                        <div className="sticky top-24 space-y-6">
-                            <div className="rounded-[32px] border border-white/10 bg-[#1c1c28] p-8 space-y-8 shadow-2xl shadow-black/50">
-                                <div className="space-y-2 text-center">
-                                    <p className="text-xs font-black text-white/20 uppercase tracking-widest">{t('value')}</p>
-                                    <div className="text-3xl font-black text-white">
+                        <div className="sticky top-24 space-y-8">
+                            <div className="rounded-cursor-lg border border-cursor-hairline bg-cursor-surface-card p-10 space-y-10">
+                                <div className="space-y-3 text-center">
+                                    <p className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">{t('value')}</p>
+                                    <div className="text-[36px] font-normal text-cursor-ink tracking-[-0.72px]">
                                         {format(project.price_from ? Number(project.price_from) : 0)}+
                                     </div>
                                 </div>
 
-                                <div className="space-y-4 pt-8 border-t border-white/5 text-sm">
+                                <div className="space-y-6 pt-10 border-t border-cursor-hairline text-sm">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-white/30 flex items-center gap-2"><Clock size={16} /> {t('duration')}</span>
-                                        <span className="text-white font-bold">{t('weeks_count', { count: String(project.duration_weeks || 4) })}</span>
+                                        <span className="text-cursor-muted font-medium uppercase tracking-[0.88px] text-[10px]">{t('duration')}</span>
+                                        <span className="text-cursor-ink font-semibold">{t('weeks_count', { count: String(project.duration_weeks || 4) })}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-white/30 flex items-center gap-2"><CheckCircle2 size={16} /> {t('delivery')}</span>
-                                        <span className="text-white font-bold text-emerald-400">{t('on_time')}</span>
+                                        <span className="text-cursor-muted font-medium uppercase tracking-[0.88px] text-[10px]">{t('delivery')}</span>
+                                        <span className="text-emerald-600 font-semibold">{t('on_time')}</span>
                                     </div>
                                 </div>
 
-                                <div className="space-y-3">
+                                <div className="space-y-4">
                                     {project.live_url && (
-                                        <Button asChild className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold">
+                                        <Button asChild className="w-full h-[44px] rounded-cursor-md bg-cursor-ink hover:bg-cursor-ink/90 text-white font-medium text-sm">
                                             <a href={project.live_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2">
-                                                {t('live_preview')} <ExternalLink size={18} />
+                                                {t('live_preview')} <ExternalLink size={16} />
                                             </a>
                                         </Button>
                                     )}
                                     {project.github_url && (
-                                        <Button variant="outline" asChild className="w-full h-14 rounded-2xl border-white/10 bg-white/5 text-white font-bold hover:bg-white/10">
+                                        <Button variant="outline" asChild className="w-full h-[44px] rounded-cursor-md border-cursor-hairline bg-cursor-canvas-soft text-cursor-ink font-medium text-sm hover:bg-cursor-hairline-soft">
                                             <a href={project.github_url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2">
-                                                {t('view_source')} <Github size={18} />
+                                                {t('view_source')} <Github size={16} />
                                             </a>
                                         </Button>
                                     )}
-                                    <Button asChild className="w-full h-14 rounded-2xl bg-white text-indigo-600 hover:bg-white/90 font-black text-lg shadow-xl shadow-white/5">
+                                    <Button asChild className="w-full h-[44px] rounded-cursor-md bg-cursor-primary hover:bg-cursor-primary-active text-white font-medium text-sm">
                                         <Link href="/services" className="flex items-center justify-center gap-2">
-                                            {t('hire_similar')} <ShoppingCart size={20} />
+                                            {t('hire_similar')}
                                         </Link>
                                     </Button>
                                 </div>
                             </div>
 
                             {/* Brief Stats Card */}
-                            <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-[#1c1c28] to-indigo-600/10 p-8 flex items-center gap-6">
-                                <div className="flex-1 space-y-1">
-                                    <div className="text-2xl font-black text-white">{project.views}</div>
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{t('total_views')}</p>
+                            <div className="rounded-cursor-lg border border-cursor-hairline bg-cursor-surface-strong p-10 flex items-center gap-10">
+                                <div className="flex-1 space-y-2">
+                                    <div className="text-[26px] font-normal text-cursor-ink leading-none tracking-[-0.325px]">{project.views}</div>
+                                    <p className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">{t('total_views')}</p>
                                 </div>
-                                <div className="flex-1 space-y-1 border-l border-white/10 pl-6">
-                                    <div className="text-2xl font-black text-white">{ratingsData.avg > 0 ? ratingsData.avg.toFixed(1) : 'N/A'}</div>
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{t('ratings_count', { count: String(ratingsData.count) })}</p>
+                                <div className="flex-1 space-y-2 border-l border-cursor-hairline-strong pl-10">
+                                    <div className="text-[26px] font-normal text-cursor-ink leading-none tracking-[-0.325px]">{ratingsData.avg > 0 ? ratingsData.avg.toFixed(1) : 'N/A'}</div>
+                                    <p className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">{t('ratings_count', { count: String(ratingsData.count) })}</p>
                                 </div>
                             </div>
                         </div>
@@ -186,19 +183,19 @@ export default function Show({ project }: { project: Project }) {
                 </div>
 
                 {/* Ratings Section at Bottom */}
-                <div className="mt-20 space-y-12 max-w-4xl">
-                    <div className="flex items-center justify-between">
-                        <div className="space-y-1">
-                            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                                <Star size={24} className="text-amber-400" /> {t('client_reviews')}
+                <div className="mt-32 space-y-16 max-w-4xl">
+                    <div className="flex items-center justify-between border-b border-cursor-hairline pb-8">
+                        <div className="space-y-2">
+                            <h3 className="text-[36px] font-normal text-cursor-ink tracking-[-0.72px]">
+                                {t('client_reviews')}
                             </h3>
-                            <p className="text-white/40 text-sm">{t('client_reviews_desc')}</p>
+                            <p className="text-cursor-body font-normal">{t('client_reviews_desc')}</p>
                         </div>
                         {auth.user && (
                             <Button 
                                 onClick={() => setIsRatingOpen(!isRatingOpen)}
                                 variant="outline" 
-                                className="rounded-xl border-indigo-500/20 bg-indigo-500/5 text-indigo-400"
+                                className="h-10 rounded-cursor-md border-cursor-hairline bg-cursor-canvas-soft text-cursor-ink font-medium"
                             >
                                 {isRatingOpen ? t('common.cancel') : t('give_feedback')}
                             </Button>
@@ -206,18 +203,18 @@ export default function Show({ project }: { project: Project }) {
                     </div>
 
                     {isRatingOpen && (
-                        <div className="rounded-[32px] border border-indigo-500/20 bg-indigo-500/[0.02] p-8 space-y-6">
-                            <h4 className="font-bold text-white">{t('how_experience')}</h4>
-                            <form onSubmit={handleSubmitRating} className="space-y-4">
-                                <div className="flex gap-2">
+                        <div className="rounded-cursor-lg border border-cursor-hairline bg-cursor-canvas-soft p-10 space-y-8">
+                            <h4 className="text-[18px] font-normal text-cursor-ink tracking-[-0.11px]">{t('how_experience')}</h4>
+                            <form onSubmit={handleSubmitRating} className="space-y-6">
+                                <div className="flex gap-3">
                                     {[1, 2, 3, 4, 5].map((s) => (
                                         <button
                                             key={s}
                                             type="button"
                                             onClick={() => setData('score', s)}
                                             className={cn(
-                                                "h-12 w-12 rounded-xl border flex items-center justify-center transition-all",
-                                                data.score >= s ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-white/5 border-white/5 text-white/20"
+                                                "h-12 w-12 rounded-cursor-md border flex items-center justify-center transition-all",
+                                                data.score >= s ? "bg-cursor-ink text-white border-cursor-ink" : "bg-cursor-surface-card border-cursor-hairline text-cursor-muted"
                                             )}
                                         >
                                             <Star size={20} fill={data.score >= s ? "currentColor" : "none"} />
@@ -228,42 +225,37 @@ export default function Show({ project }: { project: Project }) {
                                     value={data.review}
                                     onChange={e => setData('review', e.target.value)}
                                     placeholder={t('write_review_placeholder')}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 h-32"
+                                    className="w-full bg-cursor-surface-card border border-cursor-hairline rounded-cursor-md p-6 text-cursor-ink focus:outline-none focus:border-cursor-hairline-strong h-40 resize-none transition-colors"
                                 />
-                                <Button disabled={processing} className="bg-indigo-600 rounded-xl h-12 px-8 font-bold">
+                                <Button disabled={processing} className="bg-cursor-primary hover:bg-cursor-primary-active text-white rounded-cursor-md h-12 px-10 font-medium border-none shadow-none transition-all">
                                     {t('submit_review')}
                                 </Button>
                             </form>
                         </div>
                     )}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         {ratingsData.items.map((r) => (
-                            <div key={r.id} className="p-6 rounded-[24px] bg-[#1c1c28] border border-white/5 space-y-4">
+                            <div key={r.id} className="p-8 rounded-cursor-lg bg-cursor-surface-card border border-cursor-hairline space-y-6">
                                 <div className="flex justify-between items-start">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center font-bold text-white/30 text-xs uppercase">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-cursor-md bg-cursor-canvas-soft border border-cursor-hairline flex items-center justify-center font-semibold text-cursor-muted text-xs uppercase">
                                             {r.user?.name[0]}
                                         </div>
                                         <div>
-                                            <p className="text-sm font-bold text-white">{r.user?.name}</p>
-                                            <p className="text-[10px] text-white/20 uppercase font-bold tracking-widest">{t('verified_client')}</p>
+                                            <p className="text-sm font-semibold text-cursor-ink">{r.user?.name}</p>
+                                            <p className="text-[11px] text-cursor-muted uppercase font-semibold tracking-[0.88px]">{t('verified_client')}</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-0.5 text-amber-400">
+                                    <div className="flex gap-1 text-cursor-primary">
                                         {[...Array(5)].map((_, i) => (
-                                            <Star key={i} size={10} fill={i < r.score ? "currentColor" : "none"} className={i < r.score ? "" : "text-white/10"} />
+                                            <Star key={i} size={12} fill={i < r.score ? "currentColor" : "none"} className={i < r.score ? "" : "text-cursor-hairline-strong"} />
                                         ))}
                                     </div>
                                 </div>
-                                <p className="text-sm text-white/60 leading-relaxed italic">"{r.review}"</p>
+                                <p className="text-sm text-cursor-body leading-relaxed font-normal italic">"{r.review}"</p>
                             </div>
                         ))}
-                        {ratingsData.items.length === 0 && (
-                            <div className="col-span-full py-12 text-center rounded-[32px] border border-dashed border-white/5">
-                                <p className="text-white/20 text-sm">{t('no_reviews')}</p>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

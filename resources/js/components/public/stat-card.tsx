@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
-import { LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface StatCardProps {
-    icon: LucideIcon;
     value: number;
     label: string;
     suffix?: string;
-    color?: 'indigo' | 'emerald' | 'sky' | 'violet' | 'amber' | 'rose';
 }
 
-export function StatCard({ icon: Icon, value, label, suffix = '', color = 'indigo' }: StatCardProps) {
+export function StatCard({ value, label, suffix = '' }: StatCardProps) {
     const [count, setCount] = useState(0);
 
     useEffect(() => {
@@ -35,27 +31,13 @@ export function StatCard({ icon: Icon, value, label, suffix = '', color = 'indig
         requestAnimationFrame(animate);
     }, [value]);
 
-    const colorClasses = {
-        indigo: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-        emerald: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-        sky: 'text-sky-400 bg-sky-500/10 border-sky-500/20',
-        violet: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
-        amber: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-        rose: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-    };
-
     return (
-        <div className="rounded-[20px] border border-white/7 bg-[#1c1c28] p-5 flex items-center gap-4 transition-transform hover:scale-[1.02] duration-300">
-            <div className={cn("p-3 rounded-2xl border", colorClasses[color])}>
-                <Icon size={24} />
+        <div className="rounded-cursor-md border border-cursor-hairline bg-cursor-surface-card p-6 flex flex-col transition-all hover:border-cursor-hairline-strong group">
+            <div className="text-[32px] font-normal text-cursor-ink leading-none tracking-[-0.325px]">
+                {count}{suffix}
             </div>
-            <div>
-                <div className="text-2xl font-bold text-white leading-none">
-                    {count}{suffix}
-                </div>
-                <div className="text-xs font-medium text-white/30 uppercase tracking-wider mt-1">
-                    {label}
-                </div>
+            <div className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] mt-3">
+                {label}
             </div>
         </div>
     );

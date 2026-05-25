@@ -1,20 +1,15 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { User, Order, ForumThread } from '@/types/models';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
     User as UserIcon, 
-    Mail, 
-    Shield, 
-    Calendar, 
     ShoppingCart, 
     MessageSquare, 
-    ArrowLeft,
-    UserX,
-    UserCheck,
-    Clock
+    ArrowLeft
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface UserShowProps {
     user: User & {
@@ -28,55 +23,54 @@ export default function Show({ user }: UserShowProps) {
         <AppLayout>
             <Head title={`Detail Pengguna: ${user.name}`} />
 
-            <div className="px-6 py-10 space-y-8">
+            <div className="px-12 py-16 space-y-12">
                 <Link 
                     href={route('admin.users.index')} 
-                    className="inline-flex items-center gap-2 text-sm font-bold text-white/30 hover:text-white transition-colors group"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> KEMBALI KE DAFTAR
                 </Link>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                     {/* Sidebar: User Info */}
-                    <div className="lg:col-span-1 space-y-6">
-                        <div className="rounded-[32px] border border-white/10 bg-[#1c1c28] p-8 text-center space-y-6">
-                            <div className="mx-auto h-24 w-24 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-                                <UserIcon size={48} className="text-indigo-400" />
+                    <div className="lg:col-span-1 space-y-8">
+                        <div className="rounded-xl border border-border bg-card p-10 text-center space-y-8 transition-all">
+                            <div className="mx-auto h-24 w-24 rounded-md bg-accent flex items-center justify-center border border-border">
+                                <UserIcon size={40} className="text-muted-foreground" />
                             </div>
-                            <div>
-                                <h1 className="text-2xl font-bold text-white">{user.name}</h1>
-                                <p className="text-white/40">{user.email}</p>
+                            <div className="space-y-2">
+                                <h1 className="text-[26px] font-normal text-foreground tracking-[-0.325px]">{user.name}</h1>
+                                <p className="text-muted-foreground font-normal">{user.email}</p>
                             </div>
-                            <div className="flex justify-center gap-2">
-                                <Badge className={user.role === 'admin' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-white/5 text-white/50 border-white/10'}>
-                                    {user.role.toUpperCase()}
+                            <div className="flex justify-center gap-3">
+                                <Badge variant="outline" className={cn(
+                                    "rounded-cursor-pill h-6 px-3 border-none",
+                                    user.role === 'admin' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+                                )}>
+                                    {user.role}
                                 </Badge>
                                 {user.is_banned && (
-                                    <Badge className="bg-rose-500/10 text-rose-400 border-rose-500/20">DIBLOKIR</Badge>
+                                    <Badge variant="outline" className="bg-destructive/10 text-destructive border-none rounded-cursor-pill h-6 px-3">DIBLOKIR</Badge>
                                 )}
                             </div>
-                            <div className="pt-6 border-t border-white/5 space-y-3 text-left">
+                            <div className="pt-8 border-t border-border space-y-4 text-left">
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-white/30 flex items-center gap-2"><Calendar size={14} /> Terdaftar</span>
-                                    <span className="text-white/70 font-medium">{new Date(user.created_at).toLocaleDateString('id-ID')}</span>
+                                    <span className="text-muted-foreground font-normal">Terdaftar</span>
+                                    <span className="text-foreground font-medium">{new Date(user.created_at).toLocaleDateString('id-ID')}</span>
                                 </div>
                                 <div className="flex items-center justify-between text-sm">
-                                    <span className="text-white/30 flex items-center gap-2"><Clock size={14} /> Locale</span>
-                                    <span className="text-white/70 font-medium uppercase">{user.locale}</span>
+                                    <span className="text-muted-foreground font-normal">Locale</span>
+                                    <span className="text-foreground font-medium uppercase">{user.locale}</span>
                                 </div>
                             </div>
-                            <div className="pt-4">
+                            <div className="pt-6">
                                 {user.role !== 'admin' && (
                                     <Button 
                                         variant={user.is_banned ? 'outline' : 'destructive'} 
-                                        className="w-full rounded-xl"
+                                        className="w-full h-11 rounded-md font-medium border-none shadow-none"
                                         onClick={() => router.post(route('admin.users.ban', user.id))}
                                     >
-                                        {user.is_banned ? (
-                                            <><UserCheck size={18} className="mr-2" /> Aktifkan User</>
-                                        ) : (
-                                            <><UserX size={18} className="mr-2" /> Blokir User</>
-                                        )}
+                                        {user.is_banned ? 'Aktifkan User' : 'Blokir User'}
                                     </Button>
                                 )}
                             </div>
@@ -84,54 +78,57 @@ export default function Show({ user }: UserShowProps) {
                     </div>
 
                     {/* Main Content: Activity */}
-                    <div className="lg:col-span-2 space-y-8">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="p-6 rounded-[24px] border border-white/10 bg-[#1c1c28] flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/10">
-                                    <ShoppingCart size={24} />
+                    <div className="lg:col-span-2 space-y-12">
+                        <div className="grid grid-cols-2 gap-8">
+                            <div className="p-8 rounded-xl border border-border bg-card flex items-center gap-6 transition-all">
+                                <div className="h-12 w-12 rounded-md bg-accent flex items-center justify-center border border-border">
+                                    <ShoppingCart size={24} className="text-primary" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-black text-white">{user.orders?.length || 0}</div>
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest leading-none mt-1">Total Pesanan</p>
+                                    <div className="text-[26px] font-normal text-foreground leading-none tracking-[-0.325px]">{user.orders?.length || 0}</div>
+                                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px] mt-2">Total Pesanan</p>
                                 </div>
                             </div>
-                            <div className="p-6 rounded-[24px] border border-white/10 bg-[#1c1c28] flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-2xl bg-violet-500/10 flex items-center justify-center text-violet-400 border border-violet-500/10">
-                                    <MessageSquare size={24} />
+                            <div className="p-8 rounded-xl border border-border bg-card flex items-center gap-6 transition-all">
+                                <div className="h-12 w-12 rounded-md bg-accent flex items-center justify-center border border-border">
+                                    <MessageSquare size={24} className="text-primary" />
                                 </div>
                                 <div>
-                                    <div className="text-2xl font-black text-white">{user.forum_threads?.length || 0}</div>
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest leading-none mt-1">Thread Forum</p>
+                                    <div className="text-[26px] font-normal text-foreground leading-none tracking-[-0.325px]">{user.forum_threads?.length || 0}</div>
+                                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px] mt-2">Thread Forum</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Recent Orders Table */}
-                        <div className="rounded-[32px] border border-white/10 bg-[#1c1c28] overflow-hidden">
-                            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                                <h3 className="font-bold text-white">Riwayat Pesanan</h3>
-                                <ShoppingCart size={18} className="text-white/20" />
+                        <div className="rounded-xl border border-border bg-card overflow-hidden">
+                            <div className="p-8 border-b border-border flex items-center justify-between">
+                                <h3 className="text-[22px] font-normal text-foreground tracking-[-0.11px]">Riwayat Pesanan</h3>
                             </div>
                             <div className="p-0">
                                 <table className="w-full text-left text-sm">
-                                    <thead className="bg-white/5 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                                    <thead className="bg-accent/50 text-[10px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">
                                         <tr>
-                                            <th className="px-6 py-3">KODE</th>
-                                            <th className="px-6 py-3">STATUS</th>
-                                            <th className="px-6 py-3 text-right">TOTAL</th>
+                                            <th className="px-8 py-4">KODE</th>
+                                            <th className="px-8 py-4">STATUS</th>
+                                            <th className="px-8 py-4 text-right">TOTAL</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-white/5 text-white/70">
+                                    <tbody className="divide-y divide-border text-foreground">
                                         {user.orders?.map(order => (
-                                            <tr key={order.id} className="hover:bg-white/5 cursor-pointer" onClick={() => router.get(route('admin.orders.show', order.id))}>
-                                                <td className="px-6 py-4 font-mono text-xs">{order.order_code}</td>
-                                                <td className="px-6 py-4 capitalize">{order.status}</td>
-                                                <td className="px-6 py-4 text-right font-bold text-white">Rp {order.total_idr.toLocaleString('id-ID')}</td>
+                                            <tr key={order.id} className="hover:bg-accent/30 transition-colors cursor-pointer group" onClick={() => router.get(route('admin.orders.show', order.id))}>
+                                                <td className="px-8 py-5 font-mono text-xs text-muted-foreground group-hover:text-foreground transition-colors">{order.order_code}</td>
+                                                <td className="px-8 py-5">
+                                                     <Badge variant="outline" className="rounded-cursor-pill h-6 px-3 border-none bg-muted text-muted-foreground capitalize">
+                                                        {order.status}
+                                                     </Badge>
+                                                </td>
+                                                <td className="px-8 py-5 text-right font-medium">Rp {order.total_idr.toLocaleString('id-ID')}</td>
                                             </tr>
                                         ))}
                                         {(!user.orders || user.orders.length === 0) && (
                                             <tr>
-                                                <td colSpan={3} className="px-6 py-12 text-center text-white/20 italic">Belum ada pesanan.</td>
+                                                <td colSpan={3} className="px-8 py-16 text-center text-muted-foreground italic font-normal">Belum ada pesanan.</td>
                                             </tr>
                                         )}
                                     </tbody>
@@ -144,5 +141,3 @@ export default function Show({ user }: UserShowProps) {
         </AppLayout>
     );
 }
-
-import { router } from '@inertiajs/react';

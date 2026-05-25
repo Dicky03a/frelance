@@ -100,54 +100,54 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
             
             <div className="container mx-auto py-12 px-4">
                 <div className="max-w-2xl mx-auto">
-                    <Card className="border-white/10 bg-surface/50 backdrop-blur-sm">
+                    <Card className="border-border bg-card">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <CreditCard className="w-6 h-6 text-indigo-500" />
+                            <CardTitle className="text-[26px] font-normal tracking-[-0.325px] text-foreground flex items-center gap-2">
+                                <CreditCard className="w-6 h-6 text-primary" />
                                 Pembayaran Pesanan
                             </CardTitle>
-                            <CardDescription>
+                            <CardDescription className="text-muted-foreground">
                                 Silakan selesaikan pembayaran untuk memproses pesanan Anda.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <div className="p-4 rounded-lg bg-white/5 border border-white/10 space-y-4">
+                            <div className="p-4 rounded-lg bg-muted/50 border border-border space-y-4">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Layanan</p>
-                                        <p className="text-lg font-semibold">{order.service_package.service.name}</p>
+                                        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Layanan</p>
+                                        <p className="text-lg font-semibold text-foreground">{order.service_package.service.name}</p>
                                         <p className="text-sm text-muted-foreground">{order.service_package.name}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Total</p>
-                                        <p className="text-xl font-bold text-indigo-400">
+                                        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">Total</p>
+                                        <p className="text-xl font-bold text-primary">
                                             Rp {new Intl.NumberFormat('id-ID').format(parseFloat(order.total_idr))}
                                         </p>
                                     </div>
                                 </div>
                                 
-                                <div className="pt-4 border-t border-white/10">
-                                    <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider mb-2">Kode Pesanan</p>
-                                    <p className="font-mono bg-black/30 p-2 rounded inline-block text-sm">{order.order_code}</p>
+                                <div className="pt-4 border-t border-border">
+                                    <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px] mb-2">Kode Pesanan</p>
+                                    <p className="font-mono bg-muted p-2 rounded inline-block text-sm text-foreground">{order.order_code}</p>
                                 </div>
                             </div>
 
                             <div className="flex flex-col items-center justify-center py-8">
                                 {loading && (
                                     <div className="flex flex-col items-center gap-4">
-                                        <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
+                                        <Loader2 className="w-12 h-12 text-primary animate-spin" />
                                         <p className="text-muted-foreground">Menyiapkan gerbang pembayaran...</p>
                                     </div>
                                 )}
 
                                 {error && (
                                     <div className="flex flex-col items-center gap-4 text-center">
-                                        <AlertCircle className="w-12 h-12 text-red-500" />
-                                        <p className="text-red-400 font-medium">{error}</p>
+                                        <AlertCircle className="w-12 h-12 text-rose-500" />
+                                        <p className="text-rose-600 font-medium">{error}</p>
                                         <Button 
                                             variant="outline" 
                                             onClick={() => window.location.reload()}
-                                            className="mt-2"
+                                            className="mt-2 text-foreground"
                                         >
                                             Coba Lagi
                                         </Button>
@@ -162,7 +162,7 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
                                         </p>
                                         <Button 
                                             onClick={triggerPayment}
-                                            className="bg-indigo-600 hover:bg-indigo-700"
+                                            className="bg-primary hover:bg-primary/90 text-white"
                                         >
                                             Bayar Sekarang
                                         </Button>
