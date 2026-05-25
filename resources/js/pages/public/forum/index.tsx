@@ -47,7 +47,7 @@ export default function Index({ threads, categories, filters }: ForumIndexProps)
                         </p>
                     </div>
                     <Button asChild className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl h-12 px-8 font-bold shadow-lg shadow-indigo-600/20">
-                        <Link href="/forum/threads/create">
+                        <Link href={route('forum.create')}>
                             <Plus size={18} className="mr-2" /> Buat Diskusi
                         </Link>
                     </Button>

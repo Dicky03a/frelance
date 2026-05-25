@@ -14,9 +14,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(funct
     
     Route::prefix('forum')->as('forum.')->group(function () {
         Route::resource('threads', \App\Http\Controllers\Admin\ForumThreadController::class)->only(['index', 'show', 'update', 'destroy']);
-        Route::post('/replies/{reply}/hide', function () {
-            // Logic to hide reply
-        })->name('replies.hide');
+        Route::post('/replies/{reply}/hide', [\App\Http\Controllers\Admin\ForumReplyController::class, 'hide'])->name('replies.hide');
     });
 
     Route::resource('skills', \App\Http\Controllers\Admin\SkillController::class);

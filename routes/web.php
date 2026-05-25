@@ -12,6 +12,7 @@ Route::get('/projects/{project:slug}', [\App\Http\Controllers\Public\ProjectCont
 Route::get('/services', [\App\Http\Controllers\Public\ServiceController::class, 'index'])->name('services.index');
 
 Route::get('/forum', [\App\Http\Controllers\Public\ForumController::class, 'index'])->name('forum.index');
+Route::get('/forum/create', [\App\Http\Controllers\Public\ForumController::class, 'create'])->name('forum.create')->middleware('auth');
 Route::get('/forum/{thread:slug}', [\App\Http\Controllers\Public\ForumController::class, 'show'])->name('forum.show');
 
 Route::get('/reviews', [\App\Http\Controllers\Public\ReviewController::class, 'index'])->name('reviews.index');

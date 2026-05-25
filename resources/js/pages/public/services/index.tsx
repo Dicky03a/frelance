@@ -4,7 +4,8 @@ import { Service } from '@/types/models';
 import { ServicePackageCard } from '@/components/public/service-package-card';
 import { usePage } from '@inertiajs/react';
 import { SharedProps } from '@/types/inertia';
-import { Wrench, Rocket, ShieldCheck, HeartHandshake } from 'lucide-react';
+import { Wrench, Rocket, ShieldCheck, HeartHandshake, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ServicesIndexProps {
     services: Service[];
@@ -81,6 +82,3 @@ export default function Index({ services }: ServicesIndexProps) {
         </PublicLayout>
     );
 }
-
-// I need to import Button for the custom solution section
-import { Button } from '@/components/ui/button';

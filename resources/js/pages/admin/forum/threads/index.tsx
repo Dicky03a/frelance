@@ -104,7 +104,7 @@ export default function Index({ threads, filters }: ForumThreadsIndexProps) {
                                         <TableCell className="text-right">
                                             <div className="flex justify-end gap-2">
                                                 <Button variant="ghost" size="icon" asChild className="text-white/30 hover:text-indigo-400">
-                                                    <Link href={`/forum/${thread.slug}`} target="_blank">
+                                                    <Link href={route('admin.forum.threads.show', thread.id)}>
                                                         <Eye size={16} />
                                                     </Link>
                                                 </Button>

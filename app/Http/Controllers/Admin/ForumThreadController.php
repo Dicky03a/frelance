@@ -9,11 +9,13 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\ForumThreadResource;
+
 class ForumThreadController extends Controller
 {
     public function index(Request $request): Response
     {
-        $query = ForumThread::with('user');
+        $query = ForumThread::with('user')->withCount('replies');
 
         if ($request->filled('search')) {
             $query->where('title', 'like', "%{$request->search}%");
@@ -22,7 +24,7 @@ class ForumThreadController extends Controller
         $threads = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('admin/forum/threads/index', [
-            'threads' => $threads,
+            'threads' => ForumThreadResource::collection($threads),
             'filters' => $request->only(['search']),
         ]);
     }

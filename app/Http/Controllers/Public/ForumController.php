@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Http\Resources\ForumThreadResource;
+
 class ForumController extends Controller
 {
     public function index(Request $request): Response
@@ -30,7 +32,7 @@ class ForumController extends Controller
         $threads = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('public/forum/index', [
-            'threads' => $threads,
+            'threads' => ForumThreadResource::collection($threads),
             'categories' => collect(ForumCategory::cases())->map(fn($c) => $c->value)->toArray(),
             'filters' => $request->only(['category', 'search']),
         ]);
@@ -48,6 +50,13 @@ class ForumController extends Controller
             'thread' => $thread->load(['user', 'replies.user' => function ($query) {
                 $query->where('is_hidden', false);
             }]),
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('public/forum/create', [
+            'categories' => collect(ForumCategory::cases())->map(fn($c) => $c->value)->toArray(),
         ]);
     }
 }
