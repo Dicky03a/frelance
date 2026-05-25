@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/projects/{project}/comments', [\App\Http\Controllers\Client\ReviewController::class, 'storeComment'])->name('projects.comments.store');
     Route::post('/projects/{project}/ratings', [\App\Http\Controllers\Client\ReviewController::class, 'storeRating'])->name('projects.ratings.store');
+    Route::post('/orders/{order}/ratings', [\App\Http\Controllers\Client\ReviewController::class, 'storeOrderRating'])->name('orders.ratings.store');
 });
 
 Route::get('/api/calculator/config/{type}', function ($type) {

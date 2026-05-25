@@ -4,7 +4,15 @@ import { ServicePackage } from '@/types/models';
 import { Link } from '@inertiajs/react';
 import { Check } from 'lucide-react';
 
-export function ServicePackageCard({ pkg, currency }: { pkg: ServicePackage; currency: 'IDR' | 'USD' }) {
+export function ServicePackageCard({ 
+    pkg, 
+    currency, 
+    onSelect 
+}: { 
+    pkg: ServicePackage; 
+    currency: 'IDR' | 'USD'; 
+    onSelect: (pkg: ServicePackage) => void;
+}) {
     const price = currency === 'IDR' ? pkg.price_idr : pkg.price_usd;
     const formattedPrice = currency === 'IDR' ? `Rp ${(price / 1000).toLocaleString('id-ID')}k` : `$${price}`;
 
@@ -52,13 +60,13 @@ export function ServicePackageCard({ pkg, currency }: { pkg: ServicePackage; cur
             </div>
 
             <Button
-                asChild
+                onClick={() => onSelect(pkg)}
                 className={cn(
                     'h-12 w-full rounded-2xl font-bold transition-all duration-300',
                     pkg.is_popular ? 'bg-white text-indigo-600 hover:bg-indigo-50' : 'border border-white/10 bg-white/5 text-white hover:bg-white/10',
                 )}
             >
-                <Link href={route('login')}>Get Started</Link>
+                Pesan Sekarang
             </Button>
         </div>
     );

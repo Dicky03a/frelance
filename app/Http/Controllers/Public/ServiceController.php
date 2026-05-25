@@ -14,7 +14,9 @@ class ServiceController extends Controller
     {
         $services = Service::where('is_active', true)
             ->with(['packages' => function ($query) {
-                $query->where('is_active', true)->orderBy('sort_order');
+                $query->where('is_active', true)
+                    ->with('service')
+                    ->orderBy('sort_order');
             }])
             ->orderBy('sort_order')
             ->get();

@@ -49,10 +49,21 @@ class Order extends Model
             'total_idr' => 'decimal:2',
             'total_usd' => 'decimal:2',
             'exchange_rate' => 'decimal:4',
+            'status' => \App\Enums\OrderStatus::class,
             'paid_at' => 'datetime',
             'completed_at' => 'datetime',
             'expired_at' => 'datetime',
         ];
+    }
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Order $order) {
+            $order->order_code = 'ORD-' . strtoupper(bin2hex(random_bytes(4)));
+        });
     }
 
     /**

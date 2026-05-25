@@ -1,18 +1,55 @@
 import PublicLayout from '@/layouts/public-layout';
-import { Head, Link } from '@inertiajs/react';
-import { Service } from '@/types/models';
+import { Head, Link, useForm, usePage, router } from '@inertiajs/react';
+import { Service, ServicePackage } from '@/types/models';
 import { ServicePackageCard } from '@/components/public/service-package-card';
-import { usePage } from '@inertiajs/react';
 import { SharedProps } from '@/types/inertia';
-import { Wrench, Rocket, ShieldCheck, HeartHandshake, Zap } from 'lucide-react';
+import { Wrench, Rocket, ShieldCheck, HeartHandshake, Zap, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { 
+    Dialog, 
+    DialogContent, 
+    DialogHeader, 
+    DialogTitle, 
+    DialogDescription,
+    DialogFooter
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 interface ServicesIndexProps {
     services: Service[];
 }
 
 export default function Index({ services }: ServicesIndexProps) {
-    const { currency } = usePage<SharedProps>().props;
+    const { currency, auth } = usePage<SharedProps>().props;
+    const [selectedPackage, setSelectedPackage] = useState<ServicePackage | null>(null);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        service_package_id: 0,
+        requirements: '',
+    });
+
+    const handleSelectPackage = (pkg: ServicePackage) => {
+        if (!auth.user) {
+            router.get(route('login'), { 
+                redirect: window.location.pathname 
+            });
+            return;
+        }
+        setSelectedPackage(pkg);
+        setData('service_package_id', pkg.id);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route('orders.store'), {
+            onSuccess: () => {
+                setSelectedPackage(null);
+                reset();
+            },
+        });
+    };
 
     return (
         <PublicLayout>
@@ -34,7 +71,7 @@ export default function Index({ services }: ServicesIndexProps) {
                         <section key={service.id} className="space-y-12">
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4">
                                 <div className="space-y-2">
-                                    <h2 className="text-3xl font-bold text-white">{service.name}</h2>
+                                    <h2 className="text-3xl font-bold text-white">{service.title}</h2>
                                     <p className="text-white/50 max-w-xl">{service.description}</p>
                                 </div>
                                 <div className="flex gap-4 text-xs font-bold text-white/20 uppercase tracking-widest">
@@ -45,12 +82,73 @@ export default function Index({ services }: ServicesIndexProps) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                                 {service.packages?.map((pkg) => (
-                                    <ServicePackageCard key={pkg.id} pkg={pkg} currency={currency as 'IDR' | 'USD'} />
+                                    <ServicePackageCard 
+                                        key={pkg.id} 
+                                        pkg={pkg} 
+                                        currency={currency as 'IDR' | 'USD'} 
+                                        onSelect={handleSelectPackage}
+                                    />
                                 ))}
                             </div>
                         </section>
                     ))}
                 </div>
+
+                {/* Order Dialog */}
+                <Dialog open={!!selectedPackage} onOpenChange={(open) => !open && setSelectedPackage(null)}>
+                    <DialogContent className="sm:max-w-[500px] bg-[#111118] border-white/10">
+                        <DialogHeader>
+                            <DialogTitle className="text-2xl font-bold">Konfirmasi Pesanan</DialogTitle>
+                            <DialogDescription className="text-white/50">
+                                Anda memilih paket <span className="text-white font-semibold">{selectedPackage?.name}</span> untuk layanan <span className="text-white font-semibold">{selectedPackage?.service?.title}</span>.
+                            </DialogDescription>
+                        </DialogHeader>
+                        
+                        <form onSubmit={handleSubmit} className="space-y-6 py-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="requirements" className="text-white font-medium">
+                                    Persyaratan & Detail Proyek
+                                </Label>
+                                <Textarea
+                                    id="requirements"
+                                    placeholder="Jelaskan kebutuhan proyek Anda secara detail (minimal 20 karakter)..."
+                                    className="min-h-[150px] bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:border-indigo-500 transition-colors"
+                                    value={data.requirements}
+                                    onChange={e => setData('requirements', e.target.value)}
+                                    required
+                                />
+                                {errors.requirements && (
+                                    <p className="text-xs text-red-400 mt-1">{errors.requirements}</p>
+                                )}
+                            </div>
+
+                            <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex gap-3">
+                                <Info className="text-indigo-400 shrink-0" size={20} />
+                                <p className="text-xs text-indigo-200/60 leading-relaxed">
+                                    Setelah menekan tombol di bawah, Anda akan diarahkan ke halaman pembayaran Midtrans yang aman untuk menyelesaikan transaksi.
+                                </p>
+                            </div>
+
+                            <DialogFooter>
+                                <Button 
+                                    type="button" 
+                                    variant="ghost" 
+                                    onClick={() => setSelectedPackage(null)}
+                                    className="rounded-xl hover:bg-white/5 text-white/50 hover:text-white"
+                                >
+                                    Batal
+                                </Button>
+                                <Button 
+                                    type="submit" 
+                                    disabled={processing}
+                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl h-11 px-6 transition-all"
+                                >
+                                    {processing ? 'Memproses...' : 'Lanjutkan ke Pembayaran'}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
 
                 {/* FAQ / Trust Section */}
                 <section className="rounded-[40px] border border-white/7 bg-[#1c1c28] p-8 md:p-16 flex flex-col md:flex-row gap-12 items-center">

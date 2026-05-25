@@ -53,4 +53,39 @@ class ReviewController extends Controller
 
         return redirect()->back()->with('success', 'Terima kasih atas ulasan Anda!');
     }
+
+    public function storeOrderRating(Request $request, \App\Models\Order $order): RedirectResponse
+    {
+        \Illuminate\Support\Facades\Gate::authorize('view', $order);
+
+        if ($order->status !== \App\Enums\OrderStatus::COMPLETED) {
+            return redirect()->back()->with('error', 'Anda hanya dapat memberikan ulasan pada pesanan yang sudah selesai.');
+        }
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|string',
+        ]);
+
+        // Check if user already rated this order
+        $existing = Rating::where('order_id', $order->id)->first();
+
+        if ($existing) {
+            $existing->update([
+                'score' => $validated['rating'],
+                'review' => $validated['review'],
+            ]);
+            return redirect()->back()->with('success', 'Ulasan Anda berhasil diperbarui.');
+        }
+
+        Rating::create([
+            'user_id' => Auth::id(),
+            'order_id' => $order->id,
+            'score' => $validated['rating'],
+            'review' => $validated['review'],
+            'is_visible' => true,
+        ]);
+
+        return redirect()->back()->with('success', 'Terima kasih atas ulasan Anda!');
+    }
 }

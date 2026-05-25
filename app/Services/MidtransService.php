@@ -45,6 +45,9 @@ class MidtransService
                 'first_name' => $order->user->name,
                 'email' => $order->user->email,
             ],
+            'callbacks' => [
+                'finish' => route('orders.show', $order->id),
+            ],
         ];
 
         try {
