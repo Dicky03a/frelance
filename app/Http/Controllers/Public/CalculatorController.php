@@ -13,39 +13,17 @@ class CalculatorController extends Controller
     {
         $request->validate([
             'project_type' => 'required|string|exists:calculator_configs,project_type',
-            'features' => 'array',
-            'timeline_weeks' => 'integer',
+            'selected_features' => 'nullable|array',
+            'selected_features.*' => 'string',
+            'timeline_weeks' => 'required|integer|min:1',
         ]);
 
-        $config = CalculatorConfig::where('project_type', $request->project_type)
-            ->where('is_active', true)
-            ->firstOrFail();
+        $result = app(\App\Services\PriceCalculatorService::class)->calculate(
+            $request->project_type,
+            $request->selected_features ?? [],
+            $request->timeline_weeks
+        );
 
-        $basePrice = (float) $config->base_price;
-        $featurePrice = 0;
-
-        foreach ($config->features as $feature) {
-            if (in_array($feature['key'], $request->features ?? [])) {
-                $featurePrice += (float) $feature['price_add'];
-            }
-        }
-
-        $subtotal = $basePrice + $featurePrice;
-        $multiplier = 1.0;
-
-        foreach ($config->timeline_multipliers as $tm) {
-            if ($tm['weeks'] == $request->timeline_weeks) {
-                $multiplier = (float) $tm['multiplier'];
-                break;
-            }
-        }
-
-        $total = $subtotal * $multiplier;
-
-        return response()->json([
-            'min' => $total * 0.9,
-            'max' => $total * 1.1,
-            'currency' => 'IDR',
-        ]);
+        return response()->json($result);
     }
 }

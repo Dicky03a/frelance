@@ -49,8 +49,8 @@ class HomeController extends Controller
             ->take(3)
             ->get();
 
-        $calculatorTypes = CalculatorConfig::where('is_active', true)
-            ->get(['project_type', 'label']);
+        $calculatorConfigs = CalculatorConfig::where('is_active', true)
+            ->get();
 
         return Inertia::render('public/home', [
             'stats' => $stats,
@@ -58,7 +58,7 @@ class HomeController extends Controller
             'skills_by_category' => $skillsByCategory,
             'service_packages' => $servicePackages,
             'forum_preview' => $forumPreview,
-            'calculator_types' => $calculatorTypes,
+            'calculator_configs' => $calculatorConfigs,
         ]);
     }
 }

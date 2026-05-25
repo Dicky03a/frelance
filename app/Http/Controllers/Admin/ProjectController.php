@@ -104,6 +104,8 @@ class ProjectController extends Controller
                     Storage::disk('public')->delete($project->thumbnail);
                 }
                 $data['thumbnail'] = $request->file('thumbnail')->store('projects/thumbnails', 'public');
+            } else {
+                unset($data['thumbnail']);
             }
 
             $project->update($data);

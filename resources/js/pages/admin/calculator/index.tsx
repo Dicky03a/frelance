@@ -9,32 +9,46 @@ import {
     TableRow 
 } from '@/components/ui/table';
 import { CalculatorConfig } from '@/types/models';
-import { Head, Link, useForm, router } from '@inertiajs/react';
-import { Plus, Edit2, Trash2, Calculator } from 'lucide-react';
-import { useState } from 'react';
+import { Head, Link, router } from '@inertiajs/react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
+import { useTranslation } from '@/lib/i18n';
 
-interface CalculatorConfigsIndexProps {
-    calculatorConfigs: { data: CalculatorConfig[] }; // Assuming it's wrapped in a resource or just raw
+interface IndexProps {
+    configs: CalculatorConfig[];
 }
 
-export default function Index({ calculatorConfigs }: any) {
-    // Note: I'll use 'any' briefly to handle both paginated or raw list, 
-    // but the goal is consistency. Let's assume it's data[] from a resource.
-    const data = calculatorConfigs.data || calculatorConfigs;
+export default function Index({ configs }: IndexProps) {
+    const { t: tCommon } = useTranslation('common');
+
+    const deleteConfig = (id: number) => {
+        if (confirm('Are you sure you want to delete this configuration?')) {
+            router.delete(route('admin.calculator-configs.destroy', id));
+        }
+    };
+
+    const toggleActive = (config: CalculatorConfig) => {
+        router.patch(route('admin.calculator-configs.update', config.id), {
+            ...config,
+            is_active: !config.is_active
+        });
+    };
 
     return (
-        <AppLayout>
-            <Head title="Konfigurasi Kalkulator" />
+        <AppLayout breadcrumbs={[{ title: 'Calculator', href: route('admin.calculator-configs.index') }]}>
+            <Head title="Calculator Configuration" />
             
             <div className="space-y-6 p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-white">Kalkulator Estimasi</h1>
+                        <h1 className="text-2xl font-bold text-white">Calculator Estimasi</h1>
                         <p className="text-white/50">Atur harga dasar dan fitur untuk kalkulator publik.</p>
                     </div>
-                    <Button disabled className="bg-indigo-600/50 cursor-not-allowed rounded-xl">
-                        <Plus className="mr-2 h-4 w-4" /> Tambah Config
+                    <Button asChild className="bg-indigo-600 hover:bg-indigo-700 rounded-xl">
+                        <Link href={route('admin.calculator-configs.create')}>
+                            <Plus className="mr-2 h-4 w-4" /> Tambah Config
+                        </Link>
                     </Button>
                 </div>
 
@@ -51,32 +65,42 @@ export default function Index({ calculatorConfigs }: any) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {data.map((config: CalculatorConfig) => (
+                            {configs.map((config) => (
                                 <TableRow key={config.id} className="border-white/7 hover:bg-white/5 transition-colors group">
                                     <TableCell className="font-mono text-xs text-indigo-400">{config.project_type}</TableCell>
                                     <TableCell className="font-bold text-white">{config.label}</TableCell>
-                                    <TableCell className="text-white/70">Rp {config.base_price.toLocaleString('id-ID')}</TableCell>
+                                    <TableCell className="text-white/70">Rp {parseFloat(config.base_price as any).toLocaleString('id-ID')}</TableCell>
                                     <TableCell className="text-center">
                                         <Badge variant="outline" className="border-white/10 text-white/40">
                                             {config.features.length} Pilihan
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-center">
-                                        <span className={cn(
-                                            "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border",
-                                            config.is_active 
-                                                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" 
-                                                : "bg-white/5 text-white/30 border-white/10"
-                                        )}>
+                                        <button 
+                                            onClick={() => toggleActive(config)}
+                                            className={cn(
+                                                "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium border transition-colors",
+                                                config.is_active 
+                                                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20" 
+                                                    : "bg-white/5 text-white/30 border-white/10 hover:bg-white/10"
+                                            )}
+                                        >
                                             {config.is_active ? 'AKTIF' : 'NONAKTIF'}
-                                        </span>
+                                        </button>
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
-                                            <Button variant="ghost" size="icon" disabled className="text-white/10">
-                                                <Edit2 size={16} />
+                                            <Button variant="ghost" size="icon" asChild className="text-white/40 hover:text-white hover:bg-white/5">
+                                                <Link href={route('admin.calculator-configs.edit', config.id)}>
+                                                    <Edit2 size={16} />
+                                                </Link>
                                             </Button>
-                                            <Button variant="ghost" size="icon" disabled className="text-white/10">
+                                            <Button 
+                                                variant="ghost" 
+                                                size="icon" 
+                                                onClick={() => deleteConfig(config.id)}
+                                                className="text-white/40 hover:text-red-400 hover:bg-red-500/5"
+                                            >
                                                 <Trash2 size={16} />
                                             </Button>
                                         </div>
@@ -86,16 +110,7 @@ export default function Index({ calculatorConfigs }: any) {
                         </TableBody>
                     </Table>
                 </div>
-                
-                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs flex gap-3 items-center">
-                    <Calculator size={16} />
-                    <p>Edit & Create untuk Calculator Config saat ini sedang dalam pengembangan (Planned for Stage 12). Gunakan Seeder untuk memperbarui data saat ini.</p>
-                </div>
             </div>
         </AppLayout>
     );
-}
-
-function cn(...classes: any[]) {
-    return classes.filter(Boolean).join(' ');
 }

@@ -21,47 +21,57 @@ class PriceCalculatorService
      */
     public function calculate(string $projectType, array $selectedFeatures, int $timelineWeeks): array
     {
-        $config = $this->getConfig($projectType);
+        $config = CalculatorConfig::where('project_type', $projectType)
+            ->where('is_active', true)
+            ->first();
 
-        if (! $config) {
-            throw new \RuntimeException("Calculator config for '{$projectType}' not found.");
+        if (!$config) {
+            return ['error' => 'Invalid project type'];
         }
 
         $basePrice = (float) $config->base_price;
-        $featurePrice = 0;
-        $breakdown = [
-            'base' => $basePrice,
-            'features' => [],
-        ];
+        $featuresTotal = 0;
 
         foreach ($config->features as $feature) {
             if (in_array($feature['key'], $selectedFeatures)) {
-                $priceAdd = (float) $feature['price_add'];
-                $featurePrice += $priceAdd;
-                $breakdown['features'][] = [
-                    'label' => $feature['label'],
-                    'price' => $priceAdd,
-                ];
+                $featuresTotal += (float) $feature['price_add'];
             }
         }
 
-        $subtotal = $basePrice + $featurePrice;
         $multiplier = 1.0;
-
+        $timelineLabel = '';
+        
+        // Find closest timeline weeks
+        $closestDiff = null;
         foreach ($config->timeline_multipliers as $tm) {
-            if ($tm['weeks'] == $timelineWeeks) {
+            $diff = abs($tm['weeks'] - $timelineWeeks);
+            if ($closestDiff === null || $diff < $closestDiff) {
+                $closestDiff = $diff;
                 $multiplier = (float) $tm['multiplier'];
-                break;
+                $timelineLabel = $tm['label'];
             }
         }
 
-        $total = $subtotal * $multiplier;
+        $total = ($basePrice + $featuresTotal) * $multiplier;
+        
+        $min = $total * 0.9;
+        $max = $total * 1.1;
+
+        // Round to nearest 100k
+        $roundedMin = round($min, -5);
+        $roundedMax = round($max, -5);
 
         return [
-            'min' => $total * 0.9,
-            'max' => $total * 1.1,
+            'project_type' => $projectType,
+            'base_price' => $basePrice,
+            'features_total' => $featuresTotal,
+            'multiplier' => $multiplier,
+            'timeline_label' => $timelineLabel,
+            'min' => $roundedMin,
+            'max' => $roundedMax,
             'currency' => 'IDR',
-            'breakdown' => $breakdown,
+            'formatted_min' => 'Rp ' . number_format($roundedMin, 0, ',', '.'),
+            'formatted_max' => 'Rp ' . number_format($roundedMax, 0, ',', '.'),
         ];
     }
 

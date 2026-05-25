@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { type NavItem } from '@/types';
 import { SharedProps } from '@/types/inertia';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Briefcase, Settings2, ShieldCheck, ShoppingCart, MessageSquare, Wrench, Star } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Briefcase, Settings2, ShieldCheck, ShoppingCart, MessageSquare, Wrench, Star, Calculator } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -35,7 +35,7 @@ export function AppSidebar() {
 
     const adminNavItems: NavItem[] = [
         {
-            title: 'Admin Dashboard',
+            title: 'Statistics',
             url: route('admin.dashboard'),
             icon: ShieldCheck,
         },
@@ -53,6 +53,11 @@ export function AppSidebar() {
             title: 'Pesanan',
             url: route('admin.orders.index'),
             icon: ShoppingCart,
+        },
+        {
+            title: 'Calculator',
+            url: route('admin.calculator-configs.index'),
+            icon: Calculator,
         },
         {
             title: 'Forum',

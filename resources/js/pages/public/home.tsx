@@ -1,11 +1,11 @@
 import PublicLayout from '@/layouts/public-layout';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { StatCard } from '@/components/public/stat-card';
 import { ProjectCard } from '@/components/public/project-card';
 import { ServicePackageCard } from '@/components/public/service-package-card';
 import { ForumPreviewItem } from '@/components/public/forum-preview-item';
 import { SharedProps } from '@/types/inertia';
-import { Project, ForumThread, ServicePackage } from '@/types/models';
+import { Project, ForumThread, ServicePackage, CalculatorConfig } from '@/types/models';
 import { 
     Check, 
     ChevronRight, 
@@ -18,13 +18,13 @@ import {
     Users,
     Briefcase
 } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import axios from 'axios';
 
-import { useCurrency } from '@/lib/currency';
 import { useTranslation } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 
 interface HomeProps extends SharedProps {
     stats: {
@@ -36,24 +36,40 @@ interface HomeProps extends SharedProps {
     featured_projects: Project[];
     service_packages: ServicePackage[];
     forum_preview: ForumThread[];
-    calculator_types: Array<{ project_type: string; label: string }>;
+    calculator_configs: CalculatorConfig[];
 }
 
-export default function Home({ stats, featured_projects, service_packages, forum_preview, calculator_types }: HomeProps) {
-    const { format } = useCurrency();
+interface CalculationEstimate {
+    project_type: string;
+    base_price: number;
+    features_total: number;
+    multiplier: number;
+    timeline_label: string;
+    min: number;
+    max: number;
+    currency: string;
+    formatted_min: string;
+    formatted_max: string;
+}
+
+export default function Home({ stats, featured_projects, service_packages, forum_preview, calculator_configs }: HomeProps) {
     const { t } = useTranslation('home');
     const { t: tCommon } = useTranslation('common');
     const { t: tForum } = useTranslation('forum');
-    const { t: tNav } = useTranslation('nav');
 
     const [projectFilter, setProjectFilter] = useState('all');
     
     // Calculator State
     const [calcStep, setCalcStep] = useState(1);
-    const [, setCalcType] = useState('');
-    const [calcConfig, setCalcConfig] = useState<any>(null);
+    const [calcType, setCalcType] = useState('');
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
     const [timelineWeeks, setTimelineWeeks] = useState(0);
+    const [estimate, setEstimate] = useState<CalculationEstimate | null>(null);
+    const [calcLoading, setCalcLoading] = useState(false);
+
+    const calcConfig = useMemo(() => {
+        return calculator_configs.find(c => c.project_type === calcType);
+    }, [calcType, calculator_configs]);
 
     const filteredProjects = useMemo(() => {
         if (projectFilter === 'all') return featured_projects;
@@ -61,38 +77,38 @@ export default function Home({ stats, featured_projects, service_packages, forum
     }, [projectFilter, featured_projects]);
 
     // Handle Calculator logic
-    const handleTypeSelect = async (type: string) => {
+    const handleTypeSelect = (type: string) => {
         setCalcType(type);
         setCalcStep(2);
-        try {
-            // In a real app, I'd have a specific endpoint or pre-pass configs
-            // For now, let's assume we fetch estimate which returns config if only type sent
-            const response = await axios.get(`/api/calculator/config/${type}`);
-            setCalcConfig(response.data);
-            setSelectedFeatures([]);
-        } catch (e) {
-            console.error("Failed to load calculator config");
-        }
+        setSelectedFeatures([]);
+        setTimelineWeeks(0);
+        setEstimate(null);
     };
 
-    const estimate = useMemo(() => {
-        if (!calcConfig) return { min: 0, max: 0 };
-        let total = parseFloat(calcConfig.base_price);
-        
-        calcConfig.features.forEach((f: any) => {
-            if (selectedFeatures.includes(f.key)) {
-                total += parseFloat(f.price_add);
-            }
-        });
+    // Effect for fetching estimate
+    useEffect(() => {
+        if (calcStep === 3 && timelineWeeks > 0) {
+            const fetchEstimate = async () => {
+                setCalcLoading(true);
+                try {
+                    const response = await axios.post('/calculator/estimate', {
+                        project_type: calcType,
+                        selected_features: selectedFeatures,
+                        timeline_weeks: timelineWeeks
+                    });
+                    setEstimate(response.data);
+                } catch (error) {
+                    console.error("Failed to fetch estimate", error);
+                    setEstimate(null);
+                } finally {
+                    setCalcLoading(false);
+                }
+            };
 
-        const multiplier = calcConfig.timeline_multipliers.find((m: any) => m.weeks === timelineWeeks)?.multiplier || 1.0;
-        total *= multiplier;
-
-        return {
-            min: total * 0.9,
-            max: total * 1.1
-        };
-    }, [calcConfig, selectedFeatures, timelineWeeks]);
+            const timer = setTimeout(fetchEstimate, 300);
+            return () => clearTimeout(timer);
+        }
+    }, [calcStep, calcType, selectedFeatures, timelineWeeks]);
 
     return (
         <PublicLayout>
@@ -238,13 +254,13 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                     <div className="space-y-6">
                                         <h3 className="text-xl font-bold text-white text-center">{t('calc_step_1', { default: 'What are we building?' })}</h3>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            {calculator_types.map(type => (
+                                            {calculator_configs.map(config => (
                                                 <button
-                                                    key={type.project_type}
-                                                    onClick={() => handleTypeSelect(type.project_type)}
+                                                    key={config.project_type}
+                                                    onClick={() => handleTypeSelect(config.project_type)}
                                                     className="p-6 rounded-2xl border border-white/10 bg-white/5 text-left hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all group"
                                                 >
-                                                    <span className="block font-bold text-white group-hover:text-indigo-400">{type.label}</span>
+                                                    <span className="block font-bold text-white group-hover:text-indigo-400">{config.label}</span>
                                                     <span className="text-xs text-white/30 mt-1 uppercase tracking-widest font-medium">{tCommon('view')}</span>
                                                 </button>
                                             ))}
@@ -259,7 +275,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                             <button onClick={() => setCalcStep(1)} className="text-sm text-indigo-400 font-bold">{t('calc_change_type', { default: 'Change Type' })}</button>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            {calcConfig.features.map((f: any) => (
+                                            {calcConfig.features.map((f) => (
                                                 <label key={f.key} className={cn(
                                                     "flex items-center gap-3 p-4 rounded-xl border transition-all cursor-pointer",
                                                     selectedFeatures.includes(f.key) 
@@ -297,7 +313,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                     <div className="space-y-8 text-center">
                                         <h3 className="text-xl font-bold text-white">{t('calc_step_3', { default: 'Project Timeline' })}</h3>
                                         <div className="flex flex-wrap justify-center gap-4">
-                                            {calcConfig.timeline_multipliers.map((m: any) => (
+                                            {calcConfig.timeline_multipliers.map((m) => (
                                                 <button
                                                     key={m.weeks}
                                                     onClick={() => setTimelineWeeks(m.weeks)}
@@ -314,11 +330,23 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                             ))}
                                         </div>
 
-                                        <div className="pt-8 border-t border-white/10">
-                                            <p className="text-sm text-white/30 mb-2 font-bold uppercase tracking-widest">{t('calc_est_title', { default: 'Estimated Investment' })}</p>
-                                            <div className="text-4xl md:text-5xl font-black text-indigo-400">
-                                                {format(estimate.min)} – {format(estimate.max)}
-                                            </div>
+                                        <div className="pt-8 border-t border-white/10 relative min-h-[140px] flex flex-col justify-center">
+                                            {calcLoading ? (
+                                                <div className="flex items-center justify-center gap-3 text-indigo-400">
+                                                    <Zap className="animate-pulse" />
+                                                    <span className="font-bold animate-pulse">Calculating estimate...</span>
+                                                </div>
+                                            ) : estimate ? (
+                                                <>
+                                                    <p className="text-sm text-white/30 mb-2 font-bold uppercase tracking-widest">{t('calc_est_title', { default: 'Estimated Investment' })}</p>
+                                                    <div className="text-4xl md:text-5xl font-black text-indigo-400">
+                                                        {estimate.formatted_min} – {estimate.formatted_max}
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <p className="text-white/20 italic">Select a timeline to see estimate.</p>
+                                            )}
+                                            
                                             <p className="text-xs text-white/20 mt-4 max-w-sm mx-auto">
                                                 {t('calc_disclaimer', { default: '*This is a rough estimate based on your selections. Final pricing may vary after detailed discussion.' })}
                                             </p>
@@ -348,7 +376,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
                         {service_packages.slice(0, 3).map(pkg => (
-                            <ServicePackageCard key={pkg.id} pkg={pkg} onSelect={(pkg) => router.visit(route('services.index'))} />
+                            <ServicePackageCard key={pkg.id} pkg={pkg} onSelect={() => router.visit(route('services.index'))} />
                         ))}
                     </div>
                     
@@ -396,8 +424,4 @@ export default function Home({ stats, featured_projects, service_packages, forum
             </div>
         </PublicLayout>
     );
-}
-
-function cn(...classes: any[]) {
-    return classes.filter(Boolean).join(' ');
 }
