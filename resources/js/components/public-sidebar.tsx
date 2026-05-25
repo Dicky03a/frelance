@@ -26,7 +26,6 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
 
     const sections = [
         {
-            title: t('overview', { default: 'Overview' }),
             items: [
                 { title: t('home'), href: route('home') },
                 { title: t('projects'), href: route('projects.index') },
