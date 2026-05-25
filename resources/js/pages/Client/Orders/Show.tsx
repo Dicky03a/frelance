@@ -19,6 +19,7 @@ import {
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { SharedProps } from '@/types/inertia';
+import { BreadcrumbItem } from '@/types';
 
 import { useTranslation } from '@/lib/i18n';
 import { useCurrency } from '@/lib/currency';
@@ -53,8 +54,20 @@ interface Props {
 export default function Show({ order }: Props) {
     const { t } = useTranslation('orders');
     const { t: tCommon } = useTranslation('common');
+    const { t: tNav } = useTranslation('nav');
     const { format } = useCurrency();
     const { locale } = usePage<SharedProps>().props;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'My Orders',
+            href: route('client.orders'),
+        },
+        {
+            title: order.order_code,
+            href: route('orders.show', order.id),
+        },
+    ];
 
     const statusConfig = {
         pending: { label: t('status_pending'), color: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20', icon: Clock },
@@ -96,7 +109,7 @@ export default function Show({ order }: Props) {
     });
 
     return (
-        <AppLayout>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`${t('details')} ${order.order_code}`} />
 
             <div className="container mx-auto py-8 px-4 max-w-5xl">
@@ -227,7 +240,7 @@ export default function Show({ order }: Props) {
                                                 disabled={processing}
                                                 className="bg-indigo-600 hover:bg-indigo-700"
                                             >
-                                                {t('post_reply')}
+                                                {tCommon('submit')}
                                             </Button>
                                         </form>
                                     )}

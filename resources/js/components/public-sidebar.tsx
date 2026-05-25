@@ -8,14 +8,20 @@ import {
     Star, 
     User, 
     Code, 
-    Mail 
+    Mail,
+    ShoppingBag,
+    Settings,
+    ShieldCheck,
+    Briefcase
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { SharedData } from '@/types';
 
 import { useTranslation } from '@/lib/i18n';
 
 export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
-    const { url } = usePage();
+    const { url, props } = usePage<SharedData>();
+    const { auth } = props;
     const { t } = useTranslation('nav');
 
     const getPathname = (itemUrl: string) => {

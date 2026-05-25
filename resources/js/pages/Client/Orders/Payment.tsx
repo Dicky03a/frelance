@@ -13,7 +13,7 @@ interface Order {
     service_package: {
         name: string;
         service: {
-            title: string;
+            name: string;
         };
     };
 }
@@ -35,37 +35,64 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const triggerPayment = () => {
+        if (!window.snap) {
+            setError('Payment gateway not ready. Please refresh the page.');
+            return;
+        }
+
+        window.snap.pay(snap_token, {
+            onSuccess: (result: any) => {
+                router.visit(route('orders.show', order.id));
+            },
+            onPending: (result: any) => {
+                router.visit(route('orders.show', order.id));
+            },
+            onError: (result: any) => {
+                setError(result.status_message || 'Payment failed. Please try again.');
+            },
+            onClose: () => {
+                setError('Payment window closed. You can try again by clicking "Bayar Sekarang".');
+            }
+        });
+    };
+
     useEffect(() => {
+        // Check if script is already loaded
+        const existingScript = document.getElementById('midtrans-snap');
+        
+        if (existingScript) {
+            setLoading(false);
+            // Delay slightly to ensure snap is ready
+            setTimeout(triggerPayment, 500);
+            return;
+        }
+
         const script = document.createElement('script');
+        script.id = 'midtrans-snap';
         script.src = snap_url;
         script.setAttribute('data-client-key', client_key);
+        script.async = true;
+        
         script.onload = () => {
             setLoading(false);
-            window.snap.pay(snap_token, {
-                onSuccess: (result: any) => {
-                    router.visit(route('orders.show', order.id));
-                },
-                onPending: (result: any) => {
-                    router.visit(route('orders.show', order.id));
-                },
-                onError: (result: any) => {
-                    setError(result.status_message || 'Payment failed. Please try again.');
-                },
-                onClose: () => {
-                    setError('Payment window closed. You can try again by refreshing the page.');
-                }
-            });
+            // Small delay helps with some browser origin issues
+            setTimeout(triggerPayment, 500);
         };
+
         script.onerror = () => {
             setLoading(false);
             setError('Failed to load payment gateway. Please check your internet connection.');
         };
+
         document.body.appendChild(script);
 
         return () => {
-            document.body.removeChild(script);
+            // We don't necessarily want to remove it if it might be reused, 
+            // but for a single payment page it's usually fine.
+            // However, removing it might cause issues if navigation is fast.
         };
-    }, [snap_token, snap_url, client_key, order.id]);
+    }, [snap_token, snap_url, client_key]);
 
     return (
         <AppLayout>
@@ -88,7 +115,7 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
                                 <div className="flex justify-between items-start">
                                     <div>
                                         <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Layanan</p>
-                                        <p className="text-lg font-semibold">{order.service_package.service.title}</p>
+                                        <p className="text-lg font-semibold">{order.service_package.service.name}</p>
                                         <p className="text-sm text-muted-foreground">{order.service_package.name}</p>
                                     </div>
                                     <div className="text-right">
@@ -134,7 +161,7 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
                                             Jika tidak muncul, silakan klik tombol di bawah ini.
                                         </p>
                                         <Button 
-                                            onClick={() => window.snap.pay(snap_token)}
+                                            onClick={triggerPayment}
                                             className="bg-indigo-600 hover:bg-indigo-700"
                                         >
                                             Bayar Sekarang

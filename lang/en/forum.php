@@ -14,7 +14,7 @@ return [
     'search_placeholder' => 'Search threads...',
     'login_to_reply' => 'Please login to reply.',
     'reply_placeholder' => 'Write your reply...',
-    'post_reply' => 'Post Reply',
+    'post_reply' => 'Post Reply',       
     'thread_details' => 'Thread Details',
     'browse_forum' => 'Browse Forum',
     'have_question' => 'Have a question or need technical advice?',

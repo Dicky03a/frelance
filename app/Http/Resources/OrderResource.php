@@ -28,6 +28,9 @@ class OrderResource extends JsonResource
             ],
             'total_idr' => (float) $this->total_idr,
             'status' => $this->status,
+            'midtrans_token' => $this->midtrans_token,
+            'midtrans_order_id' => $this->midtrans_order_id,
+            'rating' => new RatingResource($this->whenLoaded('rating')),
             'paid_at' => $this->paid_at,
             'created_at' => $this->created_at,
         ];

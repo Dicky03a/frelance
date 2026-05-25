@@ -10,6 +10,7 @@ use App\Models\ServicePackage;
 use App\Services\CurrencyService;
 use App\Services\MidtransService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
@@ -82,8 +83,60 @@ class OrderController extends Controller
     {
         Gate::authorize('view', $order);
 
+        // Auto-sync if pending
+        if ($order->status === OrderStatus::PENDING) {
+            try {
+                $status = $this->midtransService->getTransactionStatus($order->midtrans_order_id);
+                $newStatus = $this->midtransService->mapPaymentStatus(
+                    $status['transaction_status'],
+                    $status['fraud_status'] ?? 'accept'
+                );
+
+                if ($newStatus !== $order->status) {
+                    $order->update([
+                        'status' => $newStatus,
+                        'midtrans_transaction_id' => $status['transaction_id'],
+                        'payment_type' => $status['payment_type'],
+                        'paid_at' => $newStatus === OrderStatus::PAID ? now() : $order->paid_at,
+                    ]);
+
+                    if ($newStatus === OrderStatus::PAID) {
+                        \App\Jobs\SendOrderConfirmationJob::dispatch($order);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Silently fail, just show the current data
+            }
+        }
+
         return Inertia::render('Client/Orders/Show', [
             'order' => $order->load(['user', 'servicePackage.service', 'rating']),
+        ]);
+    }
+
+    public function myOrders(Request $request): Response
+    {
+        $status = $request->query('status');
+        
+        $query = auth()->user()->orders()
+            ->with(['servicePackage.service', 'rating'])
+            ->latest();
+
+        if ($status === 'active') {
+            $query->whereIn('status', [OrderStatus::PENDING, OrderStatus::PAID, OrderStatus::IN_PROGRESS]);
+        } elseif ($status === 'completed') {
+            $query->where('status', OrderStatus::COMPLETED);
+        } elseif ($status === 'cancelled') {
+            $query->whereIn('status', [OrderStatus::CANCELLED, OrderStatus::EXPIRED]);
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
+
+        return Inertia::render('Client/Orders/Index', [
+            'orders' => \App\Http\Resources\OrderResource::collection($orders),
+            'filters' => [
+                'status' => $status,
+            ],
         ]);
     }
 }

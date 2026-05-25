@@ -69,7 +69,35 @@ class MidtransService
             config('midtrans.server_key')
         );
 
-        return $signatureKey === $payload['signature_key'];
+        $isValid = $signatureKey === $payload['signature_key'];
+
+        if (!$isValid) {
+            \Illuminate\Support\Facades\Log::warning('Midtrans Signature Mismatch', [
+                'expected' => $signatureKey,
+                'received' => $payload['signature_key'] ?? 'none',
+                'order_id' => $payload['order_id'] ?? 'none',
+                'status_code' => $payload['status_code'] ?? 'none',
+                'gross_amount' => $payload['gross_amount'] ?? 'none',
+            ]);
+        }
+
+        return $isValid;
+    }
+
+    /**
+     * Get transaction status from Midtrans API.
+     */
+    public function getTransactionStatus(string $orderId): array
+    {
+        try {
+            return (array) \Midtrans\Transaction::status($orderId);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Midtrans API Error: Failed to fetch status', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
     }
 
     /**
@@ -77,20 +105,12 @@ class MidtransService
      */
     public function mapPaymentStatus(string $transactionStatus, string $fraudStatus): OrderStatus
     {
-        if ($transactionStatus == 'capture') {
-            if ($fraudStatus == 'challenge') {
-                return OrderStatus::PENDING;
-            } else if ($fraudStatus == 'accept') {
-                return OrderStatus::PAID;
-            }
-        } else if ($transactionStatus == 'settlement') {
-            return OrderStatus::PAID;
-        } else if ($transactionStatus == 'cancel' || $transactionStatus == 'deny' || $transactionStatus == 'expire') {
-            return OrderStatus::CANCELLED;
-        } else if ($transactionStatus == 'pending') {
-            return OrderStatus::PENDING;
-        }
-
-        return OrderStatus::PENDING;
+        return match ($transactionStatus) {
+            'capture' => ($fraudStatus == 'challenge') ? OrderStatus::PENDING : OrderStatus::PAID,
+            'settlement' => OrderStatus::PAID,
+            'pending' => OrderStatus::PENDING,
+            'deny', 'expire', 'cancel' => OrderStatus::CANCELLED,
+            default => OrderStatus::PENDING,
+        };
     }
 }

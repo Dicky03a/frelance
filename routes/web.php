@@ -26,10 +26,9 @@ Route::get('/currency/{currency}', [\App\Http\Controllers\CurrencyController::cl
 Route::post('/calculator/estimate', [\App\Http\Controllers\Public\CalculatorController::class, 'estimate'])->name('calculator.estimate');
 
 // Client Routes
-Route::middleware(['auth'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('my-orders', [\App\Http\Controllers\Client\OrderController::class, 'myOrders'])->name('client.orders');
 
     Route::post('/orders', [\App\Http\Controllers\Client\OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [\App\Http\Controllers\Client\OrderController::class, 'show'])->name('orders.show');

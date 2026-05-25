@@ -20,6 +20,19 @@ export function AppSidebar() {
         },
     ];
 
+    const clientNavItems: NavItem[] = [
+        {
+            title: 'My Orders',
+            url: route('client.orders'),
+            icon: ShoppingCart,
+        },
+        {
+            title: 'Forum',
+            url: route('forum.index'),
+            icon: MessageSquare,
+        },
+    ];
+
     const adminNavItems: NavItem[] = [
         {
             title: 'Admin Dashboard',
@@ -87,6 +100,7 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+                {!isAdmin && <NavMain items={clientNavItems} label="Client Area" />}
                 {isAdmin && (
                     <NavMain items={adminNavItems} label="Administration" />
                 )}

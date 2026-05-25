@@ -2224,3 +2224,8 @@ php artisan telescope:install      # Install Telescope for request debugging (de
 ---
 
 *Document version: 1.0 · Freelance Porto · 13 Stages · ~8 weeks*
+
+
+cloudflared tunnel --url http://localhost:8000
+
+php artisan serve --port=8000
