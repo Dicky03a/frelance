@@ -14,7 +14,7 @@ export function StatCard({ icon: Icon, value, label, suffix = '', color = 'indig
     const [count, setCount] = useState(0);
 
     useEffect(() => {
-        let start = 0;
+        const start = 0;
         const duration = 1500; // 1.5s
         const startTime = performance.now();
 

@@ -3,9 +3,8 @@ import { Head, router } from '@inertiajs/react';
 import { ProjectCard } from '@/components/public/project-card';
 import { Project } from '@/types/models';
 import { PaginatedResponse } from '@/types/pagination';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Search, Filter, Briefcase } from 'lucide-react';
+import { Search, Briefcase } from 'lucide-react';
 
 interface ProjectsIndexProps {
     projects: PaginatedResponse<Project>;

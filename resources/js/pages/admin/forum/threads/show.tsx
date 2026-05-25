@@ -16,7 +16,7 @@ import {
     ShieldAlert
 } from 'lucide-react';
 import { ForumThread, ForumReply } from '@/types/models';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -25,8 +25,6 @@ interface ForumThreadShowProps {
 }
 
 export default function Show({ thread }: ForumThreadShowProps) {
-    const { patch, delete: destroy, processing } = useForm();
-
     const toggleStatus = (field: 'is_pinned' | 'is_locked' | 'is_hidden') => {
         router.patch(route('admin.forum.threads.update', thread.id), {
             [field]: !thread[field]

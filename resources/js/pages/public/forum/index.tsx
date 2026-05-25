@@ -2,7 +2,6 @@ import PublicLayout from '@/layouts/public-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import { ForumThread } from '@/types/models';
 import { PaginatedResponse } from '@/types/pagination';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ForumPreviewItem } from '@/components/public/forum-preview-item';

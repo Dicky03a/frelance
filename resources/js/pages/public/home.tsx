@@ -9,21 +9,16 @@ import { Project, ForumThread, ServicePackage } from '@/types/models';
 import { 
     Check, 
     ChevronRight, 
-    Code, 
-    Globe, 
-    Layout, 
     MessageSquare, 
-    Rocket, 
     Zap, 
     Calculator,
     ArrowRight,
-    Search,
     Star,
     Award,
     Users,
     Briefcase
 } from 'lucide-react';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import axios from 'axios';
@@ -41,13 +36,13 @@ interface HomeProps extends SharedProps {
     calculator_types: Array<{ project_type: string; label: string }>;
 }
 
-export default function home({ stats, featured_projects, service_packages, forum_preview, calculator_types }: HomeProps) {
+export default function Home({ stats, featured_projects, service_packages, forum_preview, calculator_types }: HomeProps) {
     const { currency } = usePage<SharedProps>().props;
     const [projectFilter, setProjectFilter] = useState('all');
     
     // Calculator State
     const [calcStep, setCalcStep] = useState(1);
-    const [calcType, setCalcType] = useState('');
+    const [, setCalcType] = useState('');
     const [calcConfig, setCalcConfig] = useState<any>(null);
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
     const [timelineWeeks, setTimelineWeeks] = useState(0);
