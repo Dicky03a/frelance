@@ -24,13 +24,12 @@ export default function Index({ configs }: IndexProps) {
 
     const deleteConfig = (id: number) => {
         if (confirm('Are you sure you want to delete this configuration?')) {
-            router.delete(route('admin.calculator-configs.destroy', id));
+            router.delete(route('admin.calculator-configs.destroy', { calculator_config: id }));
         }
     };
 
     const toggleActive = (config: CalculatorConfig) => {
-        router.patch(route('admin.calculator-configs.update', config.id), {
-            ...config,
+        router.patch(route('admin.calculator-configs.update', { calculator_config: config.id }), {
             is_active: !config.is_active
         });
     };
@@ -91,7 +90,7 @@ export default function Index({ configs }: IndexProps) {
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
                                             <Button variant="ghost" size="icon" asChild className="text-white/40 hover:text-white hover:bg-white/5">
-                                                <Link href={route('admin.calculator-configs.edit', config.id)}>
+                                                <Link href={route('admin.calculator-configs.edit', { calculator_config: config.id })}>
                                                     <Edit2 size={16} />
                                                 </Link>
                                             </Button>

@@ -15,14 +15,14 @@ class CalculatorConfigController extends Controller
     {
         $configs = CalculatorConfig::orderBy('project_type')->get();
 
-        return Inertia::render('Admin/Calculator/Index', [
+        return Inertia::render('admin/calculator/index', [
             'configs' => $configs,
         ]);
     }
 
     public function create(): Response
     {
-        return Inertia::render('Admin/Calculator/Form', [
+        return Inertia::render('admin/calculator/form', [
             'config' => null,
         ]);
     }
@@ -50,23 +50,23 @@ class CalculatorConfigController extends Controller
             ->with('success', 'Calculator configuration created successfully.');
     }
 
-    public function edit(CalculatorConfig $config): Response
+    public function edit(CalculatorConfig $calculatorConfig): Response
     {
-        return Inertia::render('Admin/Calculator/Form', [
-            'config' => $config,
+        return Inertia::render('admin/calculator/form', [
+            'config' => $calculatorConfig,
         ]);
     }
 
-    public function update(Request $request, CalculatorConfig $config): RedirectResponse
+    public function update(Request $request, CalculatorConfig $calculatorConfig): RedirectResponse
     {
         // Handle partial update (e.g. toggle active from index)
-        if ($request->has('is_active') && count($request->all()) <= 2) {
-            $config->update($request->only('is_active'));
+        if ($request->has('is_active') && count($request->all()) <= 3) {
+            $calculatorConfig->update($request->only('is_active'));
             return back()->with('success', 'Status updated.');
         }
 
         $validated = $request->validate([
-            'project_type' => 'required|string|unique:calculator_configs,project_type,' . $config->id,
+            'project_type' => 'required|string|unique:calculator_configs,project_type,' . $calculatorConfig->id,
             'label' => 'required|string|max:100',
             'base_price' => 'required|numeric|min:0',
             'is_active' => 'boolean',
@@ -80,15 +80,15 @@ class CalculatorConfigController extends Controller
             'timeline_multipliers.*.multiplier' => 'required|numeric|min:0.5|max:3',
         ]);
 
-        $config->update($validated);
+        $calculatorConfig->update($validated);
 
         return redirect()->route('admin.calculator-configs.index')
             ->with('success', 'Calculator configuration updated successfully.');
     }
 
-    public function destroy(CalculatorConfig $config): RedirectResponse
+    public function destroy(CalculatorConfig $calculatorConfig): RedirectResponse
     {
-        $config->delete();
+        $calculatorConfig->delete();
 
         return redirect()->route('admin.calculator-configs.index')
             ->with('success', 'Calculator configuration deleted successfully.');

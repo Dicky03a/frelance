@@ -46,8 +46,8 @@ export default function Form({ config }: FormProps) {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (isEdit) {
-            patch(route('admin.calculator-configs.update', config.id));
+        if (isEdit && config) {
+            patch(route('admin.calculator-configs.update', { calculator_config: config.id }));
         } else {
             post(route('admin.calculator-configs.store'));
         }

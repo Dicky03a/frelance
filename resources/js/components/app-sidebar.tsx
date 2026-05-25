@@ -13,14 +13,15 @@ export function AppSidebar() {
     const isAdmin = auth.user?.role === 'admin';
 
     const mainNavItems: NavItem[] = [
+        
+    ];
+
+    const clientNavItems: NavItem[] = [
         {
             title: 'Dashboard',
             url: route('dashboard'),
             icon: LayoutGrid,
         },
-    ];
-
-    const clientNavItems: NavItem[] = [
         {
             title: 'My Orders',
             url: route('client.orders'),
