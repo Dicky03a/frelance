@@ -4,7 +4,11 @@ import { Link } from '@inertiajs/react';
 import { MessageSquare, Clock, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
+import { useTranslation } from '@/lib/i18n';
+
 export function ForumPreviewItem({ thread }: { thread: ForumThread }) {
+    const { t } = useTranslation('forum');
+    
     return (
         <Link 
             href={`/forum/${thread.slug}`}
@@ -31,10 +35,10 @@ export function ForumPreviewItem({ thread }: { thread: ForumThread }) {
                 <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center gap-1.5 text-[11px] text-white/30 font-medium">
                         <MessageSquare size={12} className="text-indigo-500" />
-                        <span>{thread.replies_count ?? 0} Replies</span>
+                        <span>{thread.replies_count ?? 0} {t('replies')}</span>
                     </div>
                     <div className="text-[11px] text-white/30">
-                        By <span className="text-white/60">{thread.user?.name}</span>
+                        {t('author')}: <span className="text-white/60">{thread.user?.name}</span>
                     </div>
                 </div>
             </div>

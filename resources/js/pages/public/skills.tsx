@@ -2,14 +2,18 @@ import PublicLayout from '@/layouts/public-layout';
 import { Head } from '@inertiajs/react';
 import { Skill } from '@/types/models';
 
+import { useTranslation } from '@/lib/i18n';
+
 export default function Skills({ skills_by_category }: { skills_by_category: Record<string, Skill[]> }) {
+    const { t } = useTranslation('skills');
+
     return (
         <PublicLayout>
-            <Head title="Keahlian Teknis - DevPorto" />
+            <Head title={`${t('title')} - DevPorto`} />
             <div className="px-6 py-10 space-y-12">
                 <header className="max-w-3xl space-y-4">
                     <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">Tech Stack</h1>
-                    <p className="text-white/40 text-lg">Kumpulan teknologi yang saya gunakan untuk membangun produk digital.</p>
+                    <p className="text-white/40 text-lg">{t('subtitle')}</p>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

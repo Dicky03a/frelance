@@ -6,6 +6,7 @@ export interface SharedProps extends PageProps {
         user: User | null;
     };
     locale: 'id' | 'en';
+    translations: Record<string, Record<string, string>>;
     currency: 'IDR' | 'USD';
     exchange_rate: number;
     flash: {

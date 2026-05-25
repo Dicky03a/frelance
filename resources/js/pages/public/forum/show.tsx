@@ -13,11 +13,15 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
+import { useTranslation } from '@/lib/i18n';
+
 interface ForumShowProps {
     thread: ForumThread;
 }
 
 export default function Show({ thread }: ForumShowProps) {
+    const { t } = useTranslation('forum');
+    
     const { data, setData, post, processing, reset } = useForm({
         body: '',
     });
@@ -38,7 +42,7 @@ export default function Show({ thread }: ForumShowProps) {
                     href="/forum" 
                     className="inline-flex items-center gap-2 text-sm font-bold text-white/30 hover:text-white transition-colors group"
                 >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> BACK TO FORUM
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> {t('back_to_forum')}
                 </Link>
 
                 <div className="space-y-6">
@@ -64,7 +68,7 @@ export default function Show({ thread }: ForumShowProps) {
                             </div>
                             <div>
                                 <p className="font-bold text-white">{thread.user?.name}</p>
-                                <p className="text-xs text-white/30 uppercase tracking-widest font-bold">Author</p>
+                                <p className="text-xs text-white/30 uppercase tracking-widest font-bold">{t('author')}</p>
                             </div>
                         </div>
                         <div className="prose prose-invert max-w-none text-white/80 leading-relaxed text-lg whitespace-pre-wrap">
@@ -76,7 +80,7 @@ export default function Show({ thread }: ForumShowProps) {
                     <div className="space-y-6 pt-10">
                         <div className="flex items-center gap-3 px-4">
                             <MessageSquare className="text-indigo-400" size={20} />
-                            <h3 className="text-xl font-bold text-white">{thread.replies?.length || 0} Tanggapan</h3>
+                            <h3 className="text-xl font-bold text-white">{thread.replies?.length || 0} {t('responses')}</h3>
                         </div>
 
                         <div className="space-y-4">
@@ -106,7 +110,7 @@ export default function Show({ thread }: ForumShowProps) {
 
                             {(!thread.replies || thread.replies.length === 0) && (
                                 <div className="py-20 text-center rounded-[32px] border border-dashed border-white/5">
-                                    <p className="text-white/20 italic">Belum ada tanggapan. Jadilah yang pertama!</p>
+                                    <p className="text-white/20 italic">{t('no_replies')}</p>
                                 </div>
                             )}
                         </div>
@@ -115,13 +119,13 @@ export default function Show({ thread }: ForumShowProps) {
                     {/* Reply Form */}
                     <div className="pt-10">
                         <div className="rounded-[32px] border border-indigo-500/20 bg-indigo-500/5 p-8 space-y-6">
-                            <h4 className="text-lg font-bold text-white">Tulis Tanggapan</h4>
+                            <h4 className="text-lg font-bold text-white">{t('write_reply')}</h4>
                             <form onSubmit={handleSubmitReply} className="space-y-4">
                                 <textarea 
                                     rows={5}
                                     value={data.body}
                                     onChange={e => setData('body', e.target.value)}
-                                    placeholder="Tuliskan saran atau jawaban Anda di sini..."
+                                    placeholder={t('reply_placeholder_input')}
                                     className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                                 />
                                 <div className="flex justify-end">
@@ -129,7 +133,7 @@ export default function Show({ thread }: ForumShowProps) {
                                         disabled={processing || !data.body.trim()} 
                                         className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-8 h-12 font-bold"
                                     >
-                                        <Send size={18} className="mr-2" /> Kirim Balasan
+                                        <Send size={18} className="mr-2" /> {t('post_reply')}
                                     </Button>
                                 </div>
                             </form>

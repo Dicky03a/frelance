@@ -6,6 +6,8 @@ import { PaginatedResponse } from '@/types/pagination';
 import { cn } from '@/lib/utils';
 import { Search, Briefcase } from 'lucide-react';
 
+import { useTranslation } from '@/lib/i18n';
+
 interface ProjectsIndexProps {
     projects: PaginatedResponse<Project>;
     categories: string[];
@@ -15,6 +17,9 @@ interface ProjectsIndexProps {
 }
 
 export default function Index({ projects, categories, filters }: ProjectsIndexProps) {
+    const { t } = useTranslation('projects');
+    const { t: tCommon } = useTranslation('common');
+
     const handleCategoryFilter = (category: string) => {
         router.get(route('projects.index'), { category: category === filters.category ? null : category }, {
             preserveState: true,
@@ -24,16 +29,16 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
 
     return (
         <PublicLayout>
-            <Head title="Portfolio - Professional Works" />
+            <Head title={`${t('title')} - Professional Works`} />
 
             <div className="px-6 py-10 space-y-12">
                 <header className="max-w-3xl space-y-4">
                     <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/10 mb-2">
                         <Briefcase size={28} />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">Portfolio</h1>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{t('title')}</h1>
                     <p className="text-white/40 text-lg leading-relaxed">
-                        A showcase of my recent projects, featuring custom web applications, e-commerce solutions, and creative digital experiences.
+                        {t('subtitle')}
                     </p>
                 </header>
 
@@ -47,7 +52,7 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
                                 : "bg-white/5 border-white/5 text-white/40 hover:border-white/10"
                         )}
                     >
-                        ALL PROJECTS
+                        {t('all_projects')}
                     </button>
                     {categories.map(cat => (
                         <button
@@ -74,8 +79,8 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
                 {projects.data.length === 0 && (
                     <div className="py-32 text-center rounded-[40px] border border-dashed border-white/10">
                         <Search size={48} className="mx-auto text-white/10 mb-4" />
-                        <h3 className="text-xl font-bold text-white mb-2">No projects found</h3>
-                        <p className="text-white/30 italic">Try selecting a different category or check back later.</p>
+                        <h3 className="text-xl font-bold text-white mb-2">{t('no_projects')}</h3>
+                        <p className="text-white/30 italic">{t('no_projects_desc')}</p>
                     </div>
                 )}
 
@@ -87,18 +92,18 @@ export default function Index({ projects, categories, filters }: ProjectsIndexPr
                                 onClick={() => router.get(projects.links.prev!)}
                                 className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 text-white/50 font-bold hover:text-white transition-all"
                             >
-                                Previous
+                                {tCommon('previous')}
                             </button>
                         )}
                         <div className="px-6 py-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-bold">
-                            Page {projects.meta.current_page} of {projects.meta.last_page}
+                            {t('page_info', { current: String(projects.meta.current_page), last: String(projects.meta.last_page) })}
                         </div>
                         {projects.links.next && (
                             <button 
                                 onClick={() => router.get(projects.links.next!)}
                                 className="px-6 py-3 rounded-2xl bg-white/5 border border-white/5 text-white/50 font-bold hover:text-white transition-all"
                             >
-                                Next
+                                {tCommon('next')}
                             </button>
                         )}
                     </div>

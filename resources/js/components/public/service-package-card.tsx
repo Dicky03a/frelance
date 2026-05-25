@@ -1,20 +1,23 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ServicePackage } from '@/types/models';
-import { Link } from '@inertiajs/react';
 import { Check } from 'lucide-react';
+import { useCurrency } from '@/lib/currency';
+import { useTranslation } from '@/lib/i18n';
 
 export function ServicePackageCard({ 
     pkg, 
-    currency, 
     onSelect 
 }: { 
     pkg: ServicePackage; 
-    currency: 'IDR' | 'USD'; 
     onSelect: (pkg: ServicePackage) => void;
 }) {
-    const price = currency === 'IDR' ? pkg.price_idr : pkg.price_usd;
-    const formattedPrice = currency === 'IDR' ? `Rp ${(price / 1000).toLocaleString('id-ID')}k` : `$${price}`;
+    const { format } = useCurrency();
+    const { t } = useTranslation('home');
+    const { t: tOrders } = useTranslation('orders');
+    
+    // We always use price_idr as the source and format it based on selected currency
+    const formattedPrice = format(pkg.price_idr);
 
     return (
         <div
@@ -27,7 +30,7 @@ export function ServicePackageCard({
         >
             {pkg.is_popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-white px-4 py-1.5 text-[10px] font-bold tracking-widest text-indigo-600 uppercase shadow-lg">
-                    Most Popular
+                    {t('popular_badge') || 'Most Popular'}
                 </div>
             )}
 
@@ -66,7 +69,7 @@ export function ServicePackageCard({
                     pkg.is_popular ? 'bg-white text-indigo-600 hover:bg-indigo-50' : 'border border-white/10 bg-white/5 text-white hover:bg-white/10',
                 )}
             >
-                Pesan Sekarang
+                {tOrders('order_now')}
             </Button>
         </div>
     );

@@ -3,15 +3,19 @@ import { Head } from '@inertiajs/react';
 import { Mail, MessageCircle, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+import { useTranslation } from '@/lib/i18n';
+
 export default function Contact() {
+    const { t } = useTranslation('contact');
+
     return (
         <PublicLayout>
-            <Head title="Kontak - DevPorto" />
+            <Head title={`${t('title')} - DevPorto`} />
             <div className="px-6 py-10 space-y-12 max-w-6xl mx-auto">
                 <header className="text-center space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">Mari Berdiskusi</h1>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{t('title')}</h1>
                     <p className="text-white/40 text-lg max-w-2xl mx-auto">
-                        Punya proyek menarik atau sekadar ingin bertanya? Saya akan dengan senang hati membantu Anda.
+                        {t('subtitle')}
                     </p>
                 </header>
 
@@ -44,20 +48,20 @@ export default function Contact() {
                             <form className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">Nama Lengkap</label>
+                                        <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">{t('name_label')}</label>
                                         <input className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-indigo-500/50" placeholder="John Doe" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">Email</label>
+                                        <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">{t('email_label')}</label>
                                         <input className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-indigo-500/50" placeholder="john@example.com" />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">Pesan</label>
-                                    <textarea rows={6} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-indigo-500/50" placeholder="Ceritakan sedikit tentang proyek Anda..." />
+                                    <label className="text-xs font-bold text-white/30 uppercase tracking-widest ml-2">{t('message_label')}</label>
+                                    <textarea rows={6} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:border-indigo-500/50" placeholder={t('message_placeholder')} />
                                 </div>
                                 <Button className="w-full h-14 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg">
-                                    Kirim Pesan <Send size={20} className="ml-2" />
+                                    {t('send_btn')} <Send size={20} className="ml-2" />
                                 </Button>
                             </form>
                         </div>

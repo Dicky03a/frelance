@@ -23,6 +23,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import axios from 'axios';
 
+import { useCurrency } from '@/lib/currency';
+import { useTranslation } from '@/lib/i18n';
+
 interface HomeProps extends SharedProps {
     stats: {
         projects_count: number;
@@ -37,7 +40,12 @@ interface HomeProps extends SharedProps {
 }
 
 export default function Home({ stats, featured_projects, service_packages, forum_preview, calculator_types }: HomeProps) {
-    const { currency } = usePage<SharedProps>().props;
+    const { format } = useCurrency();
+    const { t } = useTranslation('home');
+    const { t: tCommon } = useTranslation('common');
+    const { t: tForum } = useTranslation('forum');
+    const { t: tNav } = useTranslation('nav');
+
     const [projectFilter, setProjectFilter] = useState('all');
     
     // Calculator State
@@ -101,23 +109,23 @@ export default function Home({ stats, featured_projects, service_packages, forum
                             <div>
                                 <Badge className="mb-6 bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20 gap-2 px-3 py-1 rounded-full">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                    Available for projects
+                                    {t('hero_badge')}
                                 </Badge>
                                 <h1 className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight">
-                                    Building Digital <br />
-                                    <span className="text-indigo-400">Experiences</span> That Matter.
+                                    {t('hero_title_1', { default: 'Building Digital' })} <br />
+                                    <span className="text-indigo-400">{t('hero_title_2', { default: 'Experiences' })}</span> {t('hero_title_3', { default: 'That Matter.' })}
                                 </h1>
                                 <p className="mt-6 text-lg text-white/50 max-w-lg leading-relaxed">
-                                    Hi, I'm Arif. A Full Stack Developer specializing in high-performance web applications and beautiful user interfaces.
+                                    {t('hero_description')}
                                 </p>
                             </div>
                             
                             <div className="mt-12 flex flex-wrap gap-4">
                                 <Button asChild className="h-14 px-8 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg shadow-xl shadow-indigo-600/20">
-                                    <Link href="/services">Hire Me Now</Link>
+                                    <Link href="/services">{t('hire_me')}</Link>
                                 </Button>
                                 <Button variant="ghost" asChild className="h-14 px-8 rounded-2xl border border-white/10 text-white font-bold hover:bg-white/5">
-                                    <Link href="/projects">View Portfolio</Link>
+                                    <Link href="/projects">{t('view_projects')}</Link>
                                 </Button>
                             </div>
                         </div>
@@ -136,7 +144,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                 <Star size={16} fill="currentColor" />
                                 <Star size={16} fill="currentColor" />
                             </div>
-                            <p className="mt-2 text-sm font-medium text-white/30 uppercase tracking-widest">Client Satisfaction</p>
+                            <p className="mt-2 text-sm font-medium text-white/30 uppercase tracking-widest">{t('stats_sat')}</p>
                         </div>
                         <div className="flex-1 rounded-[32px] border border-white/10 bg-indigo-600 p-8 flex flex-col justify-center items-center text-center group cursor-pointer overflow-hidden relative">
                             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -144,7 +152,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                 <div className="text-5xl font-black text-white mb-2 leading-none">
                                     {stats.projects_count}+
                                 </div>
-                                <p className="text-white/80 font-bold uppercase tracking-widest text-xs">Projects Completed</p>
+                                <p className="text-white/80 font-bold uppercase tracking-widest text-xs">{t('stats_projects')}</p>
                                 <ArrowRight className="mt-4 mx-auto text-white/40 group-hover:translate-x-2 transition-transform" />
                             </div>
                         </div>
@@ -153,21 +161,21 @@ export default function Home({ stats, featured_projects, service_packages, forum
 
                 {/* SECTION 2: STATS */}
                 <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                    <StatCard icon={Briefcase} value={stats.projects_count} label="Projects" color="indigo" />
-                    <StatCard icon={Users} value={stats.clients_count} label="Clients" color="emerald" />
-                    <StatCard icon={Award} value={stats.years_experience} label="Years Exp" suffix="+" color="violet" />
-                    <StatCard icon={Zap} value={stats.satisfaction_rate} label="Satisfaction" suffix="%" color="amber" />
+                    <StatCard icon={Briefcase} value={stats.projects_count} label={t('stats_projects')} color="indigo" />
+                    <StatCard icon={Users} value={stats.clients_count} label={t('stats_clients')} color="emerald" />
+                    <StatCard icon={Award} value={stats.years_experience} label={t('stats_years')} suffix="+" color="violet" />
+                    <StatCard icon={Zap} value={stats.satisfaction_rate} label={t('stats_sat')} suffix="%" color="amber" />
                 </section>
 
                 {/* SECTION 3: PROJECTS */}
                 <section id="projects" className="space-y-8">
                     <div className="flex items-end justify-between px-2">
                         <div>
-                            <h2 className="text-3xl font-black text-white">Featured Portfolio</h2>
-                            <p className="text-white/40 mt-2">Selection of my best works from various industries.</p>
+                            <h2 className="text-3xl font-black text-white">{t('featured_projects')}</h2>
+                            <p className="text-white/40 mt-2">{t('featured_projects_subtitle', { default: 'Selection of my best works from various industries.' })}</p>
                         </div>
                         <Link href="/projects" className="text-indigo-400 font-bold flex items-center gap-2 hover:text-indigo-300 transition-colors">
-                            See all <ChevronRight size={20} />
+                            {tCommon('view')} {tCommon('all')} <ChevronRight size={20} />
                         </Link>
                     </div>
 
@@ -183,7 +191,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                         : "bg-white/5 border-white/5 text-white/40 hover:border-white/10"
                                 )}
                             >
-                                {filter.replace('_', ' ').toUpperCase()}
+                                {filter === 'all' ? tCommon('all').toUpperCase() : filter.replace('_', ' ').toUpperCase()}
                             </button>
                         ))}
                     </div>
@@ -194,7 +202,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                         ))}
                         {filteredProjects.length === 0 && (
                             <div className="col-span-full py-20 text-center rounded-[32px] border border-dashed border-white/10">
-                                <p className="text-white/20 italic">No projects found in this category.</p>
+                                <p className="text-white/20 italic">{t('no_projects', { default: 'No projects found in this category.' })}</p>
                             </div>
                         )}
                     </div>
@@ -208,8 +216,8 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                 <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-2">
                                     <Calculator size={32} />
                                 </div>
-                                <h2 className="text-4xl font-black text-white tracking-tight">Price Estimator</h2>
-                                <p className="text-white/40 text-lg">Calculate an instant estimate for your next project.</p>
+                                <h2 className="text-4xl font-black text-white tracking-tight">{t('calc_title')}</h2>
+                                <p className="text-white/40 text-lg">{t('calc_subtitle', { default: 'Calculate an instant estimate for your next project.' })}</p>
                             </div>
 
                             {/* Wizard Steps */}
@@ -228,7 +236,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                             <div className="bg-white/5 rounded-[32px] p-8 md:p-10 border border-white/5">
                                 {calcStep === 1 && (
                                     <div className="space-y-6">
-                                        <h3 className="text-xl font-bold text-white text-center">What are we building?</h3>
+                                        <h3 className="text-xl font-bold text-white text-center">{t('calc_step_1', { default: 'What are we building?' })}</h3>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {calculator_types.map(type => (
                                                 <button
@@ -237,7 +245,7 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                                     className="p-6 rounded-2xl border border-white/10 bg-white/5 text-left hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all group"
                                                 >
                                                     <span className="block font-bold text-white group-hover:text-indigo-400">{type.label}</span>
-                                                    <span className="text-xs text-white/30 mt-1 uppercase tracking-widest font-medium">Select Type</span>
+                                                    <span className="text-xs text-white/30 mt-1 uppercase tracking-widest font-medium">{tCommon('view')}</span>
                                                 </button>
                                             ))}
                                         </div>
@@ -247,8 +255,8 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                 {calcStep === 2 && calcConfig && (
                                     <div className="space-y-6">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-xl font-bold text-white">Select Features</h3>
-                                            <button onClick={() => setCalcStep(1)} className="text-sm text-indigo-400 font-bold">Change Type</button>
+                                            <h3 className="text-xl font-bold text-white">{t('calc_step_2', { default: 'Select Features' })}</h3>
+                                            <button onClick={() => setCalcStep(1)} className="text-sm text-indigo-400 font-bold">{t('calc_change_type', { default: 'Change Type' })}</button>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             {calcConfig.features.map((f: any) => (
@@ -280,14 +288,14 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                             ))}
                                         </div>
                                         <Button onClick={() => setCalcStep(3)} className="w-full h-12 bg-indigo-600 rounded-xl font-bold">
-                                            Next: Timeline
+                                            {t('next', { default: 'Next' })}: {t('timeline', { default: 'Timeline' })}
                                         </Button>
                                     </div>
                                 )}
 
                                 {calcStep === 3 && calcConfig && (
                                     <div className="space-y-8 text-center">
-                                        <h3 className="text-xl font-bold text-white">Project Timeline</h3>
+                                        <h3 className="text-xl font-bold text-white">{t('calc_step_3', { default: 'Project Timeline' })}</h3>
                                         <div className="flex flex-wrap justify-center gap-4">
                                             {calcConfig.timeline_multipliers.map((m: any) => (
                                                 <button
@@ -301,27 +309,27 @@ export default function Home({ stats, featured_projects, service_packages, forum
                                                     )}
                                                 >
                                                     <span className="block font-bold">{m.label}</span>
-                                                    <span className="text-[10px] opacity-50 uppercase tracking-widest">{m.weeks} Weeks</span>
+                                                    <span className="text-[10px] opacity-50 uppercase tracking-widest">{m.weeks} {t('weeks', { default: 'Weeks' })}</span>
                                                 </button>
                                             ))}
                                         </div>
 
                                         <div className="pt-8 border-t border-white/10">
-                                            <p className="text-sm text-white/30 mb-2 font-bold uppercase tracking-widest">Estimated Investment</p>
+                                            <p className="text-sm text-white/30 mb-2 font-bold uppercase tracking-widest">{t('calc_est_title', { default: 'Estimated Investment' })}</p>
                                             <div className="text-4xl md:text-5xl font-black text-indigo-400">
-                                                Rp {(estimate.min / 1000000).toFixed(1)}jt – Rp {(estimate.max / 1000000).toFixed(1)}jt
+                                                {format(estimate.min)} – {format(estimate.max)}
                                             </div>
                                             <p className="text-xs text-white/20 mt-4 max-w-sm mx-auto">
-                                                *This is a rough estimate based on your selections. Final pricing may vary after detailed discussion.
+                                                {t('calc_disclaimer', { default: '*This is a rough estimate based on your selections. Final pricing may vary after detailed discussion.' })}
                                             </p>
                                         </div>
 
                                         <div className="flex flex-col sm:flex-row gap-3 pt-4">
                                             <Button asChild className="flex-1 h-14 rounded-2xl bg-white text-indigo-600 font-black text-lg hover:bg-white/90">
-                                                <Link href="/contact">Book Free Consultation</Link>
+                                                <Link href="/contact">{t('calc_cta_contact')}</Link>
                                             </Button>
                                             <Button onClick={() => setCalcStep(1)} variant="ghost" className="flex-1 h-14 rounded-2xl text-white/50 font-bold hover:text-white">
-                                                Restart
+                                                {t('restart', { default: 'Restart' })}
                                             </Button>
                                         </div>
                                     </div>
@@ -334,19 +342,19 @@ export default function Home({ stats, featured_projects, service_packages, forum
                 {/* SECTION 5: SERVICES */}
                 <section id="services" className="space-y-12">
                     <div className="text-center max-w-2xl mx-auto space-y-4">
-                        <h2 className="text-4xl font-black text-white tracking-tight">Service Packages</h2>
-                        <p className="text-white/40 text-lg">Fixed-price packages designed for clarity and value.</p>
+                        <h2 className="text-4xl font-black text-white tracking-tight">{t('services_title')}</h2>
+                        <p className="text-white/40 text-lg">{t('services_subtitle')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
                         {service_packages.slice(0, 3).map(pkg => (
-                            <ServicePackageCard key={pkg.id} pkg={pkg} currency={currency as 'IDR' | 'USD'} />
+                            <ServicePackageCard key={pkg.id} pkg={pkg} onSelect={(pkg) => router.visit(route('services.index'))} />
                         ))}
                     </div>
                     
                     <div className="text-center">
                         <Button variant="ghost" asChild className="text-indigo-400 font-bold gap-2 hover:text-indigo-300">
-                            <Link href="/services">View All Services & Add-ons <ArrowRight size={18} /></Link>
+                            <Link href="/services">{t('view_all_services', { default: 'View All Services & Add-ons' })} <ArrowRight size={18} /></Link>
                         </Button>
                     </div>
                 </section>
@@ -356,13 +364,13 @@ export default function Home({ stats, featured_projects, service_packages, forum
                     <div className="rounded-[32px] border border-white/7 bg-[#1c1c28] p-8 md:p-12 space-y-8">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/10">
+                                <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                                     <MessageSquare size={24} />
                                 </div>
-                                <h2 className="text-2xl font-bold text-white tracking-tight">Community Discussion</h2>
+                                <h2 className="text-2xl font-bold text-white tracking-tight">{tForum('title')}</h2>
                             </div>
                             <Link href="/forum" className="text-xs font-black text-white/30 uppercase tracking-widest hover:text-white transition-colors">
-                                Browse Forum →
+                                {tForum('browse_forum', { default: 'Browse Forum' })} →
                             </Link>
                         </div>
 
@@ -372,15 +380,15 @@ export default function Home({ stats, featured_projects, service_packages, forum
                             ))}
                             {forum_preview.length === 0 && (
                                 <div className="py-10 text-center">
-                                    <p className="text-white/20 italic">No discussions yet. Be the first!</p>
+                                    <p className="text-white/20 italic">{tForum('no_threads')}</p>
                                 </div>
                             )}
                         </div>
 
                         <div className="pt-6 text-center border-t border-white/5">
-                            <p className="text-sm text-white/30 mb-4">Have a question or need technical advice?</p>
+                            <p className="text-sm text-white/30 mb-4">{tForum('have_question', { default: 'Have a question or need technical advice?' })}</p>
                             <Button asChild variant="outline" className="rounded-xl border-indigo-500/20 bg-indigo-500/5 text-indigo-400 font-bold hover:bg-indigo-500/10">
-                                <Link href="/forum/create">Ask the Community</Link>
+                                <Link href="/forum/create">{tForum('new_thread')}</Link>
                             </Button>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +18,10 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { SharedProps } from '@/types/inertia';
+
+import { useTranslation } from '@/lib/i18n';
+import { useCurrency } from '@/lib/currency';
 
 interface Order {
     id: number;
@@ -33,12 +37,12 @@ interface Order {
         name: string;
         service: {
             id: number;
-            title: string;
+            name: string;
         };
     };
     rating?: {
-        rating: number;
-        comment: string;
+        score: number;
+        review: string;
     };
 }
 
@@ -46,23 +50,28 @@ interface Props {
     order: Order;
 }
 
-const statusConfig = {
-    pending: { label: 'Menunggu Pembayaran', color: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20', icon: Clock },
-    paid: { label: 'Dibayar', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', icon: CheckCircle2 },
-    in_progress: { label: 'Sedang Dikerjakan', color: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20', icon: Clock },
-    completed: { label: 'Selesai', color: 'bg-green-500/10 text-green-500 border-green-500/20', icon: CheckCircle2 },
-    cancelled: { label: 'Dibatalkan', color: 'bg-red-500/10 text-red-500 border-red-500/20', icon: AlertCircle },
-    expired: { label: 'Kadaluarsa', color: 'bg-gray-500/10 text-gray-500 border-gray-500/20', icon: Clock },
-};
-
-const steps = [
-    { key: 'pending', label: 'Dipesan' },
-    { key: 'paid', label: 'Dibayar' },
-    { key: 'in_progress', label: 'Proses' },
-    { key: 'completed', label: 'Selesai' },
-];
-
 export default function Show({ order }: Props) {
+    const { t } = useTranslation('orders');
+    const { t: tCommon } = useTranslation('common');
+    const { format } = useCurrency();
+    const { locale } = usePage<SharedProps>().props;
+
+    const statusConfig = {
+        pending: { label: t('status_pending'), color: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20', icon: Clock },
+        paid: { label: t('status_paid'), color: 'bg-blue-500/10 text-blue-500 border-blue-500/20', icon: CheckCircle2 },
+        in_progress: { label: t('status_in_progress'), color: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20', icon: Clock },
+        completed: { label: t('status_completed'), color: 'bg-green-500/10 text-green-500 border-green-500/20', icon: CheckCircle2 },
+        cancelled: { label: t('status_cancelled'), color: 'bg-red-500/10 text-red-500 border-red-500/20', icon: AlertCircle },
+        expired: { label: t('status_expired'), color: 'bg-gray-500/10 text-gray-500 border-gray-500/20', icon: Clock },
+    };
+
+    const steps = [
+        { key: 'pending', label: t('status_pending') },
+        { key: 'paid', label: t('status_paid') },
+        { key: 'in_progress', label: t('status_in_progress') },
+        { key: 'completed', label: t('status_completed') },
+    ];
+
     const config = statusConfig[order.status];
     const StatusIcon = config.icon;
 
@@ -88,7 +97,7 @@ export default function Show({ order }: Props) {
 
     return (
         <AppLayout>
-            <Head title={`Pesanan ${order.order_code}`} />
+            <Head title={`${t('details')} ${order.order_code}`} />
 
             <div className="container mx-auto py-8 px-4 max-w-5xl">
                 <Link 
@@ -96,7 +105,7 @@ export default function Show({ order }: Props) {
                     className="inline-flex items-center text-sm text-muted-foreground hover:text-white mb-6 transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Kembali ke Dashboard
+                    {tCommon('back')}
                 </Link>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -144,7 +153,7 @@ export default function Show({ order }: Props) {
                                     <div>
                                         <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
                                             <FileText className="w-4 h-4" />
-                                            Persyaratan Pesanan
+                                            {t('requirements')}
                                         </h3>
                                         <div className="bg-black/20 rounded-lg p-4 border border-white/5 whitespace-pre-wrap text-sm leading-relaxed">
                                             {order.requirements}
@@ -158,8 +167,8 @@ export default function Show({ order }: Props) {
                         {order.status === 'completed' && (
                             <Card className="border-indigo-500/20 bg-indigo-500/5">
                                 <CardHeader>
-                                    <CardTitle className="text-lg">Berikan Ulasan Anda</CardTitle>
-                                    <CardDescription>Bantu kami meningkatkan layanan dengan memberikan rating dan ulasan.</CardDescription>
+                                    <CardTitle className="text-lg">{t('give_review', { default: 'Berikan Ulasan Anda' })}</CardTitle>
+                                    <CardDescription>{t('give_review_desc', { default: 'Bantu kami meningkatkan layanan dengan memberikan rating dan ulasan.' })}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
                                     {order.rating ? (
@@ -170,12 +179,12 @@ export default function Show({ order }: Props) {
                                                         key={star} 
                                                         className={cn(
                                                             "w-6 h-6",
-                                                            star <= order.rating!.rating ? "fill-yellow-500 text-yellow-500" : "text-muted-foreground/30"
+                                                            star <= order.rating!.score ? "fill-yellow-500 text-yellow-500" : "text-muted-foreground/30"
                                                         )} 
                                                     />
                                                 ))}
                                             </div>
-                                            <p className="italic text-muted-foreground">"{order.rating.comment}"</p>
+                                            <p className="italic text-muted-foreground">"{order.rating.review}"</p>
                                         </div>
                                     ) : (
                                         <form onSubmit={submitRating} className="space-y-4">
@@ -204,10 +213,10 @@ export default function Show({ order }: Props) {
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="review">Ulasan (Opsional)</Label>
+                                                <Label htmlFor="review">{t('review_label', { default: 'Ulasan (Opsional)' })}</Label>
                                                 <Textarea 
                                                     id="review"
-                                                    placeholder="Bagaimana pengalaman Anda menggunakan layanan ini?"
+                                                    placeholder={t('review_placeholder', { default: 'Bagaimana pengalaman Anda menggunakan layanan ini?' })}
                                                     value={data.review}
                                                     onChange={e => setData('review', e.target.value)}
                                                     className="bg-black/20 border-white/10"
@@ -218,7 +227,7 @@ export default function Show({ order }: Props) {
                                                 disabled={processing}
                                                 className="bg-indigo-600 hover:bg-indigo-700"
                                             >
-                                                Kirim Ulasan
+                                                {t('post_reply')}
                                             </Button>
                                         </form>
                                     )}
@@ -233,30 +242,30 @@ export default function Show({ order }: Props) {
                             <CardHeader>
                                 <CardTitle className="text-lg flex items-center gap-2">
                                     <Package className="w-5 h-5 text-indigo-500" />
-                                    Ringkasan Layanan
+                                    {t('summary', { default: 'Ringkasan Layanan' })}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-1">
-                                    <p className="text-sm text-muted-foreground">Layanan Utama</p>
-                                    <p className="font-semibold">{order.service_package.service.title}</p>
+                                    <p className="text-sm text-muted-foreground">{tNav('services')}</p>
+                                    <p className="font-semibold">{order.service_package.service.name}</p>
                                 </div>
                                 <div className="space-y-1">
-                                    <p className="text-sm text-muted-foreground">Paket</p>
+                                    <p className="text-sm text-muted-foreground">{t('package')}</p>
                                     <p className="font-semibold">{order.service_package.name}</p>
                                 </div>
                                 <div className="pt-4 border-t border-white/5 space-y-3">
                                     <div className="flex justify-between items-center text-sm">
-                                        <span className="text-muted-foreground">Harga</span>
+                                        <span className="text-muted-foreground">{tCommon('currency')}</span>
                                         <span className="font-bold text-lg text-indigo-400">
-                                            Rp {new Intl.NumberFormat('id-ID').format(parseFloat(order.total_idr))}
+                                            {format(parseFloat(order.total_idr))}
                                         </span>
                                     </div>
                                     {order.paid_at && (
                                         <div className="flex justify-between items-center text-sm">
                                             <span className="text-muted-foreground flex items-center gap-1">
                                                 <CreditCard className="w-3 h-3" />
-                                                Metode
+                                                {tCommon('actions')}
                                             </span>
                                             <span className="capitalize">{order.payment_type?.replace(/_/g, ' ') || 'Midtrans'}</span>
                                         </div>
@@ -270,16 +279,16 @@ export default function Show({ order }: Props) {
                                 <div className="flex items-start gap-3">
                                     <Clock className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
                                     <div>
-                                        <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Tanggal Pesan</p>
-                                        <p className="text-sm">{new Date(order.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                                        <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">{t('date')}</p>
+                                        <p className="text-sm">{new Date(order.created_at).toLocaleDateString(locale === 'id' ? 'id-ID' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
                                     </div>
                                 </div>
                                 {order.paid_at && (
                                     <div className="flex items-start gap-3">
                                         <CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
                                         <div>
-                                            <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">Tanggal Bayar</p>
-                                            <p className="text-sm">{new Date(order.paid_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
+                                            <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">{t('status_paid')}</p>
+                                            <p className="text-sm">{new Date(order.paid_at).toLocaleDateString(locale === 'id' ? 'id-ID' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
                                         </div>
                                     </div>
                                 )}
@@ -292,7 +301,7 @@ export default function Show({ order }: Props) {
                                 className="w-full bg-indigo-600 hover:bg-indigo-700 h-12"
                             >
                                 <Link href={route('orders.payment', order.id)}>
-                                    Lanjut ke Pembayaran
+                                    {t('continue_to_payment', { default: 'Lanjut ke Pembayaran' })}
                                     <ChevronRight className="w-4 h-4 ml-2" />
                                 </Link>
                             </Button>

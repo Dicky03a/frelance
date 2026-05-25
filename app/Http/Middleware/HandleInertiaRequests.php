@@ -47,6 +47,18 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'locale' => App::getLocale(),
+            'translations' => [
+                'home' => __('home'),
+                'nav' => __('nav'),
+                'forum' => __('forum'),
+                'orders' => __('orders'),
+                'services' => __('services'),
+                'projects' => __('projects'),
+                'contact' => __('contact'),
+                'about' => __('about'),
+                'skills' => __('skills'),
+                'common' => __('common'),
+            ],
             'currency' => session('currency', 'IDR'),
             'exchange_rate' => app(CurrencyService::class)->getRate(),
             'flash' => [

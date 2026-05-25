@@ -2,8 +2,13 @@ import { Project } from '@/types/models';
 import { Badge } from '@/components/ui/badge';
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Eye } from 'lucide-react';
+import { useCurrency } from '@/lib/currency';
+import { useTranslation } from '@/lib/i18n';
 
 export function ProjectCard({ project }: { project: Project }) {
+    const { format } = useCurrency();
+    const { t } = useTranslation('common');
+    
     return (
         <div className="group relative rounded-[24px] border border-white/7 bg-[#1c1c28] overflow-hidden transition-all duration-500 hover:border-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/10">
             {/* Image Section */}
@@ -47,7 +52,7 @@ export function ProjectCard({ project }: { project: Project }) {
                     ))}
                     {project.tech_stack.length > 3 && (
                         <span className="text-[10px] font-bold text-indigo-400">
-                            +{project.tech_stack.length - 3} MORE
+                            +{project.tech_stack.length - 3} {t('more')}
                         </span>
                     )}
                 </div>
@@ -64,7 +69,7 @@ export function ProjectCard({ project }: { project: Project }) {
                     <div className="text-xs">
                         <span className="text-white/30 block mb-1">Starting from</span>
                         <span className="text-white font-bold text-sm">
-                            Rp {(project.price_from ? project.price_from / 1000000 : 0).toFixed(1)}jt
+                            {format(project.price_from ? Number(project.price_from) : 0)}
                         </span>
                     </div>
                     
@@ -72,7 +77,7 @@ export function ProjectCard({ project }: { project: Project }) {
                         href={`/projects/${project.slug}`}
                         className="flex items-center gap-2 text-xs font-bold text-white/40 hover:text-white transition-colors group/link"
                     >
-                        DETAIL <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                        {t('view').toUpperCase()} <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
                     </Link>
                 </div>
             </div>

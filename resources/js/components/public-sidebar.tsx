@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import { useTranslation } from '@/lib/i18n';
+
 export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
     const { url } = usePage();
+    const { t } = useTranslation('nav');
 
     const getPathname = (itemUrl: string) => {
         try {
@@ -32,27 +35,27 @@ export function PublicSidebar({ isOpen }: { isOpen: boolean }) {
 
     const sections = [
         {
-            title: 'Overview',
+            title: t('overview', { default: 'Overview' }),
             items: [
-                { title: 'Dashboard', href: route('home'), icon: LayoutDashboard },
-                { title: 'Projects', href: route('projects.index'), icon: Folder },
-                { title: 'Services', href: route('services.index'), icon: Package },
+                { title: t('home'), href: route('home'), icon: LayoutDashboard },
+                { title: t('projects'), href: route('projects.index'), icon: Folder },
+                { title: t('services'), href: route('services.index'), icon: Package },
             ]
         },
         {
-            title: 'Tools',
+            title: t('tools', { default: 'Tools' }),
             items: [
-                { title: 'Calculator', href: '/#calculator', icon: Calculator },
-                { title: 'Forum', href: route('forum.index'), icon: MessageSquare },
-                { title: 'Reviews', href: route('reviews.index'), icon: Star },
+                { title: t('calculator', { default: 'Calculator' }), href: '/#calculator', icon: Calculator },
+                { title: t('forum'), href: route('forum.index'), icon: MessageSquare },
+                { title: t('reviews'), href: route('reviews.index'), icon: Star },
             ]
         },
         {
-            title: 'Info',
+            title: t('info', { default: 'Info' }),
             items: [
-                { title: 'About Me', href: route('about'), icon: User },
-                { title: 'Skills', href: route('skills.public'), icon: Code },
-                { title: 'Contact', href: route('contact'), icon: Mail },
+                { title: t('about'), href: route('about'), icon: User },
+                { title: t('skills'), href: route('skills.public'), icon: Code },
+                { title: t('contact'), href: route('contact'), icon: Mail },
             ]
         }
     ];
