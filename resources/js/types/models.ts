@@ -54,6 +54,7 @@ export interface Project {
     updated_at: string;
     skills?: Skill[];
     comments?: ProjectComment[];
+    ratings?: Rating[];
 }
 
 export interface Service {
@@ -160,15 +161,19 @@ export interface ProjectComment {
 
 export interface Rating {
     id: number;
-    user_id: number;
-    order_id: number;
+    user_id: number | null;
+    order_id: number | null;
+    project_id: number | null;
     score: number;
     review: string | null;
+    manual_client_name: string | null;
+    manual_project_name: string | null;
     is_visible: boolean;
     created_at: string;
     updated_at: string;
     user?: User;
     order?: Order;
+    project?: Project;
 }
 
 export interface CalculatorConfig {

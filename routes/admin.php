@@ -11,6 +11,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(funct
     Route::resource('services.packages', \App\Http\Controllers\Admin\ServicePackageController::class)->shallow();
     
     Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::resource('reviews', \App\Http\Controllers\Admin\RatingController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::get('reviews/user-orders/{user}', [\App\Http\Controllers\Admin\RatingController::class, 'getOrders'])->name('reviews.user-orders');
     
     Route::prefix('forum')->as('forum.')->group(function () {
         Route::resource('threads', \App\Http\Controllers\Admin\ForumThreadController::class)->only(['index', 'show', 'update', 'destroy']);

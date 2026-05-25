@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { type NavItem } from '@/types';
 import { SharedProps } from '@/types/inertia';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Briefcase, Settings2, ShieldCheck, ShoppingCart, MessageSquare, Wrench } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Briefcase, Settings2, ShieldCheck, ShoppingCart, MessageSquare, Wrench, Star } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -45,6 +45,11 @@ export function AppSidebar() {
             title: 'Forum',
             url: route('admin.forum.threads.index'),
             icon: MessageSquare,
+        },
+        {
+            title: 'Ulasan',
+            url: route('admin.reviews.index'),
+            icon: Star,
         },
         {
             title: 'Skills',

@@ -15,9 +15,12 @@ class Rating extends Model
     protected $fillable = [
         'user_id',
         'order_id',
+        'project_id',
         'score',
         'review',
         'is_visible',
+        'manual_client_name',
+        'manual_project_name',
     ];
 
     /**
@@ -47,5 +50,13 @@ class Rating extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    /**
+     * Get the project that this rating belongs to.
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 }

@@ -25,14 +25,19 @@ export default function Index({ reviews }: { reviews: PaginatedResponse<Rating> 
                             </div>
                             <p className="text-white/70 leading-relaxed italic">"{review.review}"</p>
                             <div className="pt-6 border-t border-white/5 flex items-center gap-4">
-                                <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-white/30">
-                                    {review.user?.name[0]}
+                                <div className="h-10 w-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-white/30 uppercase">
+                                    {(review.user?.name || review.manual_client_name || '?')[0]}
                                 </div>
                                 <div>
-                                    <div className="font-bold text-white">{review.user?.name}</div>
+                                    <div className="font-bold text-white">{review.user?.name || review.manual_client_name}</div>
                                     <div className="text-[10px] text-white/20 uppercase font-bold tracking-widest">
-                                        {review.order?.service_package?.service?.name}
+                                        {review.order?.service_package?.service?.name || review.manual_project_name || 'General Feedback'}
                                     </div>
+                                    {review.project && (
+                                        <div className="text-[9px] text-indigo-400 mt-0.5">
+                                            Proyek: {review.project.title}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

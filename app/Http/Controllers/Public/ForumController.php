@@ -47,9 +47,13 @@ class ForumController extends Controller
         $thread->increment('views');
 
         return Inertia::render('public/forum/show', [
-            'thread' => $thread->load(['user', 'replies.user' => function ($query) {
-                $query->where('is_hidden', false);
-            }]),
+            'thread' => $thread->load([
+                'user',
+                'replies' => function ($query) {
+                    $query->where('is_hidden', false);
+                },
+                'replies.user'
+            ]),
         ]);
     }
 

@@ -16,7 +16,38 @@ import {
     ShoppingCart
 } from 'lucide-react';
 
+import { useState, useMemo } from 'react';
+import { useForm, usePage } from '@inertiajs/react';
+import { SharedProps } from '@/types/inertia';
+import { cn } from '@/lib/utils';
+
 export default function Show({ project }: { project: Project }) {
+    const { auth } = usePage<SharedProps>().props;
+    
+    const ratingsData = useMemo(() => {
+        const items = project.ratings?.filter(r => r.is_visible) || [];
+        const avg = items.length > 0 
+            ? items.reduce((sum, r) => sum + r.score, 0) / items.length 
+            : 0;
+        return { items, avg, count: items.length };
+    }, [project.ratings]);
+
+    const { data, setData, post, processing, reset } = useForm({
+        score: 5,
+        review: '',
+    });
+
+    const [isRatingOpen, setIsRatingOpen] = useState(false);
+
+    const handleSubmitRating = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route('projects.ratings.store', project.id), {
+            onSuccess: () => {
+                setIsRatingOpen(false);
+                reset();
+            }
+        });
+    };
     return (
         <PublicLayout>
             <Head title={`${project.title} - Portfolio`} />
@@ -141,11 +172,93 @@ export default function Show({ project }: { project: Project }) {
                                     <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Total Views</p>
                                 </div>
                                 <div className="flex-1 space-y-1 border-l border-white/10 pl-6">
-                                    <div className="text-2xl font-black text-white">4.9</div>
-                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Avg. Rating</p>
+                                    <div className="text-2xl font-black text-white">{ratingsData.avg > 0 ? ratingsData.avg.toFixed(1) : 'N/A'}</div>
+                                    <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest">{ratingsData.count} Ratings</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Ratings Section at Bottom */}
+                <div className="mt-20 space-y-12 max-w-4xl">
+                    <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                                <Star size={24} className="text-amber-400" /> Client Reviews
+                            </h3>
+                            <p className="text-white/40 text-sm">Feedback from clients who worked on this specific project.</p>
+                        </div>
+                        {auth.user && (
+                            <Button 
+                                onClick={() => setIsRatingOpen(!isRatingOpen)}
+                                variant="outline" 
+                                className="rounded-xl border-indigo-500/20 bg-indigo-500/5 text-indigo-400"
+                            >
+                                {isRatingOpen ? 'Cancel' : 'Give Feedback'}
+                            </Button>
+                        )}
+                    </div>
+
+                    {isRatingOpen && (
+                        <div className="rounded-[32px] border border-indigo-500/20 bg-indigo-500/[0.02] p-8 space-y-6">
+                            <h4 className="font-bold text-white">How was your experience?</h4>
+                            <form onSubmit={handleSubmitRating} className="space-y-4">
+                                <div className="flex gap-2">
+                                    {[1, 2, 3, 4, 5].map((s) => (
+                                        <button
+                                            key={s}
+                                            type="button"
+                                            onClick={() => setData('score', s)}
+                                            className={cn(
+                                                "h-12 w-12 rounded-xl border flex items-center justify-center transition-all",
+                                                data.score >= s ? "bg-amber-500/10 border-amber-500/30 text-amber-500" : "bg-white/5 border-white/5 text-white/20"
+                                            )}
+                                        >
+                                            <Star size={20} fill={data.score >= s ? "currentColor" : "none"} />
+                                        </button>
+                                    ))}
+                                </div>
+                                <textarea 
+                                    value={data.review}
+                                    onChange={e => setData('review', e.target.value)}
+                                    placeholder="Write your review here..."
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/30 h-32"
+                                />
+                                <Button disabled={processing} className="bg-indigo-600 rounded-xl h-12 px-8 font-bold">
+                                    Submit Review
+                                </Button>
+                            </form>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {ratingsData.items.map((r) => (
+                            <div key={r.id} className="p-6 rounded-[24px] bg-[#1c1c28] border border-white/5 space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-8 w-8 rounded-full bg-white/5 flex items-center justify-center font-bold text-white/30 text-xs uppercase">
+                                            {r.user?.name[0]}
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-white">{r.user?.name}</p>
+                                            <p className="text-[10px] text-white/20 uppercase font-bold tracking-widest">Verified Client</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-0.5 text-amber-400">
+                                        {[...Array(5)].map((_, i) => (
+                                            <Star key={i} size={10} fill={i < r.score ? "currentColor" : "none"} className={i < r.score ? "" : "text-white/10"} />
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="text-sm text-white/60 leading-relaxed italic">"{r.review}"</p>
+                            </div>
+                        ))}
+                        {ratingsData.items.length === 0 && (
+                            <div className="col-span-full py-12 text-center rounded-[32px] border border-dashed border-white/5">
+                                <p className="text-white/20 text-sm">No reviews for this project yet.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
