@@ -2,7 +2,7 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 
-export function NavMain({ items = [], label = 'Platform' }: { items: NavItem[]; label?: string }) {
+export function NavMain({ items = [], label = '' }: { items: NavItem[]; label?: string }) {
     const { url } = usePage();
 
     const getPathname = (itemUrl: string) => {
