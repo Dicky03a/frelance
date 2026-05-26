@@ -4,7 +4,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 export function NavMain({ items = [], label = 'Platform' }: { items: NavItem[]; label?: string }) {
     const { url } = usePage();
-    
+
     const getPathname = (itemUrl: string) => {
         try {
             return new URL(itemUrl).pathname;

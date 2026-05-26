@@ -19,6 +19,7 @@ Route::get('/reviews', [\App\Http\Controllers\Public\ReviewController::class, 'i
 Route::get('/about', [\App\Http\Controllers\Public\AboutController::class, 'index'])->name('about');
 Route::get('/skills', [\App\Http\Controllers\Public\SkillController::class, 'index'])->name('skills.public');
 Route::get('/contact', [\App\Http\Controllers\Public\ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [\App\Http\Controllers\Public\ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/locale/{lang}', [\App\Http\Controllers\LocaleController::class, 'set'])->name('locale.set');
 Route::get('/currency/{currency}', [\App\Http\Controllers\CurrencyController::class, 'set'])->name('currency.set');

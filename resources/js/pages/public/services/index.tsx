@@ -75,11 +75,6 @@ export default function Index({ services }: ServicesIndexProps) {
                                     <h2 className="text-[36px] font-normal text-cursor-ink tracking-[-0.72px]">{service.name}</h2>
                                     <p className="text-cursor-body text-lg max-w-xl font-normal leading-relaxed">{service.description}</p>
                                 </div>
-                                <div className="flex gap-6 text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px]">
-                                    <span>{t('fast_delivery')}</span>
-                                    <span className="text-cursor-hairline-strong">|</span>
-                                    <span>{t('secure_code')}</span>
-                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

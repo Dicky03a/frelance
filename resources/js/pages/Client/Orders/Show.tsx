@@ -168,7 +168,7 @@ export default function Show({ order }: Props) {
                                             <FileText className="w-4 h-4" />
                                             {t('requirements')}
                                         </h3>
-                                        <div className="bg-muted/50 rounded-lg p-4 border border-border whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                                        <div className="bg-white rounded-lg p-4 border border-border whitespace-pre-wrap text-sm leading-relaxed text-foreground">
                                             {order.requirements}
                                         </div>
                                     </div>
@@ -254,8 +254,7 @@ export default function Show({ order }: Props) {
                         <Card className="border-border bg-card">
                             <CardHeader>
                                 <CardTitle className="text-[22px] font-normal tracking-[-0.11px] text-foreground flex items-center gap-2">
-                                    <Package className="w-5 h-5 text-primary" />
-                                    {t('summary', { default: 'Ringkasan Layanan' })}
+                                    {t('Summary', { default: 'Ringkasan Layanan' })}
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-4">

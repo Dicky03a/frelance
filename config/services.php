@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'fonnte' => [
+        'token' => env('FONNTE_TOKEN', env('FOONTE_TOKEN')),
+        'whatsapp_number' => env('WHATSAPP_NUMBER', '085182529291'),
+    ],
+
 ];

@@ -9,7 +9,7 @@ return [
     'confirm_order_desc' => 'You have selected the :package package for the :service service.',
     'requirements_label' => 'Requirements & Project Details',
     'requirements_placeholder' => 'Explain your project requirements in detail (minimum 20 characters)...',
-    'payment_info' => 'After clicking the button below, you will be redirected to the secure Midtrans payment page to complete the transaction.',
+    'payment_info' => 'After clicking the button below, you will be redirected to the secure payment page to complete the transaction and add No WhatsApp to the note above.',
     'continue_to_payment' => 'Continue to Payment',
     'custom_solution_title' => 'Need a Custom Solution?',
     'custom_solution_desc' => 'If your project requirements are not covered by the packages above, I am always open to discussing custom solutions tailored specifically to your business scale.',

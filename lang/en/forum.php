@@ -24,7 +24,7 @@ return [
     'categories' => 'Categories',
     'all_topics' => 'All Topics',
     'need_help' => 'Need Help?',
-    'need_help_desc' => 'Our moderators are ready to help answer your technical questions about our services.',
+    'need_help_desc' => 'Our Admin are ready to help answer your technical questions about our services.',
     'search_threads' => 'Search discussion title...',
     'back_to_forum' => 'BACK TO FORUM',
     'responses' => 'Responses',

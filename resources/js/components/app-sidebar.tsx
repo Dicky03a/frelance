@@ -1,20 +1,16 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { SharedProps } from '@/types/inertia';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Briefcase, Settings2, ShieldCheck, ShoppingCart, MessageSquare, Wrench, Star, Calculator } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
     const { auth } = usePage<SharedProps>().props;
     const isAdmin = auth.user?.role === 'admin';
 
-    const mainNavItems: NavItem[] = [
-        
-    ];
+    const mainNavItems: NavItem[] = [];
 
     const clientNavItems: NavItem[] = [
         {
@@ -66,17 +62,6 @@ export function AppSidebar() {
         },
     ];
 
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Repository',
-            url: 'https://github.com/laravel/react-starter-kit',
-        },
-        {
-            title: 'Documentation',
-            url: 'https://laravel.com/docs/starter-kits',
-        },
-    ];
-
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -94,13 +79,10 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
                 {!isAdmin && <NavMain items={clientNavItems} label="Client Area" />}
-                {isAdmin && (
-                    <NavMain items={adminNavItems} label="Administration" />
-                )}
+                {isAdmin && <NavMain items={adminNavItems} label="Administration" />}
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

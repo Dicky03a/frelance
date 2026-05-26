@@ -7,7 +7,7 @@ return [
     'no_projects' => 'No projects found',
     'no_projects_desc' => 'Try selecting a different category or check back later.',
     'page_info' => 'Page :current of :last',
-    'back_to_portfolio' => 'BACK TO PORTFOLIO',
+    'back_to_portfolio' => 'Back to Portfolio',
     'technical_details' => 'Technical Details',
     'tech_stack' => 'Technology Stack',
     'gallery' => 'Project Gallery',

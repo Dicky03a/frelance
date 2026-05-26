@@ -85,7 +85,7 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                                 "px-6 py-2.5 rounded-full text-sm font-bold transition-all",
                                 (filters.status || null) === tab.value
                                     ? "bg-primary text-white"
-                                    : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
+                                    : "bg-white text-black hover:bg-muted hover:text-foreground"
                             )}
                         >
                             {tab.label}
@@ -106,7 +106,7 @@ export default function Index({ orders, filters }: OrdersIndexProps) {
                                         <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground group-hover:text-primary transition-colors">
                                             {order.service_package?.service?.name}
                                         </h3>
-                                        <Badge variant="outline" className="bg-muted/50 border-border text-muted-foreground">
+                                        <Badge variant="outline" className="bg-white border-border text-muted-foreground">
                                             {order.service_package?.name}
                                         </Badge>
                                     </div>

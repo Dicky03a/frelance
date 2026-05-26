@@ -9,7 +9,7 @@ return [
     'confirm_order_desc' => 'Anda memilih paket :package untuk layanan :service.',
     'requirements_label' => 'Persyaratan & Detail Proyek',
     'requirements_placeholder' => 'Jelaskan kebutuhan proyek Anda secara detail (minimal 20 karakter)...',
-    'payment_info' => 'Setelah menekan tombol di bawah, Anda akan diarahkan ke halaman pembayaran Midtrans yang aman untuk menyelesaikan transaksi.',
+    'payment_info' => 'Setelah menekan tombol di bawah, Anda akan diarahkan ke halaman pembayaran yang aman untuk menyelesaikan transaksi dan tambahkan No WhatsApp pada catatan di atas.',
     'continue_to_payment' => 'Lanjutkan ke Pembayaran',
     'custom_solution_title' => 'Butuh Solusi Kustom?',
     'custom_solution_desc' => 'Jika kebutuhan proyek Anda tidak tercakup dalam paket di atas, saya selalu terbuka untuk diskusi mengenai solusi kustom yang dirancang khusus untuk skala bisnis Anda.',

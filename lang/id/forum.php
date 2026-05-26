@@ -24,7 +24,7 @@ return [
     'categories' => 'Kategori',
     'all_topics' => 'Semua Topik',
     'need_help' => 'Butuh Bantuan?',
-    'need_help_desc' => 'Moderator kami siap membantu menjawab pertanyaan teknis Anda seputar layanan kami.',
+    'need_help_desc' => 'Admin kami siap membantu menjawab pertanyaan teknis Anda seputar layanan kami.',
     'search_threads' => 'Cari judul diskusi...',
     'back_to_forum' => 'KEMBALI KE FORUM',
     'responses' => 'Tanggapan',

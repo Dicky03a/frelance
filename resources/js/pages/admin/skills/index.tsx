@@ -94,12 +94,7 @@ export default function Index({ skills, categories }: SkillsIndexProps) {
 
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {skills.data.map((skill) => (
-                        <div key={skill.id} className="rounded-xl border border-border bg-card p-8 group relative overflow-hidden transition-all hover:border-muted-foreground/30">
-                            <div 
-                                className="absolute top-0 left-0 w-1 h-full" 
-                                style={{ backgroundColor: skill.color || '#f54e00' }}
-                            />
-                            
+                        <div key={skill.id} className="rounded-xl border border-border bg-card p-8 group relative overflow-hidden transition-all hover:border-muted-foreground/30">                            
                             <div className="flex items-start justify-between">
                                 <div className="space-y-3">
                                     <Badge variant="outline" className="text-[10px] uppercase font-semibold tracking-[0.88px]">

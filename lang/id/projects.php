@@ -7,7 +7,7 @@ return [
     'no_projects' => 'Tidak ada proyek ditemukan',
     'no_projects_desc' => 'Coba pilih kategori lain atau periksa kembali nanti.',
     'page_info' => 'Halaman :current dari :last',
-    'back_to_portfolio' => 'KEMBALI KE PORTOFOLIO',
+    'back_to_portfolio' => 'Kembali ke Portofolio',
     'technical_details' => 'Detail Teknis',
     'tech_stack' => 'Teknologi yang Digunakan',
     'gallery' => 'Galeri Proyek',
