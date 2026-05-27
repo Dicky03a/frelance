@@ -29,7 +29,8 @@ Route::post('/calculator/estimate', [\App\Http\Controllers\Public\CalculatorCont
 // Client Routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('my-orders', [\App\Http\Controllers\Client\OrderController::class, 'myOrders'])->name('client.orders');
+    Route::get('/orders', [\App\Http\Controllers\Client\OrderController::class, 'myOrders'])->name('client.orders');
+    Route::get('/orders/{order}/invoice', [\App\Http\Controllers\Client\OrderController::class, 'invoice'])->name('orders.invoice');
 
     Route::post('/orders', [\App\Http\Controllers\Client\OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [\App\Http\Controllers\Client\OrderController::class, 'show'])->name('orders.show');

@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\ServicePackage;
 use App\Services\CurrencyService;
 use App\Services\MidtransService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,9 @@ class OrderController extends Controller
         $order = DB::transaction(function () use ($request, $package, $exchangeRate) {
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'customer_name' => $request->customer_name,
+                'customer_whatsapp' => $request->customer_whatsapp,
+                'customer_category' => $request->customer_category,
                 'service_package_id' => $package->id,
                 'requirements' => $request->requirements,
                 'total_idr' => $package->price_idr,
@@ -138,5 +142,16 @@ class OrderController extends Controller
                 'status' => $status,
             ],
         ]);
+    }
+
+    public function invoice(Order $order)
+    {
+        Gate::authorize('view', $order);
+
+        $order->load(['user', 'servicePackage.service']);
+
+        $pdf = Pdf::loadView('invoices.order', compact('order'));
+
+        return $pdf->download("invoice-{$order->order_code}.pdf");
     }
 }

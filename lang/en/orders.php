@@ -19,4 +19,8 @@ return [
     'status_completed' => 'Completed',
     'status_cancelled' => 'Cancelled',
     'status_expired' => 'Expired',
+    'payment_secure_title' => 'Safe & Encrypted Payment',
+    'payment_secure_desc' => 'We use high security standards to protect your transaction data.',
+    'payment_trusted_partner' => 'Official Midtrans Partner',
+    'download_invoice' => 'Download Invoice',
 ];

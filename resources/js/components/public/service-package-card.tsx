@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ServicePackage } from '@/types/models';
-import { Check } from 'lucide-react';
+import { Check, ShieldCheck } from 'lucide-react';
 import { useCurrency } from '@/lib/currency';
 import { useTranslation } from '@/lib/i18n';
 
@@ -64,6 +64,13 @@ export function ServicePackageCard({
             >
                 {tOrders('order_now')}
             </Button>
+
+            <div className="mt-4 flex items-center justify-center gap-1.5 opacity-50">
+                <ShieldCheck size={12} className={pkg.is_popular ? 'text-cursor-canvas' : 'text-cursor-muted'} />
+                <span className={cn('text-[10px] font-medium uppercase tracking-[0.5px]', pkg.is_popular ? 'text-cursor-canvas' : 'text-cursor-muted')}>
+                    {tOrders('payment_secure_title')}
+                </span>
+            </div>
         </div>
     );
 }

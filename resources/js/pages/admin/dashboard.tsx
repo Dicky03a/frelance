@@ -37,23 +37,25 @@ interface DashboardProps extends SharedProps {
 }
 
 const StatCard = ({ title, value, icon: Icon, trend, trendValue, prefix = '' }: any) => (
-    <div className="rounded-xl border border-border bg-card p-6">
+    <div className="rounded-cursor-lg border border-hairline bg-surface-card p-6 flex flex-col transition-all hover:border-hairline-strong group">
         <div className="flex items-center justify-between">
-            <div className="rounded-lg bg-primary/10 p-3 text-primary">
-                <Icon size={24} />
+            <div className="rounded-cursor-md bg-primary/5 dark:bg-primary/10 p-3 text-primary">
+                <Icon size={20} />
             </div>
             {trend && (
-                <div className={`flex items-center gap-1 text-sm ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                    {trend === 'up' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+                <div className={`flex items-center gap-1 text-[11px] font-bold tracking-wider ${trend === 'up' ? 'text-emerald-600 dark:text-emerald-500' : 'text-rose-600 dark:text-rose-500'}`}>
+                    {trend === 'up' ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
                     {trendValue}%
                 </div>
             )}
         </div>
-        <div className="mt-4">
-            <h3 className="text-[11px] font-semibold text-muted-foreground uppercase tracking-[0.88px]">{title}</h3>
-            <p className="mt-1 text-2xl font-bold text-foreground">
+        <div className="mt-6">
+            <div className="text-[32px] font-normal text-ink leading-none tracking-[-0.325px]">
                 {prefix}{typeof value === 'number' ? value.toLocaleString('id-ID') : value}
-            </p>
+            </div>
+            <div className="text-[11px] font-semibold text-muted uppercase tracking-[0.88px] mt-3">
+                {title}
+            </div>
         </div>
     </div>
 );
@@ -63,10 +65,10 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
         <AppLayout>
             <Head title="Admin Dashboard" />
             
-            <div className="space-y-8 p-6">
+            <div className="space-y-12 p-8 max-w-7xl mx-auto">
                 <div>
-                    <h1 className="text-[36px] font-normal tracking-[-0.72px] text-foreground">Dashboard Overview</h1>
-                    <p className="text-muted-foreground">Selamat datang kembali, Admin.</p>
+                    <h1 className="text-[36px] font-normal tracking-[-0.72px] text-ink">Dashboard Overview</h1>
+                    <p className="text-body mt-2">Selamat datang kembali, Admin.</p>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -99,100 +101,105 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
                     />
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    <div className="lg:col-span-2 rounded-xl border border-border bg-card p-6">
-                        <h3 className="mb-6 text-[22px] font-normal tracking-[-0.11px] text-foreground">Statistik Pendapatan (6 Bulan Terakhir)</h3>
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                    <div className="lg:col-span-2 rounded-cursor-lg border border-hairline bg-surface-card p-8">
+                        <h3 className="mb-8 text-[22px] font-normal tracking-[-0.11px] text-ink">Statistik Pendapatan</h3>
                         <div className="h-[300px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={monthly_revenue}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#e6e5e0" vertical={false} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} opacity={0.5} />
                                     <XAxis 
                                         dataKey="month" 
-                                        stroke="#807d72" 
-                                        fontSize={12}
+                                        stroke="var(--muted-foreground)" 
+                                        fontSize={10}
                                         tickLine={false}
                                         axisLine={false}
+                                        tick={{ dy: 10 }}
                                     />
                                     <YAxis 
-                                        stroke="#807d72" 
-                                        fontSize={12}
+                                        stroke="var(--muted-foreground)" 
+                                        fontSize={10}
                                         tickLine={false}
                                         axisLine={false}
                                         tickFormatter={(value) => `Rp ${value / 1000000}jt`}
                                     />
                                     <Tooltip 
-                                        contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e6e5e0', borderRadius: '12px' }}
-                                        itemStyle={{ color: '#f54e00' }}
-                                        cursor={{ fill: '#f7f7f4' }}
+                                        contentStyle={{ 
+                                            backgroundColor: 'var(--card)', 
+                                            border: '1px solid var(--border)', 
+                                            borderRadius: '8px',
+                                            boxShadow: 'none',
+                                            fontSize: '12px'
+                                        }}
+                                        itemStyle={{ color: 'var(--primary)' }}
+                                        cursor={{ fill: 'var(--muted)', opacity: 0.05 }}
                                     />
-                                    <Bar dataKey="revenue" fill="#f54e00" radius={[6, 6, 0, 0]} />
+                                    <Bar dataKey="revenue" fill="var(--primary)" radius={[4, 4, 0, 0]} barSize={40} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
                     </div>
 
-                    <div className="rounded-xl border border-border bg-card p-6">
-                        <h3 className="mb-6 text-[22px] font-normal tracking-[-0.11px] text-foreground">Layanan Terlaris</h3>
+                    <div className="rounded-cursor-lg border border-hairline bg-surface-card p-8">
+                        <h3 className="mb-8 text-[22px] font-normal tracking-[-0.11px] text-ink">Layanan Terlaris</h3>
                         <div className="space-y-6">
                             {top_services.map((service, i) => (
-                                <div key={service.id} className="flex items-center justify-between">
+                                <div key={service.id} className="flex items-center justify-between group cursor-default">
                                     <div className="flex items-center gap-4">
-                                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold">
-                                            {i + 1}
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-cursor-md bg-canvas dark:bg-muted text-muted-soft font-mono text-xs">
+                                            {String(i + 1).padStart(2, '0')}
                                         </div>
                                         <div>
-                                            <p className="font-medium text-foreground">{service.name}</p>
-                                            <p className="text-xs text-muted-foreground">{service.orders_count} Pesanan</p>
+                                            <p className="font-bold text-ink text-sm group-hover:text-primary transition-colors">{service.name}</p>
+                                            <p className="text-[10px] text-muted uppercase tracking-wider mt-0.5">{service.orders_count} Pesanan</p>
                                         </div>
                                     </div>
-                                    <div className="text-right text-sm font-medium text-primary">
+                                    <div className="text-right text-xs font-mono font-bold text-ink">
                                         Rp {(service.price_idr / 1000000).toFixed(1)}jt
                                     </div>
                                 </div>
                             ))}
                             {top_services.length === 0 && (
-                                <p className="text-center text-muted-foreground/30 py-4 italic">Belum ada data</p>
+                                <p className="text-center text-muted/30 py-4 italic text-sm">Belum ada data</p>
                             )}
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div className="rounded-xl border border-border bg-card overflow-hidden">
-                        <div className="flex items-center justify-between p-6 border-b border-border">
-                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground">Pesanan Terbaru</h3>
-                            <button className="text-sm text-primary hover:text-primary/80">Lihat Semua</button>
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                    <div className="rounded-cursor-lg border border-hairline bg-surface-card overflow-hidden">
+                        <div className="flex items-center justify-between p-8 border-b border-hairline">
+                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-ink">Pesanan Terbaru</h3>
+                            <button className="text-xs font-bold uppercase tracking-wider text-primary hover:text-primary-active transition-colors">Lihat Semua</button>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-muted/50 text-xs font-medium text-muted-foreground">
+                                <thead className="bg-canvas dark:bg-muted/30 text-[10px] font-bold text-muted uppercase tracking-[0.88px]">
                                     <tr>
-                                        <th className="px-6 py-3 uppercase tracking-[0.88px]">KODE</th>
-                                        <th className="px-6 py-3 uppercase tracking-[0.88px]">KLIEN</th>
-                                        <th className="px-6 py-3 uppercase tracking-[0.88px]">PAKET</th>
-                                        <th className="px-6 py-3 uppercase tracking-[0.88px]">STATUS</th>
-                                        <th className="px-6 py-3 uppercase tracking-[0.88px]">TOTAL</th>
+                                        <th className="px-8 py-4">KODE</th>
+                                        <th className="px-8 py-4">KLIEN</th>
+                                        <th className="px-8 py-4">STATUS</th>
+                                        <th className="px-8 py-4 text-right">TOTAL</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border text-sm text-foreground/70">
+                                <tbody className="divide-y divide-hairline text-sm text-body">
                                     {pending_orders.data.map(order => (
-                                        <tr key={order.id} className="hover:bg-muted/50 transition-colors cursor-pointer">
-                                            <td className="px-6 py-4 font-mono text-xs">{order.order_code}</td>
-                                            <td className="px-6 py-4">{order.user?.name}</td>
-                                            <td className="px-6 py-4">{order.service_package?.name}</td>
-                                            <td className="px-6 py-4">
-                                                <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-600 border border-amber-500/20">
+                                        <tr key={order.id} className="hover:bg-canvas-soft dark:hover:bg-muted/10 transition-colors cursor-pointer group">
+                                            <td className="px-8 py-5 font-mono text-[11px] text-muted-soft group-hover:text-primary transition-colors uppercase tracking-tight">{order.order_code}</td>
+                                            <td className="px-8 py-5 font-medium text-ink">{order.user?.name}</td>
+                                            <td className="px-8 py-5">
+                                                <span className="inline-flex items-center rounded-cursor-pill bg-amber-500/5 dark:bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-500 border border-amber-500/10">
                                                     Pending
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 font-medium text-foreground">
+                                            <td className="px-8 py-5 font-mono font-bold text-ink text-right">
                                                 Rp {order.total_idr.toLocaleString('id-ID')}
                                             </td>
                                         </tr>
                                     ))}
                                     {pending_orders.data.length === 0 && (
                                         <tr>
-                                            <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground/30 italic">Belum ada pesanan masuk</td>
+                                            <td colSpan={4} className="px-8 py-12 text-center text-muted/30 italic text-sm border-none">Belum ada pesanan masuk</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -200,30 +207,30 @@ export default function Dashboard({ stats, pending_orders, recent_threads, month
                         </div>
                     </div>
 
-                    <div className="rounded-xl border border-border bg-card p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground">Thread Forum Terbaru</h3>
-                            <MessageSquare className="text-muted-foreground/20" size={20} />
+                    <div className="rounded-cursor-lg border border-hairline bg-surface-card p-8">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-[22px] font-normal tracking-[-0.11px] text-ink">Thread Forum Terbaru</h3>
+                            <MessageSquare className="text-muted/20" size={20} />
                         </div>
                         <div className="space-y-4">
                             {recent_threads.map(thread => (
-                                <div key={thread.id} className="flex gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group">
-                                    <div className="h-10 w-10 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-muted-foreground">
-                                        <Users size={20} />
+                                <div key={thread.id} className="flex gap-4 p-5 rounded-cursor-md border border-hairline bg-canvas-soft dark:bg-muted/10 hover:border-hairline-strong transition-all cursor-pointer group">
+                                    <div className="h-10 w-10 rounded-full bg-surface-card dark:bg-muted flex-shrink-0 flex items-center justify-center text-muted-soft border border-hairline shadow-sm">
+                                        <Users size={18} />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="font-medium text-foreground truncate group-hover:text-primary transition-colors">{thread.title}</h4>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-xs text-muted-foreground">{thread.user?.name}</span>
-                                            <span className="text-muted-foreground/10">•</span>
-                                            <span className="text-xs text-muted-foreground/50">{new Date(thread.created_at).toLocaleDateString()}</span>
+                                        <h4 className="font-bold text-ink truncate group-hover:text-primary transition-colors text-sm">{thread.title}</h4>
+                                        <div className="flex items-center gap-3 mt-1.5">
+                                            <span className="text-[11px] font-medium text-muted">{thread.user?.name}</span>
+                                            <span className="text-muted/10">•</span>
+                                            <span className="text-[11px] text-muted-soft">{new Date(thread.created_at).toLocaleDateString()}</span>
                                         </div>
                                     </div>
-                                    <ExternalLink size={16} className="text-muted-foreground/20" />
+                                    <ExternalLink size={14} className="text-muted/20 group-hover:text-primary transition-colors" />
                                 </div>
                             ))}
                             {recent_threads.length === 0 && (
-                                <p className="text-center text-muted-foreground/30 py-8 italic">Belum ada diskusi baru</p>
+                                <p className="text-center text-muted/30 py-12 italic text-sm">Belum ada diskusi baru</p>
                             )}
                         </div>
                     </div>

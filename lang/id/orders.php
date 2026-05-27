@@ -19,4 +19,8 @@ return [
     'status_completed' => 'Selesai',
     'status_cancelled' => 'Dibatalkan',
     'status_expired' => 'Kadaluarsa',
+    'payment_secure_title' => 'Pembayaran Aman & Terenkripsi',
+    'payment_secure_desc' => 'Kami menggunakan standar keamanan tinggi untuk melindungi data transaksi Anda.',
+    'payment_trusted_partner' => 'Partner Resmi Midtrans',
+    'download_invoice' => 'Unduh Invoice',
 ];

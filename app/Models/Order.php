@@ -20,6 +20,9 @@ class Order extends Model
      */
     protected $fillable = [
         'user_id',
+        'customer_name',
+        'customer_whatsapp',
+        'customer_category',
         'service_package_id',
         'order_code',
         'requirements',

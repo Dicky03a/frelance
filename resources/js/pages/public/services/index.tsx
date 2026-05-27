@@ -14,7 +14,16 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { useState } from 'react';
+import { ShieldCheck, Lock, Headset } from 'lucide-react';
 
 import { useTranslation } from '@/lib/i18n';
 
@@ -32,6 +41,9 @@ export default function Index({ services }: ServicesIndexProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
         service_package_id: 0,
         requirements: '',
+        customer_name: auth.user?.name ?? '',
+        customer_whatsapp: '',
+        customer_category: 'umum' as 'mahasiswa' | 'instansi' | 'umum',
     });
 
     const handleSelectPackage = (pkg: ServicePackage) => {
@@ -105,27 +117,121 @@ export default function Index({ services }: ServicesIndexProps) {
                             </DialogHeader>
                             
                             <form onSubmit={handleSubmit} className="space-y-8">
-                                <div className="space-y-3">
-                                    <Label htmlFor="requirements" className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">
-                                        {t('requirements_label')}
-                                    </Label>
-                                    <Textarea
-                                        id="requirements"
-                                        placeholder={t('requirements_placeholder')}
-                                        className="min-h-[150px] bg-cursor-canvas-soft border-cursor-hairline text-cursor-ink placeholder:text-cursor-muted/40 rounded-cursor-md focus:border-cursor-hairline-strong transition-colors p-4 resize-none"
-                                        value={data.requirements}
-                                        onChange={e => setData('requirements', e.target.value)}
-                                        required
-                                    />
-                                    {errors.requirements && (
-                                        <p className="text-xs text-red-500 mt-2 ml-1">{errors.requirements}</p>
-                                    )}
+                                <div className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-3">
+                                            <Label htmlFor="customer_name" className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">
+                                                {t('customer_name_label')}
+                                            </Label>
+                                            <Input
+                                                id="customer_name"
+                                                className="bg-cursor-canvas-soft border-cursor-hairline text-cursor-ink placeholder:text-cursor-muted/40 rounded-cursor-md focus:border-cursor-hairline-strong transition-colors"
+                                                value={data.customer_name}
+                                                onChange={e => setData('customer_name', e.target.value)}
+                                                required
+                                            />
+                                            {errors.customer_name && (
+                                                <p className="text-xs text-red-500 mt-2 ml-1">{errors.customer_name}</p>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            <Label htmlFor="customer_whatsapp" className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">
+                                                {t('customer_whatsapp_label')}
+                                            </Label>
+                                            <Input
+                                                id="customer_whatsapp"
+                                                placeholder="08xxxxxxxxxx"
+                                                className="bg-cursor-canvas-soft border-cursor-hairline text-cursor-ink placeholder:text-cursor-muted/40 rounded-cursor-md focus:border-cursor-hairline-strong transition-colors"
+                                                value={data.customer_whatsapp}
+                                                onChange={e => setData('customer_whatsapp', e.target.value)}
+                                                required
+                                            />
+                                            {errors.customer_whatsapp && (
+                                                <p className="text-xs text-red-500 mt-2 ml-1">{errors.customer_whatsapp}</p>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <Label htmlFor="customer_category" className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">
+                                            {t('customer_category_label')}
+                                        </Label>
+                                        <Select 
+                                            value={data.customer_category} 
+                                            onValueChange={(value: any) => setData('customer_category', value)}
+                                        >
+                                            <SelectTrigger className="bg-cursor-canvas-soft border-cursor-hairline text-cursor-ink rounded-cursor-md focus:border-cursor-hairline-strong">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent className="bg-cursor-surface-card border-cursor-hairline">
+                                                <SelectItem value="mahasiswa">{t('category_mahasiswa')}</SelectItem>
+                                                <SelectItem value="instansi">{t('category_instansi')}</SelectItem>
+                                                <SelectItem value="umum">{t('category_umum')}</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.customer_category && (
+                                            <p className="text-xs text-red-500 mt-2 ml-1">{errors.customer_category}</p>
+                                        )}
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <Label htmlFor="requirements" className="text-[11px] font-semibold text-cursor-muted uppercase tracking-[0.88px] ml-1">
+                                            {t('requirements_label')}
+                                        </Label>
+                                        <Textarea
+                                            id="requirements"
+                                            placeholder={t('requirements_placeholder')}
+                                            className="min-h-[150px] bg-cursor-canvas-soft border-cursor-hairline text-cursor-ink placeholder:text-cursor-muted/40 rounded-cursor-md focus:border-cursor-hairline-strong transition-colors p-4 resize-none"
+                                            value={data.requirements}
+                                            onChange={e => setData('requirements', e.target.value)}
+                                            required
+                                        />
+                                        {errors.requirements && (
+                                            <p className="text-xs text-red-500 mt-2 ml-1">{errors.requirements}</p>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="p-5 rounded-cursor-md bg-cursor-canvas-soft border border-cursor-hairline">
-                                    <p className="text-xs text-cursor-body leading-relaxed font-normal">
-                                        {t('payment_info')}
-                                    </p>
+                                <div className="space-y-4">
+                                    <div className="p-4 rounded-cursor-md bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/10 dark:border-amber-500/20 space-y-2">
+                                        <p className="text-xs text-amber-600 dark:text-amber-500 font-medium leading-relaxed">
+                                            {t('whatsapp_confirmation_info')}
+                                        </p>
+                                        <p className="text-[11px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
+                                            {t('admin_contact_info')}
+                                        </p>
+                                    </div>
+
+                                    <div className="p-5 rounded-cursor-md bg-cursor-canvas-soft dark:bg-muted/20 border border-cursor-hairline dark:border-border space-y-4">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
+                                                <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+                                            </div>
+                                            <p className="text-sm font-medium text-cursor-ink dark:text-foreground">{t('trust_title')}</p>
+                                        </div>
+                                        
+                                        <div className="grid grid-cols-1 gap-3 pl-1">
+                                            <div className="flex items-start gap-3">
+                                                <Lock className="w-3.5 h-3.5 text-cursor-muted dark:text-muted-foreground mt-0.5" />
+                                                <p className="text-[13px] text-cursor-body dark:text-muted-foreground leading-relaxed">{t('trust_payment')}</p>
+                                            </div>
+                                            <div className="flex items-start gap-3">
+                                                <ShieldCheck className="w-3.5 h-3.5 text-cursor-muted dark:text-muted-foreground mt-0.5" />
+                                                <p className="text-[13px] text-cursor-body dark:text-muted-foreground leading-relaxed">{t('trust_guarantee')}</p>
+                                            </div>
+                                            <div className="flex items-start gap-3">
+                                                <Headset className="w-3.5 h-3.5 text-cursor-muted dark:text-muted-foreground mt-0.5" />
+                                                <p className="text-[13px] text-cursor-body dark:text-muted-foreground leading-relaxed">{t('trust_support')}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-cursor-md bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20">
+                                        <p className="text-xs text-blue-600/80 dark:text-blue-400/80 leading-relaxed font-normal">
+                                            {t('payment_info')}
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <DialogFooter className="gap-4">

@@ -24,6 +24,9 @@ class StoreOrderRequest extends FormRequest
         return [
             'service_package_id' => 'required|exists:service_packages,id',
             'requirements' => 'required|string|min:20|max:2000',
+            'customer_name' => 'required|string|max:255',
+            'customer_whatsapp' => 'required|string|max:20',
+            'customer_category' => 'required|in:mahasiswa,instansi,umum',
         ];
     }
 }

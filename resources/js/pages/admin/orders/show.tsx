@@ -13,7 +13,8 @@ import {
     CheckCircle2,
     Clock,
     AlertCircle,
-    Save
+    Save,
+    MessageSquare
 } from 'lucide-react';
 
 interface OrderShowProps {
@@ -123,13 +124,32 @@ export default function Show({ order, statuses }: OrderShowProps) {
                             <h3 className="text-[22px] font-normal tracking-[-0.11px] text-foreground flex items-center gap-2">
                                 <UserIcon size={20} className="text-primary" /> Informasi Klien
                             </h3>
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center text-lg font-bold text-muted-foreground">
-                                    {order.user?.name[0]}
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <div>
+                                        <p className="text-foreground font-medium">{order.customer_name || order.user?.name}</p>
+                                        <p className="text-xs text-muted-foreground">{order.user?.email}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-foreground font-medium">{order.user?.name}</p>
-                                    <p className="text-xs text-muted-foreground">{order.user?.email}</p>
+                                
+                                <div className="grid grid-cols-1 gap-4 pt-4 border-t border-border">
+                                    <div className="flex items-center gap-3">
+                                        <div>
+                                            <Label className="text-muted-foreground text-[10px] uppercase tracking-wider leading-none">WhatsApp</Label>
+                                            <p className="text-foreground font-medium text-sm">
+                                                <a href={`https://wa.me/${order.customer_whatsapp?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-colors">
+                                                    {order.customer_whatsapp || '-'}
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <div>
+                                            <Label className="text-muted-foreground text-[10px] uppercase tracking-wider leading-none">Kategori</Label>
+                                            <p className="text-foreground font-medium text-sm capitalize">{order.customer_category || '-'}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

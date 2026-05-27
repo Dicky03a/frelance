@@ -3,7 +3,8 @@ import { Head, router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, CreditCard, AlertCircle } from 'lucide-react';
+import { Loader2, CreditCard, AlertCircle, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 
 interface Order {
     id: number;
@@ -32,6 +33,7 @@ declare global {
 }
 
 export default function Payment({ order, snap_token, client_key, snap_url }: Props) {
+    const { t } = useTranslation('orders');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -168,6 +170,41 @@ export default function Payment({ order, snap_token, client_key, snap_url }: Pro
                                         </Button>
                                     </div>
                                 )}
+                            </div>
+
+                            <div className="pt-6 border-t border-border space-y-6">
+                                <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20">
+                                    <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-500">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center">
+                                            <ShieldCheck className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-sm leading-tight">{t('payment_secure_title')}</p>
+                                            <p className="text-xs opacity-80 dark:text-emerald-500/80">{t('payment_secure_desc')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-zinc-900 border border-border shadow-sm">
+                                        <Lock className="w-3.5 h-3.5 text-muted-foreground" />
+                                        <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">SSL Encrypted</span>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/30 dark:bg-muted/10">
+                                        <CheckCircle2 className="w-5 h-5 text-primary dark:text-foreground" />
+                                        <p className="text-[13px] font-medium text-foreground">{t('payment_trusted_partner')}</p>
+                                    </div>
+                                    <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/30 dark:bg-muted/10">
+                                        <div className="flex -space-x-1">
+                                            {[1, 2, 3].map((i) => (
+                                                <div key={i} className="w-6 h-6 rounded-full border-2 border-background bg-muted dark:bg-muted/20 flex items-center justify-center overflow-hidden">
+                                                    <CreditCard className="w-3 h-3 text-muted-foreground" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <p className="text-[13px] font-medium text-foreground">Multi-channel Payment</p>
+                                    </div>
+                                </div>
                             </div>
 
                             <div className="text-center">

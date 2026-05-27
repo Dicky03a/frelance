@@ -14,7 +14,8 @@ import {
     Star, 
     AlertCircle,
     ChevronRight,
-    ArrowLeft
+    ArrowLeft,
+    Download
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -168,7 +169,7 @@ export default function Show({ order }: Props) {
                                             <FileText className="w-4 h-4" />
                                             {t('requirements')}
                                         </h3>
-                                        <div className="bg-white rounded-lg p-4 border border-border whitespace-pre-wrap text-sm leading-relaxed text-foreground">
+                                        <div className="bg-muted/30 rounded-lg p-4 border border-border whitespace-pre-wrap text-sm leading-relaxed text-foreground">
                                             {order.requirements}
                                         </div>
                                     </div>
@@ -252,10 +253,15 @@ export default function Show({ order }: Props) {
                     {/* Right Column: Order Summary & Info */}
                     <div className="space-y-6">
                         <Card className="border-border bg-card">
-                            <CardHeader>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0">
                                 <CardTitle className="text-[22px] font-normal tracking-[-0.11px] text-foreground flex items-center gap-2">
                                     {t('Summary', { default: 'Ringkasan Layanan' })}
                                 </CardTitle>
+                                <Button variant="ghost" size="icon" asChild className="text-muted-foreground hover:text-primary">
+                                    <a href={route('orders.invoice', order.id)} target="_blank">
+                                        <Download className="w-5 h-5" />
+                                    </a>
+                                </Button>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-1">
@@ -306,6 +312,19 @@ export default function Show({ order }: Props) {
                                 )}
                             </CardContent>
                         </Card>
+
+                        {order.status === 'paid' && (
+                            <Button 
+                                variant="outline"
+                                asChild
+                                className="w-full border-border bg-card hover:bg-accent/50 h-12 text-foreground"
+                            >
+                                <a href={route('orders.invoice', order.id)} target="_blank">
+                                    <Download className="w-4 h-4 mr-2" />
+                                    {t('download_invoice')}
+                                </a>
+                            </Button>
+                        )}
 
                         {order.status === 'pending' && (
                             <Button 
